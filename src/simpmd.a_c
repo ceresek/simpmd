@@ -1197,13 +1197,13 @@ endm
 
 CB_NextFlg      =       -1                      ;prekladat tabulky pro beh
 LN_InstNext:
-                include PMDport.a_i             ;tabulky rutin IN a OUT
-                include PMDins.a_i              ;vykonne rutiny simulatoru
+                include PMDport.inc             ;tabulky rutin IN a OUT
+                include PMDins.inc              ;vykonne rutiny simulatoru
 
 CB_NextFlg      =       0                       ;prekladat tabulky pro ladeni
 LN_InstStep:
-                include PMDport.a_i             ;tabulky rutin IN a OUT
-                include PMDins.a_i              ;vykonne rutiny simulatoru
+                include PMDport.inc             ;tabulky rutin IN a OUT
+                include PMDins.inc              ;vykonne rutiny simulatoru
 
 LN_InstLast:
 CW_InstDif      equ     offset LN_InstStep - offset LN_InstNext
@@ -1215,7 +1215,7 @@ CW_InstDif      equ     offset LN_InstStep - offset LN_InstNext
 ;
 
 FB_Tbl_Chr      label   byte
-                include FKE13x8.a_i             ;znakova sada
+                include FKE13x8.inc             ;znakova sada
 
 ;
 ;;;
