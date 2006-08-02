@@ -1,0 +1,6 @@
+The sources can be compiled with Borland Turbo Assembler.
+
+I have not found a free assembler that could compile the sources yet (NASM
+does not support the ASSUME directive and YASM does not support the TASM
+syntax). I intend to rewrite the simulator from scratch, which will
+make this point mute, compiled binaries are available until then.
