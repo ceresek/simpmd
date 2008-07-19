@@ -1,12 +1,12 @@
 ;
-;   ÛÛÛ               ÛÛÛÛ   Û   Û  ÛÛÛÛ
-;  Û ฑฑÛ   Û          ÛฑฑฑÛ  ÛÛ ÛÛฑ  ÛฑฑÛ
-;  Ûฑ   ฑ   ฑ         Ûฑ  Ûฑ ÛฑÛ Ûฑ  Ûฑ Ûฑ
-;   ÛÛÛ   ÛÛ   ÛÛÛÛ   ÛÛÛÛ ฑ ÛฑÛฑÛฑ  Ûฑ Ûฑ
-;    ฑฑÛ   Ûฑ  ÛฑÛฑÛ  Ûฑฑฑฑ  Ûฑ ฑÛฑ  Ûฑ Ûฑ
-;  Û   Ûฑ  Ûฑ  ÛฑÛฑÛฑ Ûฑ     Ûฑ  Ûฑ  Ûฑ Ûฑ
-;   ÛÛÛ ฑ ÛÛÛ  ÛฑÛฑÛฑ Ûฑ     Ûฑ  Ûฑ ÛÛÛÛ ฑ
-;    ฑฑฑ   ฑฑฑ  ฑ ฑ ฑ  ฑ      ฑ   ฑ  ฑฑฑฑ
+;   โ–โ–โ–               โ–โ–โ–โ–   โ–   โ–  โ–โ–โ–โ–
+;  โ– โ–’โ–’โ–   โ–          โ–โ–’โ–’โ–’โ–  โ–โ– โ–โ–โ–’  โ–โ–’โ–’โ–
+;  โ–โ–’   โ–’   โ–’         โ–โ–’  โ–โ–’ โ–โ–’โ– โ–โ–’  โ–โ–’ โ–โ–’
+;   โ–โ–โ–   โ–โ–   โ–โ–โ–โ–   โ–โ–โ–โ– โ–’ โ–โ–’โ–โ–’โ–โ–’  โ–โ–’ โ–โ–’
+;    โ–’โ–’โ–   โ–โ–’  โ–โ–’โ–โ–’โ–  โ–โ–’โ–’โ–’โ–’  โ–โ–’ โ–’โ–โ–’  โ–โ–’ โ–โ–’
+;  โ–   โ–โ–’  โ–โ–’  โ–โ–’โ–โ–’โ–โ–’ โ–โ–’     โ–โ–’  โ–โ–’  โ–โ–’ โ–โ–’
+;   โ–โ–โ– โ–’ โ–โ–โ–  โ–โ–’โ–โ–’โ–โ–’ โ–โ–’     โ–โ–’  โ–โ–’ โ–โ–โ–โ– โ–’
+;    โ–’โ–’โ–’   โ–’โ–’โ–’  โ–’ โ–’ โ–’  โ–’      โ–’   โ–’  โ–’โ–’โ–’โ–’
 ;
 ;
 ;
@@ -29,16 +29,16 @@ LN_Begin:       jmp     LN_Install
 ;;;
 ;
 
-FB_Prg_Head     db      'Simul tor PMD 85    [SimPMD 1.11 - 92/08/20]    Ceres Soft (R)',0Dh,0Ah,'$'
+FB_Prg_Head     db      'Simulรกtor PMD 85    [SimPMD 1.11 - 92/08/20]    Ceres Soft (R)',0Dh,0Ah,'$'
 
 FB_Pref_Err     db      'SimPMD:  $'
-FB_Err_DOS      db      'Nezbytn  verze DOSu 3.20 nebo vyจจก ',0dh,0ah,'$'
-FB_Err_Mem      db      'Nedostatek pamti ',0dh,0ah,'$'
-FB_Err_EGA      db      'Nezbytn  karta EGA 128k nebo vyจจก ',0dh,0ah,'$'
+FB_Err_DOS      db      'Nezbytnรก verze DOSu 3.20 nebo vyลกลกรญ ',0dh,0ah,'$'
+FB_Err_Mem      db      'Nedostatek pamฤti ',0dh,0ah,'$'
+FB_Err_EGA      db      'Nezbytnรก karta EGA 128k nebo vyลกลกรญ ',0dh,0ah,'$'
 
 ;
 
-FB_Main_Txt     db      CB_Set_Curs,0,9,CB_Set_Bold,'Simul tor PMD 85    '
+FB_Main_Txt     db      CB_Set_Curs,0,9,CB_Set_Bold,'Simulรกtor PMD 85    '
                 db      '[SimPMD 1.11 - 92/08/20]    '
                 db      'Ceres Soft (R)'
                 db      CB_Set_Norm
@@ -47,7 +47,7 @@ FB_Main_Txt     db      CB_Set_Curs,0,9,CB_Set_Bold,'Simul tor PMD 85    '
                 db      CB_Set_Curs,22,22,' 482stick'
                 db      CB_Set_Curs,22,37,' Auto EoF'
                 db      CB_Set_Curs,22,52,' Tisk'
-                db      CB_Set_Curs,22,64,' Pฉenos'
+                db      CB_Set_Curs,22,64,' Pลenos'
                 db      0
 
 FB_Yes_Txt      db      'ANO',0
@@ -67,7 +67,7 @@ FB_Flg_Names    db      'SZ',0,'H',0,'P',0,'C'
 
 ;
 
-FB_Mnu_Txt      db      CB_Set_Curs,25,2,CB_Set_Norm,'Vbr:   ',0
+FB_Mnu_Txt      db      CB_Set_Curs,25,2,CB_Set_Norm,'Vรฝbฤr:   ',0
 
 ;
 
@@ -75,7 +75,7 @@ FB_Main_Mnu     db      CB_Set_Bold,'S',CB_Set_Norm,'imulace '
                 db      CB_Set_Bold,'R',CB_Set_Norm,'eset '
                 db      's',CB_Set_Bold,'O',CB_Set_Norm,'ubory '
                 db      CB_Set_Bold,'D',CB_Set_Norm,'ebugger '
-                db      CB_Set_Bold,'N',CB_Set_Norm,'astavenก '
+                db      CB_Set_Bold,'N',CB_Set_Norm,'astavenรญ '
                 db      CB_Set_Bold,'K',CB_Set_Norm,'onec'
                 db      0
                 db      'S'
@@ -98,11 +98,11 @@ FB_SetUp_Mnu    db      'z',CB_Set_Bold,'V',CB_Set_Norm,'uk '
                 db      CB_Set_Bold,'L',CB_Set_Norm,'ED '
                 db      CB_Set_Bold,'4',CB_Set_Norm,'82stick '
                 db      CB_Set_Bold,'M',CB_Set_Norm,'G-vstup '
-                db      'M',CB_Set_Bold,'G',CB_Set_Norm,'-vstup '
+                db      'M',CB_Set_Bold,'G',CB_Set_Norm,'-vรฝstup '
                 db      CB_Set_Bold,'A',CB_Set_Norm,'uto-EoF '
                 db      CB_Set_Bold,'T',CB_Set_Norm,'isk '
-                db      CB_Set_Bold,'P',CB_Set_Norm,'ฉenos '
-                db      CB_Set_Bold,'Z',CB_Set_Norm,'pt'
+                db      CB_Set_Bold,'P',CB_Set_Norm,'ลenos '
+                db      CB_Set_Bold,'Z',CB_Set_Norm,'pฤt'
                 db      0
                 db      'V'
                 dw      LN_Sound
@@ -126,12 +126,12 @@ FB_SetUp_Mnu    db      'z',CB_Set_Bold,'V',CB_Set_Norm,'uk '
 
 ;
 
-FB_Files_Mnu    db      CB_Set_Bold,'N',CB_Set_Norm,'aกst '
-                db      CB_Set_Bold,'U',CB_Set_Norm,'lo‘it '
+FB_Files_Mnu    db      CB_Set_Bold,'N',CB_Set_Norm,'aฤรญst '
+                db      CB_Set_Bold,'U',CB_Set_Norm,'loลพit '
                 db      CB_Set_Bold,'V',CB_Set_Norm,'ymazat '
-                db      CB_Set_Bold,'P',CB_Set_Norm,'ฉejmenovat '
-                db      CB_Set_Bold,'A',CB_Set_Norm,'dres ฉ '
-                db      CB_Set_Bold,'Z',CB_Set_Norm,'pt'
+                db      CB_Set_Bold,'P',CB_Set_Norm,'ลejmenovat '
+                db      CB_Set_Bold,'A',CB_Set_Norm,'dresรกล '
+                db      CB_Set_Bold,'Z',CB_Set_Norm,'pฤt'
                 db      0
                 db      'N'
                 dw      LN_Load
@@ -183,37 +183,37 @@ FB_Dbg_Key      db      0Dh
 
 ;
 
-FB_SimOk_Msg    db      'Simul tor pฉipraven',0
-FB_Run_Msg      db      'Pฉeruจenก simulace stiskem ESC',0
-FB_Break_Msg    db      'Simulace pฉeruจena stiskem ESC',0
-FB_Reset_Msg    db      'Simul tor uveden do stavu po RESETu',0
+FB_SimOk_Msg    db      'Simulรกtor pลipraven',0
+FB_Run_Msg      db      'Pลeruลกenรญ simulace stiskem ESC',0
+FB_Break_Msg    db      'Simulace pลeruลกena stiskem ESC',0
+FB_Reset_Msg    db      'Simulรกtor uveden do stavu po RESETu',0
 FB_HLT_Msg      db      'Simulace zastavena na instrukci HLT',0
-FB_SegOr_Msg    db      'Neoek van pฉกstup na adresu 0FFFFh - stisknte RESET',0
-FB_FOpen_Msg    db      'Soubor otevฉen',0
-FB_LdOk_Msg     db      'V poฉ dku nateno '
-FB_LLen_Msg     db      'XXXX bajt–',0
-FB_SvOk_Msg     db      'V poฉ dku ulo‘eno '
-FB_SLen_Msg     db      'XXXX bajt–',0
-FB_DelOk_Msg    db      'Soubor vymaz n',0
-FB_RenOk_Msg    db      'Soubor pฉejmenov n',0
-FB_CDOk_Msg     db      'Adres ฉ nastaven jako aktivnก',0
-FB_MgOEr_Msg    db      'Nelze otevฉกt soubor pro vstup na magnetofon',0
-FB_MgIEr_Msg    db      'Nelze otevฉกt soubor pro vstup z magnetofonu',0
-FB_MgOOp_Msg    db      'Soubor pro vstup na magnetofon otevฉen',0
-FB_MgIOp_Msg    db      'Soubor pro vstup z magnetofonu otevฉen',0
-FB_MgOCl_Msg    db      'Soubor pro vstup na magnetofon uzavฉen',0
-FB_MgICl_Msg    db      'Soubor pro vstup z magnetofonu uzavฉen',0
-FB_AtBrk_Msg    db      'Dosa‘ena adresa breakpointu',0
+FB_SegOr_Msg    db      'Neoฤekรกvanรฝ pลรญstup na adresu 0FFFFh - stisknฤte RESET',0
+FB_FOpen_Msg    db      'Soubor otevลen',0
+FB_LdOk_Msg     db      'V poลรกdku naฤteno '
+FB_LLen_Msg     db      'XXXX bajtลฏ',0
+FB_SvOk_Msg     db      'V poลรกdku uloลพeno '
+FB_SLen_Msg     db      'XXXX bajtลฏ',0
+FB_DelOk_Msg    db      'Soubor vymazรกn',0
+FB_RenOk_Msg    db      'Soubor pลejmenovรกn',0
+FB_CDOk_Msg     db      'Adresรกล nastaven jako aktivnรญ',0
+FB_MgOEr_Msg    db      'Nelze otevลรญt soubor pro vรฝstup na magnetofon',0
+FB_MgIEr_Msg    db      'Nelze otevลรญt soubor pro vstup z magnetofonu',0
+FB_MgOOp_Msg    db      'Soubor pro vรฝstup na magnetofon otevลen',0
+FB_MgIOp_Msg    db      'Soubor pro vstup z magnetofonu otevลen',0
+FB_MgOCl_Msg    db      'Soubor pro vรฝstup na magnetofon uzavลen',0
+FB_MgICl_Msg    db      'Soubor pro vstup z magnetofonu uzavลen',0
+FB_AtBrk_Msg    db      'Dosaลพena adresa breakpointu',0
 
 ;
 
 FB_DosErr_Msg   db      0                               ;0 - No Error
                 db      0                               ;1 - Invalid function
                 db      'Soubor nebyl nalezen',0        ;2 - File not found
-                db      'Adres ฉ nebyl nalezen',0       ;3 - Path not found
-                db      'Pฉกliจ mnoho '
-                db      'otevฉench soubor–',0          ;4 - Too many open files
-                db      'Pฉกstup odepฉen',0             ;5 - Access denied
+                db      'Adresรกล nebyl nalezen',0       ;3 - Path not found
+                db      'Pลรญliลก mnoho '
+                db      'otevลenรฝch souborลฏ',0          ;4 - Too many open files
+                db      'Pลรญstup odepลen',0             ;5 - Access denied
                 db      0                               ;6 - Invalid handle
                 db      0                               ;7 - MCBs destroyed
                 db      0                               ;8 - Insufficient memory
@@ -223,35 +223,35 @@ FB_DosErr_Msg   db      0                               ;0 - No Error
                 db      0                               ;C - Invalid access code
                 db      0                               ;D - Invalid data
                 db      0                               ;E - Reserved
-                db      'Uveden chybn disk',0          ;F - Invalid drive spec.
+                db      'Uveden chybnรฝ disk',0          ;F - Invalid drive spec.
                 db      0                               ;10 - Att. to remove c.d.
-                db      'Nelze pฉen จet mezi '
-                db      'r–znmi disky',0               ;11 - Not same device
+                db      'Nelze pลenรกลกet mezi '
+                db      'rลฏznรฝmi disky',0               ;11 - Not same device
                 db      0                               ;12 - No more files
-                db      'Disk chr nn proti z pisu',0   ;13 - Write protect
-                db      'Nezn m kขd jednotky',0        ;14 - Unknown unit
-                db      'Disk nenก pฉipraven',0         ;15 - Drive not ready
+                db      'Disk chrรกnฤn proti zรกpisu',0   ;13 - Write protect
+                db      'Neznรกmรฝ kรณd jednotky',0        ;14 - Unknown unit
+                db      'Disk nenรญ pลipraven',0         ;15 - Drive not ready
                 db      0                               ;16 - Unknown command
-                db      'Chybn  data na disku',0        ;17 - Bad CRC
+                db      'Chybnรก data na disku',0        ;17 - Bad CRC
                 db      0                               ;18 - Bad rq. struct. len
-                db      'Chyba pฉi posunu diskov '
+                db      'Chyba pลi posunu diskovรฉ '
                 db      'hlavy',0                       ;19 - Seek error
-                db      'Nezn m typ mdia',0           ;1A - Unknown media
+                db      'Neznรกmรฝ typ mรฉdia',0           ;1A - Unknown media
                 db      'Sektor nebyl nalezen',0        ;1B - Sector not found
                 db      0                               ;1C - Paper out
-                db      'Chyba pฉi z pisu',0            ;1D - Write fault
-                db      'Chyba pฉi tenก',0             ;1E - Read fault
-FB_XErr_Msg     db      'Neuren  chyba',0              ;1F - General error
+                db      'Chyba pลi zรกpisu',0            ;1D - Write fault
+                db      'Chyba pลi ฤtenรญ',0             ;1E - Read fault
+FB_XErr_Msg     db      'Neurฤenรก chyba',0              ;1F - General error
 
 CW_MaxDOS_Err   equ     1Fh             ;posledni implementovana chyba DOSu
 
 ;
 
 FB_FName_Rq     db      'Soubor:   ',0
-FB_NName_Rq     db      'Jmno:   ',0
-FB_PName_Rq     db      'Adres ฉ:   ',0
+FB_NName_Rq     db      'Jmรฉno:   ',0
+FB_PName_Rq     db      'Adresรกล:   ',0
 FB_Addr_Rq      db      'Adresa:   ',0
-FB_Size_Rq      db      'Dlka:   ',0
+FB_Size_Rq      db      'Dรฉlka:   ',0
 
 FB_RegA_Rq      db      'PSW:   ',0
 FB_RegB_Rq      db      'BC:   ',0
@@ -414,20 +414,20 @@ CW_JoyKeys_Nr   =       (offset $ - offset FB_Joy_Keys) / size ST_Joy_Key
 ;;;
 ;
 
-;ษอออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออป
-;บ FB_Tbl_PMDIns        tabulka pro disassemblovani instrukci PMD              บ
-;ฬอออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออน
-;บ Tvar tabulky :       1 bajt typ                                             บ
-;บ                         bity 0-1 ... delka instrukce - 1                    บ
-;บ                         bit 2 ...... cislo v bitech 3-5                     บ
-;บ                         bit 3 ...... podminka v bitech 3-5                  บ
-;บ                         bit 4 ...... registrovy par s SP v bitech 4-5       บ
-;บ                         bit 5 ...... registrovy par s PSW v bitech 4-5      บ
-;บ                         bit 6 ...... zdrojovy registr v bitech 0-2          บ
-;บ                         bit 7 ...... cilovy registr v bitech 3-5            บ
-;บ                      1 bajt instrukce po masce                              บ
-;บ                      4 bajty nazev instrukce doplneny nulami                บ
-;ศอออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออผ
+;โ•”โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•—
+;โ•‘ FB_Tbl_PMDIns        tabulka pro disassemblovani instrukci PMD              โ•‘
+;โ• โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•ฃ
+;โ•‘ Tvar tabulky :       1 bajt typ                                             โ•‘
+;โ•‘                         bity 0-1 ... delka instrukce - 1                    โ•‘
+;โ•‘                         bit 2 ...... cislo v bitech 3-5                     โ•‘
+;โ•‘                         bit 3 ...... podminka v bitech 3-5                  โ•‘
+;โ•‘                         bit 4 ...... registrovy par s SP v bitech 4-5       โ•‘
+;โ•‘                         bit 5 ...... registrovy par s PSW v bitech 4-5      โ•‘
+;โ•‘                         bit 6 ...... zdrojovy registr v bitech 0-2          โ•‘
+;โ•‘                         bit 7 ...... cilovy registr v bitech 3-5            โ•‘
+;โ•‘                      1 bajt instrukce po masce                              โ•‘
+;โ•‘                      4 bajty nazev instrukce doplneny nulami                โ•‘
+;โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•
 
 I_Nr            equ     4               ;definice hodnot pro zapis bajtu
 I_Con           equ     8                ;podminky do tabulky instrukci
@@ -534,13 +534,13 @@ FB_Tbl_RSP      db      'B',0,'D',0,'H',0,'SP'  ;tabulka registrovych paru s SP
 ;;;
 ;
 
-;ษอออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออป
-;บ Key                  makro pro zapis klaves a jejich masek do tabulky       บ
-;ฬอออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออน
-;บ Vstup:               radek, ve kterem je klavesa u PMD 85 (K0 v radku 1)    บ
-;บ                      sloupec, ve kterem je klavesa u PMD 85 (K0 ve sl. 1)   บ
-;บ Vystup:              bajt maska pro stisk na 0F5h, bajt sloupec na 0F4h     บ
-;ศอออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออผ
+;โ•”โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•—
+;โ•‘ Key                  makro pro zapis klaves a jejich masek do tabulky       โ•‘
+;โ• โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•ฃ
+;โ•‘ Vstup:               radek, ve kterem je klavesa u PMD 85 (K0 v radku 1)    โ•‘
+;โ•‘                      sloupec, ve kterem je klavesa u PMD 85 (K0 ve sl. 1)   โ•‘
+;โ•‘ Vystup:              bajt maska pro stisk na 0F5h, bajt sloupec na 0F4h     โ•‘
+;โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•
 
 Key             macro   CB_Row,CB_Column
 
@@ -666,11 +666,11 @@ CB_Max_Key      equ     (offset $ - offset FW_Tbl_Key)/2-1
 ;;;
 ;
 
-;ษอออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออป
-;บ Inst                 makro pro zapis offsetu rutiny do tabulky              บ
-;ฬอออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออน
-;บ Vstup:               pripona navesti zacatku rutiny                         บ
-;ศอออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออผ
+;โ•”โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•—
+;โ•‘ Inst                 makro pro zapis offsetu rutiny do tabulky              โ•‘
+;โ• โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•ฃ
+;โ•‘ Vstup:               pripona navesti zacatku rutiny                         โ•‘
+;โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•
 
 Inst            macro   LabelName
 
@@ -963,9 +963,9 @@ FW_Tbl_Ins      label   word
 ;
 
 
-;ษอออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออป
-;บ Prirazeni registru v simulatoru                                             บ
-;ศอออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออผ
+;โ•”โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•—
+;โ•‘ Prirazeni registru v simulatoru                                             โ•‘
+;โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•
 
 RA              equ     AL
 RF              equ     AH
@@ -994,12 +994,12 @@ RPC             equ     DI
 ;;;
 ;
 
-;ษอออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออป
-;บ Next         makro provadejici skok na rutinu instrukce adresovane v RPC    บ
-;วฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤถ
-;บ Podle hodnoty CB_NextFlg rozvine bud provedeni nasledujici instrukce, nebo  บ
-;บ ukonceni simulace skokem na cs:VW_StopAdr. Obe moznosti jsou stejne dlouhe. บ
-;ศอออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออผ
+;โ•”โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•—
+;โ•‘ Next         makro provadejici skok na rutinu instrukce adresovane v RPC    โ•‘
+;โ•โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ•ข
+;โ•‘ Podle hodnoty CB_NextFlg rozvine bud provedeni nasledujici instrukce, nebo  โ•‘
+;โ•‘ ukonceni simulace skokem na cs:VW_StopAdr. Obe moznosti jsou stejne dlouhe. โ•‘
+;โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•
 
 Next            macro
 
@@ -1021,13 +1021,13 @@ Next            macro
 
 endm
 
-;ษอออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออป
-;บ MkL          makro definujici navesti pred instrukci                        บ
-;วฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤถ
-;บ Vstup        pripona navesti vytvarene instrukce                            บ
-;วฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤถ
-;บ Podle hodnoty CB_NextFlg nadefinuje bud LN_XXX nebo LNX_XXX.                บ
-;ศอออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออผ
+;โ•”โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•—
+;โ•‘ MkL          makro definujici navesti pred instrukci                        โ•‘
+;โ•โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ•ข
+;โ•‘ Vstup        pripona navesti vytvarene instrukce                            โ•‘
+;โ•โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ•ข
+;โ•‘ Podle hodnoty CB_NextFlg nadefinuje bud LN_XXX nebo LNX_XXX.                โ•‘
+;โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•
 
 MkL             macro   LabelName
 
@@ -1039,14 +1039,14 @@ LN_&LabelName:
 
 endm
 
-;ษอออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออป
-;บ Port                 makro pro zapis adresy obsluzne rutiny IN a OUT        บ
-;ฬอออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออน
-;บ Vstup        pripona jmena obsluzne rutiny portu                            บ
-;วฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤถ
-;บ V zavislosti na hodnote CB_NextFlg prelozi bud jako DW offset LN_XXX nebo   บ
-;บ jako DW offset LNX_XXX.                                                     บ
-;ศอออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออผ
+;โ•”โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•—
+;โ•‘ Port                 makro pro zapis adresy obsluzne rutiny IN a OUT        โ•‘
+;โ• โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•ฃ
+;โ•‘ Vstup        pripona jmena obsluzne rutiny portu                            โ•‘
+;โ•โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ•ข
+;โ•‘ V zavislosti na hodnote CB_NextFlg prelozi bud jako DW offset LN_XXX nebo   โ•‘
+;โ•‘ jako DW offset LNX_XXX.                                                     โ•‘
+;โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•
 
 Port            macro   ProcName
 
@@ -1058,16 +1058,16 @@ Port            macro   ProcName
 
 endm
 
-;ษอออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออป
-;บ DispB        makro zajistujici prevod zapisovaneho bajtu do VRAM EGA        บ
-;ฬอออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออน
-;บ Vstup:       registr s adresou (Rxx nebo SI) - nutne UpCase                บ
-;บ              registr s daty (Rxx) - nutne UpCase  (umi i RM)               บ
-;บ Nici:        SI                                                             บ
-;วฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤถ
-;บ Testne adresu, pokud je ve VRAM, prevede, vzdy pokracuje na Next.           บ
-;บ Nejlepe chodi s parametry SI,RL.                                            บ
-;ศอออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออผ
+;โ•”โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•—
+;โ•‘ DispB        makro zajistujici prevod zapisovaneho bajtu do VRAM EGA        โ•‘
+;โ• โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•ฃ
+;โ•‘ Vstup:       registr s adresou (Rxx nebo SI) - nutne UpCase                โ•‘
+;โ•‘              registr s daty (Rxx) - nutne UpCase  (umi i RM)               โ•‘
+;โ•‘ Nici:        SI                                                             โ•‘
+;โ•โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ•ข
+;โ•‘ Testne adresu, pokud je ve VRAM, prevede, vzdy pokracuje na Next.           โ•‘
+;โ•‘ Nejlepe chodi s parametry SI,RL.                                            โ•‘
+;โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•
 
 DispB           macro   Reg_Adr,Reg_Dat
                 local   LN_DispB_V
@@ -1111,14 +1111,14 @@ LN_DispB_V:     ifdif   <&Reg_Adr>,<SI>         ;;pokud adresa neni v SI,
 
 endm
 
-;ษอออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออป
-;บ DispW        makro zajistujici prevod 2 bajtu do VRAM EGA                   บ
-;ฬอออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออน
-;บ Vstup:       registr s adresou zapsanych dat (Rxx nebo SI) - nutne UpCase  บ
-;บ Nici:        SI                                                             บ
-;วฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤถ
-;บ Testne adresu, pokud je ve VRAM, prevede, vzdy pokracuje na Next.           บ
-;ศอออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออผ
+;โ•”โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•—
+;โ•‘ DispW        makro zajistujici prevod 2 bajtu do VRAM EGA                   โ•‘
+;โ• โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•ฃ
+;โ•‘ Vstup:       registr s adresou zapsanych dat (Rxx nebo SI) - nutne UpCase  โ•‘
+;โ•‘ Nici:        SI                                                             โ•‘
+;โ•โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ•ข
+;โ•‘ Testne adresu, pokud je ve VRAM, prevede, vzdy pokracuje na Next.           โ•‘
+;โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•
 
 DispW           macro   Reg_Adr
                 local   LN_DispW_B,LN_DispW_S,LN_DispW_E
@@ -1197,13 +1197,13 @@ endm
 
 CB_NextFlg      =       -1                      ;prekladat tabulky pro beh
 LN_InstNext:
-                include PMDport.inc             ;tabulky rutin IN a OUT
-                include PMDins.inc              ;vykonne rutiny simulatoru
+                include PMDport.asm             ;tabulky rutin IN a OUT
+                include PMDins.asm              ;vykonne rutiny simulatoru
 
 CB_NextFlg      =       0                       ;prekladat tabulky pro ladeni
 LN_InstStep:
-                include PMDport.inc             ;tabulky rutin IN a OUT
-                include PMDins.inc              ;vykonne rutiny simulatoru
+                include PMDport.asm             ;tabulky rutin IN a OUT
+                include PMDins.asm              ;vykonne rutiny simulatoru
 
 LN_InstLast:
 CW_InstDif      equ     offset LN_InstStep - offset LN_InstNext
@@ -1215,7 +1215,7 @@ CW_InstDif      equ     offset LN_InstStep - offset LN_InstNext
 ;
 
 FB_Tbl_Chr      label   byte
-                include FKE13x8.inc             ;znakova sada
+                include PMDfont.asm             ;znakova sada
 
 ;
 ;;;
@@ -1223,9 +1223,9 @@ FB_Tbl_Chr      label   byte
 ;;;
 ;
 
-;ษอออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออป
-;บ PF_My_I08            osetreni Auto-EoF na INT 08                            บ
-;ศอออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออผ
+;โ•”โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•—
+;โ•‘ PF_My_I08            osetreni Auto-EoF na INT 08                            โ•‘
+;โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•
 
 PF_My_I08       proc    far
 ;
@@ -1275,9 +1275,9 @@ PF_I08_End:     dec     cs:VB_I08_Busy                  ;rekurentni citac
 
 PF_My_I08       endp
 
-;ษอออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออป
-;บ PF_My_I09            osetreni preruseni z klavesnice                        บ
-;ศอออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออผ
+;โ•”โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•—
+;โ•‘ PF_My_I09            osetreni preruseni z klavesnice                        โ•‘
+;โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•
 
 PF_My_I09       proc    far
 ;
@@ -1410,9 +1410,9 @@ PF_I09_No2nd:   mov     VW_Step_Adr,offset LN_Dbg_Err   ;nastavit Single Step
 
 PF_My_I09       endp
 
-;ษอออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออป
-;บ PF_My_I0D            osetreni Segment Override Exception                    บ
-;ศอออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออผ
+;โ•”โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•—
+;โ•‘ PF_My_I0D            osetreni Segment Override Exception                    โ•‘
+;โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•
 
 PF_My_I0D       proc    far
 ;
@@ -1528,9 +1528,9 @@ VW_I0D_RdVal    dw      ?
 
 PF_My_I0D       endp
 
-;ษอออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออป
-;บ PF_My_I1B            IRET pro zablokovani Ctrl-Break                        บ
-;ศอออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออผ
+;โ•”โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•—
+;โ•‘ PF_My_I1B            IRET pro zablokovani Ctrl-Break                        โ•‘
+;โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•
 
 PF_My_I1B       proc    far
 ;
@@ -1538,9 +1538,9 @@ PF_My_I1B       proc    far
 
 PF_My_I1B       endp
 
-;ษอออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออป
-;บ PF_My_I24            Critical Error Handler, vzdy vraci FAIL (AL=3)         บ
-;ศอออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออผ
+;โ•”โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•—
+;โ•‘ PF_My_I24            Critical Error Handler, vzdy vraci FAIL (AL=3)         โ•‘
+;โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•
 
 PF_My_I24       proc    far
 ;
@@ -1555,11 +1555,11 @@ PF_My_I24       endp
 ;;;
 ;
 
-;ษอออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออป
-;บ PN_Set_Blink         nastavi EGA radic pro kresbu na blikajicim pozadi      บ
-;วฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤถ
-;บ Nici:        nic                                                            บ
-;ศอออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออผ
+;โ•”โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•—
+;โ•‘ PN_Set_Blink         nastavi EGA radic pro kresbu na blikajicim pozadi      โ•‘
+;โ•โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ•ข
+;โ•‘ Nici:        nic                                                            โ•‘
+;โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•
 
 PN_Set_Blink    proc    near
 ;
@@ -1572,11 +1572,11 @@ PN_Set_Blink    proc    near
 
 PN_Set_Blink    endp
 
-;ษอออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออป
-;บ PN_Set_Bold          nastavi EGA radic pro kresbu ve zvysene intenzite      บ
-;วฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤถ
-;บ Nici:        nic                                                            บ
-;ศอออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออผ
+;โ•”โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•—
+;โ•‘ PN_Set_Bold          nastavi EGA radic pro kresbu ve zvysene intenzite      โ•‘
+;โ•โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ•ข
+;โ•‘ Nici:        nic                                                            โ•‘
+;โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•
 
 PN_Set_Bold     proc    near
 ;
@@ -1589,11 +1589,11 @@ PN_Set_Bold     proc    near
 
 PN_Set_Bold     endp
 
-;ษอออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออป
-;บ PN_Set_Norm          nastavi EGA radic pro kresbu v normalni intenzite      บ
-;วฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤถ
-;บ Nici:        nic                                                            บ
-;ศอออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออผ
+;โ•”โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•—
+;โ•‘ PN_Set_Norm          nastavi EGA radic pro kresbu v normalni intenzite      โ•‘
+;โ•โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ•ข
+;โ•‘ Nici:        nic                                                            โ•‘
+;โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•
 
 PN_Set_Norm     proc    near
 ;
@@ -1606,11 +1606,11 @@ PN_Set_Norm     proc    near
 
 PN_Set_Norm     endp
 
-;ษอออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออป
-;บ PN_Set_Red           nastavi EGA radic pro kresbu v cervene                 บ
-;วฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤถ
-;บ Nici:        nic                                                            บ
-;ศอออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออผ
+;โ•”โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•—
+;โ•‘ PN_Set_Red           nastavi EGA radic pro kresbu v cervene                 โ•‘
+;โ•โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ•ข
+;โ•‘ Nici:        nic                                                            โ•‘
+;โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•
 
 PN_Set_Red      proc    near
 ;
@@ -1623,11 +1623,11 @@ PN_Set_Red      proc    near
 
 PN_Set_Red      endp
 
-;ษอออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออป
-;บ PN_Set_Yellow        nastavi EGA radic pro kresbu ve zlute                  บ
-;วฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤถ
-;บ Nici:        nic                                                            บ
-;ศอออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออผ
+;โ•”โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•—
+;โ•‘ PN_Set_Yellow        nastavi EGA radic pro kresbu ve zlute                  โ•‘
+;โ•โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ•ข
+;โ•‘ Nici:        nic                                                            โ•‘
+;โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•
 
 PN_Set_Yellow   proc    near
 ;
@@ -1640,11 +1640,11 @@ PN_Set_Yellow   proc    near
 
 PN_Set_Yellow   endp
 
-;ษอออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออป
-;บ PN_Set_White         nastavi EGA radic pro kresbu v bile                    บ
-;วฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤถ
-;บ Nici:        nic                                                            บ
-;ศอออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออผ
+;โ•”โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•—
+;โ•‘ PN_Set_White         nastavi EGA radic pro kresbu v bile                    โ•‘
+;โ•โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ•ข
+;โ•‘ Nici:        nic                                                            โ•‘
+;โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•
 
 PN_Set_White    proc    near
 ;
@@ -1657,13 +1657,13 @@ PN_Set_White    proc    near
 
 PN_Set_White    endp
 
-;ษอออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออป
-;บ PN_Set_Color         nastavi EGA radic pro kresbu ve vybrane barve          บ
-;วฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤถ
-;บ Vstup:       BH              hodnota Set/Reset registru                     บ
-;บ              BL              hodnota Enable Set/Reset registru              บ
-;บ Nici:        nic                                                            บ
-;ศอออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออผ
+;โ•”โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•—
+;โ•‘ PN_Set_Color         nastavi EGA radic pro kresbu ve vybrane barve          โ•‘
+;โ•โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ•ข
+;โ•‘ Vstup:       BH              hodnota Set/Reset registru                     โ•‘
+;โ•‘              BL              hodnota Enable Set/Reset registru              โ•‘
+;โ•‘ Nici:        nic                                                            โ•‘
+;โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•
 
 PN_Set_Color    proc    near
 ;
@@ -1692,14 +1692,14 @@ PN_Set_Color    proc    near
 
 PN_Set_Color    endp
 
-;ษอออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออป
-;บ PN_CO                vykresli na obrazovku znak na pozici kurzoru           บ
-;วฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤถ
-;บ Vstup:       AL      ASCII kod znaku (KeybCS)                               บ
-;บ Nici:        nic                                                            บ
-;วฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤถ
-;บ Neovlada zadne ridici kody => lze tisknout znaky s ASCII 0-255.             บ
-;ศอออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออผ
+;โ•”โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•—
+;โ•‘ PN_CO                vykresli na obrazovku znak na pozici kurzoru           โ•‘
+;โ•โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ•ข
+;โ•‘ Vstup:       AL      ASCII kod znaku (KeybCS)                               โ•‘
+;โ•‘ Nici:        nic                                                            โ•‘
+;โ•โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ•ข
+;โ•‘ Neovlada zadne ridici kody => lze tisknout znaky s ASCII 0-255.             โ•‘
+;โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•
 
 PN_CO           proc    near
 ;
@@ -1744,11 +1744,11 @@ PN_CO_DChr:     movsb
 
 PN_CO           endp
 
-;ษอออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออป
-;บ PN_ClrEOL            smaze obrazovku do konce radku                         บ
-;วฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤถ
-;บ Nici:        AL,CX                                                          บ
-;ศอออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออผ
+;โ•”โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•—
+;โ•‘ PN_ClrEOL            smaze obrazovku do konce radku                         โ•‘
+;โ•โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ•ข
+;โ•‘ Nici:        AL,CX                                                          โ•‘
+;โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•
 
 PN_ClrEOL       proc    near
 ;
@@ -1762,15 +1762,15 @@ PN_CE_Clear:    call    PN_CO
 
 PN_ClrEol       endp
 
-;ษอออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออป
-;บ PN_DTxt              vypise na obrazovku text od pozice kurzoru             บ
-;วฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤถ
-;บ Vstup:       SI      ASCIIZ retezec textu                                   บ
-;บ Vystup:      SI      adresa za ukoncovaci nulou                             บ
-;บ Nici:        AL,(AX)                                                        บ
-;วฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤถ
-;บ Ovlada ridici kody definovane v konstantach.                                บ
-;ศอออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออผ
+;โ•”โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•—
+;โ•‘ PN_DTxt              vypise na obrazovku text od pozice kurzoru             โ•‘
+;โ•โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ•ข
+;โ•‘ Vstup:       SI      ASCIIZ retezec textu                                   โ•‘
+;โ•‘ Vystup:      SI      adresa za ukoncovaci nulou                             โ•‘
+;โ•‘ Nici:        AL,(AX)                                                        โ•‘
+;โ•โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ•ข
+;โ•‘ Ovlada ridici kody definovane v konstantach.                                โ•‘
+;โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•
 
 PN_DTxt         proc    near
 ;
@@ -1803,11 +1803,11 @@ PN_DT_End:      ret
 
 PN_DTxt         endp
 
-;ษอออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออป
-;บ PN_Disp_Msg          vypise nastavenou zpravu                               บ
-;วฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤถ
-;บ Nici:        hafo                                                           บ
-;ศอออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออผ
+;โ•”โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•—
+;โ•‘ PN_Disp_Msg          vypise nastavenou zpravu                               โ•‘
+;โ•โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ•ข
+;โ•‘ Nici:        hafo                                                           โ•‘
+;โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•
 
 PN_Disp_Msg     proc    near
 ;
@@ -1822,11 +1822,11 @@ PN_Disp_Msg     proc    near
 
 PN_Disp_Msg     endp
 
-;ษอออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออป
-;บ PN_Disp_Stat         vypise stavove informace                               บ
-;วฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤถ
-;บ Nici:        hafo                                                           บ
-;ศอออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออผ
+;โ•”โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•—
+;โ•‘ PN_Disp_Stat         vypise stavove informace                               โ•‘
+;โ•โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ•ข
+;โ•‘ Nici:        hafo                                                           โ•‘
+;โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•
 
 PN_Disp_Stat    proc    near
 ;
@@ -1888,12 +1888,12 @@ PN_Disp_Stat    endp
 ;;;
 ;
 
-;ษอออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออป
-;บ PN_Disp_AX           vypise v HEX obsah AX                                  บ
-;บ PN_Disp_AL           vypise v HEX obsah AL                                  บ
-;วฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤถ
-;บ Vstup:       AL(AX)          vypisovane cislo                               บ
-;ศอออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออผ
+;โ•”โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•—
+;โ•‘ PN_Disp_AX           vypise v HEX obsah AX                                  โ•‘
+;โ•‘ PN_Disp_AL           vypise v HEX obsah AL                                  โ•‘
+;โ•โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ•ข
+;โ•‘ Vstup:       AL(AX)          vypisovane cislo                               โ•‘
+;โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•
 
 PN_Disp_Acc     proc    near
 ;
@@ -1920,14 +1920,14 @@ PN_DA_NoHex:    call    PN_CO
 
 PN_Disp_Acc     endp
 
-;ษอออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออป
-;บ PN_Write_Nr          zapise cislo v HEX do ASCII retezce                    บ
-;วฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤถ
-;บ Vstup:       AX      zapisovane cislo                                       บ
-;บ              DI      adresa 4 bajtu pro ASCII tvar                          บ
-;บ Vystup:      DI      adresa za 4 bajty                                      บ
-;บ Nici:        nic                                                            บ
-;ศอออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออผ
+;โ•”โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•—
+;โ•‘ PN_Write_Nr          zapise cislo v HEX do ASCII retezce                    โ•‘
+;โ•โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ•ข
+;โ•‘ Vstup:       AX      zapisovane cislo                                       โ•‘
+;โ•‘              DI      adresa 4 bajtu pro ASCII tvar                          โ•‘
+;โ•‘ Vystup:      DI      adresa za 4 bajty                                      โ•‘
+;โ•‘ Nici:        nic                                                            โ•‘
+;โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•
 
 PN_Write_Nr     proc    near
 ;
@@ -1959,11 +1959,11 @@ PN_Write_Nr     endp
 ;;;
 ;
 
-;ษอออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออป
-;บ PN_Dos_Err           umisti do VW_Err_Msg adresu hlasky z DOS fn 59h        บ
-;วฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤถ
-;บ Nici:        nic                                                            บ
-;ศอออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออผ
+;โ•”โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•—
+;โ•‘ PN_Dos_Err           umisti do VW_Err_Msg adresu hlasky z DOS fn 59h        โ•‘
+;โ•โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ•ข
+;โ•‘ Nici:        nic                                                            โ•‘
+;โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•
 
 PN_Dos_Err      proc    near
 ;
@@ -2019,11 +2019,11 @@ PN_Dos_Err      endp
 ;;;
 ;
 
-;ษอออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออป
-;บ LN_Menu              vykresli menu, necha vybrat a skoci na danou rutinu    บ
-;วฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤถ
-;บ Vstup:       DX              adresa dat menu                                บ
-;ศอออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออผ
+;โ•”โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•—
+;โ•‘ LN_Menu              vykresli menu, necha vybrat a skoci na danou rutinu    โ•‘
+;โ•โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ•ข
+;โ•‘ Vstup:       DX              adresa dat menu                                โ•‘
+;โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•
 
 LN_Menu         label   near
 ;
@@ -2053,14 +2053,14 @@ LN_Mn_Search:   add     di,3
 ;;;
 ;
 
-;ษอออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออป
-;บ PN_Draw_Box          vykresli na obrazovku obdelnik                         บ
-;วฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤถ
-;บ Vstup:       DI              adresa leveho horniho rohu ve VRAM             บ
-;บ              BX              vyska obdelniku v bodech - 2                   บ
-;บ              CX              sirka obdelniku v bajtech - 2                  บ
-;บ Nici:        AL,CX,DX,SI,DI,ES                                              บ
-;ศอออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออผ
+;โ•”โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•—
+;โ•‘ PN_Draw_Box          vykresli na obrazovku obdelnik                         โ•‘
+;โ•โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ•ข
+;โ•‘ Vstup:       DI              adresa leveho horniho rohu ve VRAM             โ•‘
+;โ•‘              BX              vyska obdelniku v bodech - 2                   โ•‘
+;โ•‘              CX              sirka obdelniku v bajtech - 2                  โ•‘
+;โ•‘ Nici:        AL,CX,DX,SI,DI,ES                                              โ•‘
+;โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•
 
 PN_Draw_Box     proc    near
 ;
@@ -2104,11 +2104,11 @@ PN_DB_Draw2:    stosb
 
 PN_Draw_Box     endp
 
-;ษอออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออป
-;บ PN_Draw_Scr          vykresli na obrazovku zakladni informace               บ
-;วฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤถ
-;บ Nici:        AX,CX,DI,ES                                                    บ
-;ศอออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออผ
+;โ•”โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•—
+;โ•‘ PN_Draw_Scr          vykresli na obrazovku zakladni informace               โ•‘
+;โ•โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ•ข
+;โ•‘ Nici:        AX,CX,DI,ES                                                    โ•‘
+;โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•
 
 PN_Draw_Scr     proc    near
 ;
@@ -2142,12 +2142,12 @@ PN_Draw_Scr     endp
 ;;;
 ;
 
-;ษอออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออป
-;บ PN_CI                nacte klavesu sluzbou INT 16h BIOSu, z pismen UpCase   บ
-;วฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤถ
-;บ Vystup:      AX      ASCII kod znaku a SCAN kod                             บ
-;บ Nici:        nic                                                            บ
-;ศอออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออผ
+;โ•”โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•—
+;โ•‘ PN_CI                nacte klavesu sluzbou INT 16h BIOSu, z pismen UpCase   โ•‘
+;โ•โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ•ข
+;โ•‘ Vystup:      AX      ASCII kod znaku a SCAN kod                             โ•‘
+;โ•‘ Nici:        nic                                                            โ•‘
+;โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•
 
 PN_CI           proc    near
 ;
@@ -2165,14 +2165,14 @@ PN_CI_End:      ret
 
 PN_CI           endp
 
-;ษอออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออป
-;บ PN_Keybd_Cmd         posle do klavesnice prikaz                             บ
-;วฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤถ
-;บ Vstup:       AH      prikaz pro klavesnici                                  บ
-;บ Nici:        AL,CX                                                          บ
-;วฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤถ
-;บ Procedura nevraci stav provedene operace.                                   บ
-;ศอออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออผ
+;โ•”โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•—
+;โ•‘ PN_Keybd_Cmd         posle do klavesnice prikaz                             โ•‘
+;โ•โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ•ข
+;โ•‘ Vstup:       AH      prikaz pro klavesnici                                  โ•‘
+;โ•‘ Nici:        AL,CX                                                          โ•‘
+;โ•โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ•ข
+;โ•‘ Procedura nevraci stav provedene operace.                                   โ•‘
+;โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•
 
 PN_Keybd_Cmd    proc    near
 ;
@@ -2205,14 +2205,14 @@ PN_KC_End:      sti                             ;netestovat 0FAh poslane zpatky
 
 PN_Keybd_Cmd    endp
 
-;ษอออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออป
-;บ PN_Read_Line         nacte z klavesnice radek                               บ
-;วฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤถ
-;บ Vstup:       SI      ASCIIZ prompt                                          บ
-;บ              BX      buffer pro radek s implicitnim textem (ASCIIZ)         บ
-;บ Vystup:      CF      1 => vyskocil stiskem ESC, 0 => Enter                  บ
-;บ Nici:        AX,CX,DX                                                       บ
-;ศอออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออผ
+;โ•”โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•—
+;โ•‘ PN_Read_Line         nacte z klavesnice radek                               โ•‘
+;โ•โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ•ข
+;โ•‘ Vstup:       SI      ASCIIZ prompt                                          โ•‘
+;โ•‘              BX      buffer pro radek s implicitnim textem (ASCIIZ)         โ•‘
+;โ•‘ Vystup:      CF      1 => vyskocil stiskem ESC, 0 => Enter                  โ•‘
+;โ•‘ Nici:        AX,CX,DX                                                       โ•‘
+;โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•
 
 PN_Read_Line    proc    near
 ;
@@ -2388,14 +2388,14 @@ PN_Read_Line    endp
 ;;;
 ;
 
-;ษอออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออป
-;บ PN_Skip              nacte prvni znak ruzny od mezery                       บ
-;วฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤถ
-;บ Vstup:       SI      adresa retezce                                         บ
-;บ Vystup:      SI      adresa za prvnim znakem ruznym od mezery               บ
-;บ              AL      znak                                                   บ
-;บ              DF      = 0                                                    บ
-;ศอออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออผ
+;โ•”โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•—
+;โ•‘ PN_Skip              nacte prvni znak ruzny od mezery                       โ•‘
+;โ•โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ•ข
+;โ•‘ Vstup:       SI      adresa retezce                                         โ•‘
+;โ•‘ Vystup:      SI      adresa za prvnim znakem ruznym od mezery               โ•‘
+;โ•‘              AL      znak                                                   โ•‘
+;โ•‘              DF      = 0                                                    โ•‘
+;โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•
 
 PN_Skip         proc    near
 ;
@@ -2408,17 +2408,17 @@ PN_Sk_Main:     lodsb                   ;znak
 
 PN_Skip         endp
 
-;ษอออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออป
-;บ PN_Get_Nr            nacte cislo z retezce (preskakuje uvodni mezery)       บ
-;วฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤถ
-;บ Vstup:       SI      adresa retezce                                         บ
-;บ Vystup:      SI      adresa prvniho neciselneho znaku                       บ
-;บ              DX      nactene cislo                                          บ
-;บ              CF      cislo > 65535                                          บ
-;บ Nici:        AX,BX,CL                                                       บ
-;วฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤถ
-;บ Precte cislo, tvar HEX, &DEC nebo %BIN. Pismena vyzaduje v UpCase.          บ
-;ศอออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออผ
+;โ•”โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•—
+;โ•‘ PN_Get_Nr            nacte cislo z retezce (preskakuje uvodni mezery)       โ•‘
+;โ•โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ•ข
+;โ•‘ Vstup:       SI      adresa retezce                                         โ•‘
+;โ•‘ Vystup:      SI      adresa prvniho neciselneho znaku                       โ•‘
+;โ•‘              DX      nactene cislo                                          โ•‘
+;โ•‘              CF      cislo > 65535                                          โ•‘
+;โ•‘ Nici:        AX,BX,CL                                                       โ•‘
+;โ•โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ•ข
+;โ•‘ Precte cislo, tvar HEX, &DEC nebo %BIN. Pismena vyzaduje v UpCase.          โ•‘
+;โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•
 
 PN_Get_Nr       proc    near
 ;
@@ -2465,9 +2465,9 @@ PN_Get_Nr       endp
 ;;;
 ;
 
-;ษอออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออป
-;บ PN_Run       spusti simulaci, vrati se po chybe nebo Break                  บ
-;ศอออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออผ
+;โ•”โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•—
+;โ•‘ PN_Run       spusti simulaci, vrati se po chybe nebo Break                  โ•‘
+;โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•
 
 PN_Run          proc    near
 ;
@@ -2478,9 +2478,9 @@ PN_Run          proc    near
 
 PN_Run          endp
 
-;ษอออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออป
-;บ PN_Step      spusti simulaci na jeden krok, vrati se po nem, chybe a Break  บ
-;ศอออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออผ
+;โ•”โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•—
+;โ•‘ PN_Step      spusti simulaci na jeden krok, vrati se po nem, chybe a Break  โ•‘
+;โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•
 
 PN_Step         proc    near
 ;
@@ -2493,11 +2493,11 @@ PN_Step         proc    near
 
 PN_Step         endp
 
-;ษอออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออป
-;บ PN_Flush_MgIn        pokud je otevreny vstupni soubor MGF, uzavre ho        บ
-;วฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤถ
-;บ Nici:        (AX,BX)                                                        บ
-;ศอออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออผ
+;โ•”โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•—
+;โ•‘ PN_Flush_MgIn        pokud je otevreny vstupni soubor MGF, uzavre ho        โ•‘
+;โ•โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ•ข
+;โ•‘ Nici:        (AX,BX)                                                        โ•‘
+;โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•
 
 PN_Flush_MgIn   proc    near
 ;
@@ -2514,11 +2514,11 @@ PN_FI_NotOpen:  mov     VW_MgIn_Ofs,0           ;oznacit jako uzavreny
 
 PN_Flush_MgIn   endp
 
-;ษอออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออป
-;บ PN_Flush_MgOut       pokud je otevreny vystupni soubor MGF, uzavre ho       บ
-;วฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤถ
-;บ Nici:        (AX,BX,CX,DX)                                                  บ
-;ศอออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออผ
+;โ•”โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•—
+;โ•‘ PN_Flush_MgOut       pokud je otevreny vystupni soubor MGF, uzavre ho       โ•‘
+;โ•โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ•ข
+;โ•‘ Nici:        (AX,BX,CX,DX)                                                  โ•‘
+;โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•
 
 PN_Flush_MgOut  proc    near
 ;
@@ -2547,16 +2547,16 @@ PN_Flush_MgOut  endp
 ;;;
 ;
 
-;ษอออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออป
-;บ PN_Stat_MGF          vraci stav USARTu (port 1Fh)                           บ
-;วฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤถ
-;บ Vystup:      AL              stav USARTu                                    บ
-;บ              VB_MgIn_Dat     nacteny bajt                                   บ
-;บ              VB_MgIn_Flg     priznak platnosti nacteneho bajtu              บ
-;บ Nici:        SI                                                             บ
-;วฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤถ
-;บ Pocita s volanim v kontextu PMD                                            บ
-;ศอออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออผ
+;โ•”โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•—
+;โ•‘ PN_Stat_MGF          vraci stav USARTu (port 1Fh)                           โ•‘
+;โ•โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ•ข
+;โ•‘ Vystup:      AL              stav USARTu                                    โ•‘
+;โ•‘              VB_MgIn_Dat     nacteny bajt                                   โ•‘
+;โ•‘              VB_MgIn_Flg     priznak platnosti nacteneho bajtu              โ•‘
+;โ•‘ Nici:        SI                                                             โ•‘
+;โ•โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ•ข
+;โ•‘ Pocita s volanim v kontextu PMD                                            โ•‘
+;โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•
 
 PN_Stat_MGF     proc    near
 ;
@@ -2756,14 +2756,14 @@ PN_TM_ErrOpIn:  mov     [VW_Err_Msg],offset FB_MgIEr_Msg        ;text zpravy
 
 PN_Stat_MGF     endp
 
-;ษอออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออป
-;บ PN_Save_MGF          ulozi bajt na magnetofon                               บ
-;วฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤถ
-;บ Vstup:       AL              bajt na ulozeni                                บ
-;บ Nici:        SI                                                             บ
-;วฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤถ
-;บ Pocita s volanim v kontextu PMD                                            บ
-;ศอออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออผ
+;โ•”โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•—
+;โ•‘ PN_Save_MGF          ulozi bajt na magnetofon                               โ•‘
+;โ•โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ•ข
+;โ•‘ Vstup:       AL              bajt na ulozeni                                โ•‘
+;โ•‘ Nici:        SI                                                             โ•‘
+;โ•โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ•ข
+;โ•‘ Pocita s volanim v kontextu PMD                                            โ•‘
+;โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•
 
 PN_Save_MGF     proc    near
 ;
@@ -2927,14 +2927,14 @@ PN_Save_MGF     endp
 ;;;
 ;
 
-;ษอออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออป
-;บ PN_Rest_PCI          obnovi cast kontextu pro PC                            บ
-;วฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤถ
-;บ Nici:        hafo                                                           บ
-;วฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤถ
-;บ Tato procedura obnovi vsechny nutne polozky, ktere nelze obnovovat pri      บ
-;บ operacich s magnetofonovymi soubory.                                        บ
-;ศอออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออผ
+;โ•”โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•—
+;โ•‘ PN_Rest_PCI          obnovi cast kontextu pro PC                            โ•‘
+;โ•โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ•ข
+;โ•‘ Nici:        hafo                                                           โ•‘
+;โ•โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ•ข
+;โ•‘ Tato procedura obnovi vsechny nutne polozky, ktere nelze obnovovat pri      โ•‘
+;โ•‘ operacich s magnetofonovymi soubory.                                        โ•‘
+;โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•
 
 PN_Rest_PCI     proc    near
 ;
@@ -2973,14 +2973,14 @@ PN_Rest_PCI     proc    near
 
 PN_Rest_PCI     endp
 
-;ษอออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออป
-;บ PN_Rest_PC           uschova stav simulatoru PMD a obnovi cast stavu PC     บ
-;วฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤถ
-;บ Nici:        vzhledem k PN_Rest_PMD - SI,DS,ES                              บ
-;วฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤถ
-;บ Tato procedura obnovuje vsechny polozky nutne k praci magnetofonovych       บ
-;บ sluzeb simulatoru. Zbytek obnovuje PN_Rest_PCI, musi se volat az po ..._PC. บ
-;ศอออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออผ
+;โ•”โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•—
+;โ•‘ PN_Rest_PC           uschova stav simulatoru PMD a obnovi cast stavu PC     โ•‘
+;โ•โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ•ข
+;โ•‘ Nici:        vzhledem k PN_Rest_PMD - SI,DS,ES                              โ•‘
+;โ•โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ•ข
+;โ•‘ Tato procedura obnovuje vsechny polozky nutne k praci magnetofonovych       โ•‘
+;โ•‘ sluzeb simulatoru. Zbytek obnovuje PN_Rest_PCI, musi se volat az po ..._PC. โ•‘
+;โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•
 
 PN_Rest_PC      proc    near
 ;
@@ -3005,14 +3005,14 @@ PN_Rest_PC      proc    near
 
 PN_Rest_PC      endp
 
-;ษอออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออป
-;บ PN_Rest_PMDI         obnovi cast kontextu PMD                               บ
-;วฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤถ
-;บ Nici:        hafo                                                           บ
-;วฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤถ
-;บ Tato procedura obnovi vsechny nutne polozky, ktere nelze obnovovat pri      บ
-;บ operacich s magnetofonovymi soubory.                                        บ
-;ศอออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออผ
+;โ•”โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•—
+;โ•‘ PN_Rest_PMDI         obnovi cast kontextu PMD                               โ•‘
+;โ•โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ•ข
+;โ•‘ Nici:        hafo                                                           โ•‘
+;โ•โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ•ข
+;โ•‘ Tato procedura obnovi vsechny nutne polozky, ktere nelze obnovovat pri      โ•‘
+;โ•‘ operacich s magnetofonovymi soubory.                                        โ•‘
+;โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•
 
 PN_Rest_PMDI    proc    near
 ;
@@ -3078,14 +3078,14 @@ PN_Rest_PMDI    proc    near
 
 PN_Rest_PMDI    endp
 
-;ษอออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออป
-;บ PN_Rest_PMD          uschova stav PC a nastavi cast kontextu PMD            บ
-;วฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤถ
-;บ Nici:        vzhledem k PN_Rest_PC - SI,DS,ES                               บ
-;วฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤถ
-;บ Tato procedura obnovuje vsechny polozky nutne k praci magnetofonovych       บ
-;บ sluzeb simulatoru. Zbytek obnovuje PN_Rest_PMDI, volat az po ..._PMD.       บ
-;ศอออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออผ
+;โ•”โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•—
+;โ•‘ PN_Rest_PMD          uschova stav PC a nastavi cast kontextu PMD            โ•‘
+;โ•โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ•ข
+;โ•‘ Nici:        vzhledem k PN_Rest_PC - SI,DS,ES                               โ•‘
+;โ•โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ•ข
+;โ•‘ Tato procedura obnovuje vsechny polozky nutne k praci magnetofonovych       โ•‘
+;โ•‘ sluzeb simulatoru. Zbytek obnovuje PN_Rest_PMDI, volat az po ..._PMD.       โ•‘
+;โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•
 
 PN_Rest_PMD     proc    near
 ;
@@ -3112,11 +3112,11 @@ PN_Rest_PMD     proc    near
 
 PN_Rest_PMD     endp
 
-;ษอออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออป
-;บ PN_Scr_ReDraw        prekresli celou obrazovku PMD                          บ
-;วฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤถ
-;บ Nici:        AX,BX,DX,SI,DI,ES                                              บ
-;ศอออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออผ
+;โ•”โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•—
+;โ•‘ PN_Scr_ReDraw        prekresli celou obrazovku PMD                          โ•‘
+;โ•โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ•ข
+;โ•‘ Nici:        AX,BX,DX,SI,DI,ES                                              โ•‘
+;โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•
 
 PN_Scr_ReDraw   proc    near
 ;
@@ -3158,13 +3158,13 @@ PN_Scr_ReDraw   endp
 ;;;
 ;
 
-;ษอออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออป
-;บ PN_Make_Tbl          vytvori potrebne tabulky programu                      บ
-;วฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤถ
-;บ Vstup:       nic                                                            บ
-;บ Vystup:      nic                                                            บ
-;บ Nici:        AX,BX,CX,DX,SI,DI,ES                                           บ
-;ศอออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออผ
+;โ•”โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•—
+;โ•‘ PN_Make_Tbl          vytvori potrebne tabulky programu                      โ•‘
+;โ•โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ•ข
+;โ•‘ Vstup:       nic                                                            โ•‘
+;โ•‘ Vystup:      nic                                                            โ•‘
+;โ•‘ Nici:        AX,BX,CX,DX,SI,DI,ES                                           โ•‘
+;โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•
 
 PN_Make_Tbl     proc    near
 ;
@@ -3250,13 +3250,13 @@ PN_MT_MkDisp22: shl     bl,1                            ;prevadeny bit do CF
 
 PN_Make_Tbl     endp
 
-;ษอออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออป
-;บ PN_Close_EGA         obnovi video rezim                                     บ
-;วฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤถ
-;บ Vstup:       nic                                                            บ
-;บ Vystup:      nic                                                            บ
-;บ Nici:        AX,BIOS                                                        บ
-;ศอออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออผ
+;โ•”โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•—
+;โ•‘ PN_Close_EGA         obnovi video rezim                                     โ•‘
+;โ•โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ•ข
+;โ•‘ Vstup:       nic                                                            โ•‘
+;โ•‘ Vystup:      nic                                                            โ•‘
+;โ•‘ Nici:        AX,BIOS                                                        โ•‘
+;โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•
 
 PN_Close_EGA    proc    near
 ;
@@ -3268,13 +3268,13 @@ PN_Close_EGA    proc    near
 
 PN_Close_EGA    endp
 
-;ษอออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออป
-;บ PN_Open_EGA          schova video rezim, nastavi 640x350x16                 บ
-;วฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤถ
-;บ Vstup:       nic                                                            บ
-;บ Vystup:      nic                                                            บ
-;บ Nici:        AX,CX,DX,DI,ES,BIOS                                            บ
-;ศอออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออผ
+;โ•”โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•—
+;โ•‘ PN_Open_EGA          schova video rezim, nastavi 640x350x16                 โ•‘
+;โ•โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ•ข
+;โ•‘ Vstup:       nic                                                            โ•‘
+;โ•‘ Vystup:      nic                                                            โ•‘
+;โ•‘ Nici:        AX,CX,DX,DI,ES,BIOS                                            โ•‘
+;โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•
 
 PN_Open_EGA     proc    near
 ;
@@ -3298,13 +3298,13 @@ PN_Open_EGA     proc    near
 
 PN_Open_EGA     endp
 
-;ษอออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออป
-;บ PN_Set_INTs          nastavi potrebne vektory                               บ
-;ฬอออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออน
-;บ Nici:        hafo                                                           บ
-;วฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤถ
-;บ Nastavuje Critical Error a BIOS Break.                                      บ
-;ศอออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออผ
+;โ•”โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•—
+;โ•‘ PN_Set_INTs          nastavi potrebne vektory                               โ•‘
+;โ• โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•ฃ
+;โ•‘ Nici:        hafo                                                           โ•‘
+;โ•โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ•ข
+;โ•‘ Nastavuje Critical Error a BIOS Break.                                      โ•‘
+;โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•
 
 PN_Set_INTs     proc    near
 ;
@@ -3324,13 +3324,13 @@ PN_Set_INTs     proc    near
 
 PN_Set_INTs     endp
 
-;ษอออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออป
-;บ PN_Rest_INTs         obnovi zmenene vektory                                 บ
-;ฬอออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออน
-;บ Nici:        hafo                                                           บ
-;วฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤถ
-;บ Neobnovuje Critical Error, protoze ten je v PSP.                            บ
-;ศอออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออผ
+;โ•”โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•—
+;โ•‘ PN_Rest_INTs         obnovi zmenene vektory                                 โ•‘
+;โ• โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•ฃ
+;โ•‘ Nici:        hafo                                                           โ•‘
+;โ•โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ•ข
+;โ•‘ Neobnovuje Critical Error, protoze ten je v PSP.                            โ•‘
+;โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•
 
 PN_Rest_INTs    proc    near
 ;
@@ -3345,13 +3345,13 @@ PN_Rest_INTs    proc    near
 
 PN_Rest_INTs    endp
 
-;ษอออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออป
-;บ PN_Alloc_Mem         alokuje pamet pro program a nastavi promenne segmentu  บ
-;วฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤถ
-;บ Vstup:       nic                                                            บ
-;บ Vystup:      nic                                                            บ
-;บ Nici:        AX,BX,ES                                                       บ
-;ศอออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออผ
+;โ•”โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•—
+;โ•‘ PN_Alloc_Mem         alokuje pamet pro program a nastavi promenne segmentu  โ•‘
+;โ•โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ•ข
+;โ•‘ Vstup:       nic                                                            โ•‘
+;โ•‘ Vystup:      nic                                                            โ•‘
+;โ•‘ Nici:        AX,BX,ES                                                       โ•‘
+;โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•
 
 PN_Alloc_Mem    proc    near
 ;
@@ -3486,15 +3486,15 @@ LN_Reset:       mov     VW_Reg_PC,8000h                 ;resetovat PC
 ;;;
 ;
 
-;ษอออออออออออออออออออออออออออออป
-;บ ÛÛÛÛÛ ÛÛÛ Û     ÛÛÛÛÛ  ÛÛÛ  บ
-;บ Û      Û  Û     Û     Û   Û บ
-;บ Û      Û  Û     Û     Û     บ
-;บ ÛÛÛ    Û  Û     ÛÛÛ    ÛÛÛ  บ
-;บ Û      Û  Û     Û         Û บ
-;บ Û      Û  Û     Û     Û   Û บ
-;บ Û     ÛÛÛ ÛÛÛÛÛ ÛÛÛÛÛ  ÛÛÛ  บ
-;ศอออออออออออออออออออออออออออออผ
+;โ•”โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•—
+;โ•‘ โ–โ–โ–โ–โ– โ–โ–โ– โ–     โ–โ–โ–โ–โ–  โ–โ–โ–  โ•‘
+;โ•‘ โ–      โ–  โ–     โ–     โ–   โ– โ•‘
+;โ•‘ โ–      โ–  โ–     โ–     โ–     โ•‘
+;โ•‘ โ–โ–โ–    โ–  โ–     โ–โ–โ–    โ–โ–โ–  โ•‘
+;โ•‘ โ–      โ–  โ–     โ–         โ– โ•‘
+;โ•‘ โ–      โ–  โ–     โ–     โ–   โ– โ•‘
+;โ•‘ โ–     โ–โ–โ– โ–โ–โ–โ–โ– โ–โ–โ–โ–โ–  โ–โ–โ–  โ•‘
+;โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•
 
 LN_Files_ClErr: call    PN_DOS_Err              ;schovat hlasku chyby
                 mov     bx,VW_File_Hnd          ;handler souboru
@@ -3684,15 +3684,15 @@ LN_Rename:      mov     si,offset FB_FName_Rq
 ;;;
 ;
 
-;ษอออออออออออออออออออออออออออออออป
-;บ  ÛÛÛ  ÛÛÛÛÛ ÛÛÛÛÛ Û   Û ÛÛÛÛ  บ
-;บ Û   Û Û     Û Û Û Û   Û Û   Û บ
-;บ Û     Û       Û   Û   Û Û   Û บ
-;บ  ÛÛÛ  ÛÛÛ     Û   Û   Û ÛÛÛÛ  บ
-;บ     Û Û       Û   Û   Û Û     บ
-;บ Û   Û Û       Û   Û   Û Û     บ
-;บ  ÛÛÛ  ÛÛÛÛÛ   Û    ÛÛÛ  Û     บ
-;ศอออออออออออออออออออออออออออออออผ
+;โ•”โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•—
+;โ•‘  โ–โ–โ–  โ–โ–โ–โ–โ– โ–โ–โ–โ–โ– โ–   โ– โ–โ–โ–โ–  โ•‘
+;โ•‘ โ–   โ– โ–     โ– โ– โ– โ–   โ– โ–   โ– โ•‘
+;โ•‘ โ–     โ–       โ–   โ–   โ– โ–   โ– โ•‘
+;โ•‘  โ–โ–โ–  โ–โ–โ–     โ–   โ–   โ– โ–โ–โ–โ–  โ•‘
+;โ•‘     โ– โ–       โ–   โ–   โ– โ–     โ•‘
+;โ•‘ โ–   โ– โ–       โ–   โ–   โ– โ–     โ•‘
+;โ•‘  โ–โ–โ–  โ–โ–โ–โ–โ–   โ–    โ–โ–โ–  โ–     โ•‘
+;โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•
 
 LN_SetUp_Stat:  call    PN_Disp_Stat                    ;vypsat stav prepinacu
 LN_SetUp:       mov     dx,offset FB_SetUp_Mnu
@@ -3760,14 +3760,14 @@ LN_Trans:       mov     al,[VB_TRN_Flg]         ;vybrany printer port
                 out     dx,al
                 jmp     LN_SetUp_Stat
 
-;ษอออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออป
-;บ PN_Next_PRN          najde dalsi dostupny printer port                      บ
-;ฬอออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออน
-;บ Vstup:       AL              cislo portu (0 - nic, 1 - LPT1 ...)            บ
-;บ Vystup:      AL              nove cislo portu                               บ
-;บ              DX              adresa portu nebo 0                            บ
-;บ Nici:        BX,ES                                                          บ
-;ศอออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออผ
+;โ•”โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•—
+;โ•‘ PN_Next_PRN          najde dalsi dostupny printer port                      โ•‘
+;โ• โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•ฃ
+;โ•‘ Vstup:       AL              cislo portu (0 - nic, 1 - LPT1 ...)            โ•‘
+;โ•‘ Vystup:      AL              nove cislo portu                               โ•‘
+;โ•‘              DX              adresa portu nebo 0                            โ•‘
+;โ•‘ Nici:        BX,ES                                                          โ•‘
+;โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•
 
 PN_Next_PRN     PROC    near
 ;
@@ -3798,15 +3798,15 @@ PN_Next_PRN     endp
 ;;;
 ;
 
-;ษอออออออออออออออออออออออออออออออออออออออออออออออออป
-;บ ÛÛÛÛ  ÛÛÛÛÛ ÛÛÛÛ  Û   Û  ÛÛÛ   ÛÛÛ  ÛÛÛÛÛ ÛÛÛÛ  บ
-;บ Û   Û Û     Û   Û Û   Û Û   Û Û   Û Û     Û   Û บ
-;บ Û   Û Û     Û   Û Û   Û Û     Û     Û     Û   Û บ
-;บ Û   Û ÛÛÛÛ  ÛÛÛÛ  Û   Û Û ÛÛÛ Û ÛÛÛ ÛÛÛÛ  ÛÛÛÛ  บ
-;บ Û   Û Û     Û   Û Û   Û Û   Û Û   Û Û     Û Û   บ
-;บ Û   Û Û     Û   Û Û   Û Û   Û Û   Û Û     Û  Û  บ
-;บ ÛÛÛÛ  ÛÛÛÛÛ ÛÛÛÛ   ÛÛÛ   ÛÛÛ   ÛÛÛ  ÛÛÛÛÛ Û   Û บ
-;ศอออออออออออออออออออออออออออออออออออออออออออออออออผ
+;โ•”โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•—
+;โ•‘ โ–โ–โ–โ–  โ–โ–โ–โ–โ– โ–โ–โ–โ–  โ–   โ–  โ–โ–โ–   โ–โ–โ–  โ–โ–โ–โ–โ– โ–โ–โ–โ–  โ•‘
+;โ•‘ โ–   โ– โ–     โ–   โ– โ–   โ– โ–   โ– โ–   โ– โ–     โ–   โ– โ•‘
+;โ•‘ โ–   โ– โ–     โ–   โ– โ–   โ– โ–     โ–     โ–     โ–   โ– โ•‘
+;โ•‘ โ–   โ– โ–โ–โ–โ–  โ–โ–โ–โ–  โ–   โ– โ– โ–โ–โ– โ– โ–โ–โ– โ–โ–โ–โ–  โ–โ–โ–โ–  โ•‘
+;โ•‘ โ–   โ– โ–     โ–   โ– โ–   โ– โ–   โ– โ–   โ– โ–     โ– โ–   โ•‘
+;โ•‘ โ–   โ– โ–     โ–   โ– โ–   โ– โ–   โ– โ–   โ– โ–     โ–  โ–  โ•‘
+;โ•‘ โ–โ–โ–โ–  โ–โ–โ–โ–โ– โ–โ–โ–โ–   โ–โ–โ–   โ–โ–โ–   โ–โ–โ–  โ–โ–โ–โ–โ– โ–   โ– โ•‘
+;โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•
 
 LN_Dbg_Brk:     mov     cs:VW_Err_Msg,offset FB_AtBrk_Msg
 LN_Dbg_Err:     call    PN_Rest_PC              ;vratit kontext PC
@@ -3937,12 +3937,12 @@ LN_Dbg_End:     mov     VW_Cursor,2*256+25
                 call    PN_ClrEol               ;smazat stavovy radek
                 jmp     LN_Main                 ;do hlavniho menu
 
-;ษอออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออป
-;บ PN_Disp_Dbg          vytiskne radku debuggeru, nastavi VW_Next_Inst         บ
-;ฬอออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออน
-;บ Vystup:      ES:BX           adresa nasledujici instrukce                   บ
-;บ Nici:        AX,CX,SI                                                       บ
-;ศอออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออผ
+;โ•”โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•—
+;โ•‘ PN_Disp_Dbg          vytiskne radku debuggeru, nastavi VW_Next_Inst         โ•‘
+;โ• โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•ฃ
+;โ•‘ Vystup:      ES:BX           adresa nasledujici instrukce                   โ•‘
+;โ•‘ Nici:        AX,CX,SI                                                       โ•‘
+;โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•
 
 PN_Disp_Dbg     proc    near
 ;
@@ -3995,16 +3995,16 @@ PN_DD_FlgOn:    call    PN_CO                   ;vypsat flag
 
 PN_Disp_Dbg     endp
 
-;ษอออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออป
-;บ PN_Disp_Inst         vytiskne instrukci                                     บ
-;ฬอออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออน
-;บ Vstup:       BX      adresa instrukce                                       บ
-;บ              ES      segment instrukce                                      บ
-;บ Vystup:      BX      adresa nasledujici instrukce                           บ
-;บ Nici:        AX                                                             บ
-;วฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤถ
-;บ Vypsana instrukce ma delku 13 znaku, vypisuje se od pozice kurzoru.         บ
-;ศอออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออผ
+;โ•”โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•—
+;โ•‘ PN_Disp_Inst         vytiskne instrukci                                     โ•‘
+;โ• โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•ฃ
+;โ•‘ Vstup:       BX      adresa instrukce                                       โ•‘
+;โ•‘              ES      segment instrukce                                      โ•‘
+;โ•‘ Vystup:      BX      adresa nasledujici instrukce                           โ•‘
+;โ•‘ Nici:        AX                                                             โ•‘
+;โ•โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ”€โ•ข
+;โ•‘ Vypsana instrukce ma delku 13 znaku, vypisuje se od pozice kurzoru.         โ•‘
+;โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•
 
 PN_Disp_Inst    proc    near
 ;
@@ -4149,14 +4149,14 @@ PN_DI_Space:    call    PN_CO                    ;pozice v CL
 
 PN_Disp_Inst    endp
 
-;ษอออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออป
-;บ PN_Fnd_Ins           zkusi najit instrukci podle jejiho kodu v tabulce      บ
-;ฬอออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออน
-;บ Vstup:       AH      kod hledane instrukce                                  บ
-;บ Vystup:      CF      1 => instrukce nebyla nalezena, ostatni reg. pro DB    บ
-;บ              DH      typ instrukce                                          บ
-;บ              SI      nazev instrukce z tabulky                              บ
-;ศอออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออผ
+;โ•”โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•—
+;โ•‘ PN_Fnd_Ins           zkusi najit instrukci podle jejiho kodu v tabulce      โ•‘
+;โ• โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•ฃ
+;โ•‘ Vstup:       AH      kod hledane instrukce                                  โ•‘
+;โ•‘ Vystup:      CF      1 => instrukce nebyla nalezena, ostatni reg. pro DB    โ•‘
+;โ•‘              DH      typ instrukce                                          โ•‘
+;โ•‘              SI      nazev instrukce z tabulky                              โ•‘
+;โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•โ•
 
 PN_Fnd_Ins      proc    near
 ;

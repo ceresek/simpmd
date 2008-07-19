@@ -1,14 +1,14 @@
 ;
-;  ����   �   �  ����
-;  ۱���  �� �۱  ۱��                        �
-;  ۱  ۱ ۱� ۱  ۱ ۱ ����    ���   � ��   ���
-;  ���� � ۱۱۱  ۱ ۱ ۱���  � ���  �۱��   ۱�
-;  ۱���  ۱ �۱  ۱ ۱ ۱  ۱ ۱  ۱ ۱�  �  ۱
-;  ۱     ۱  ۱  ۱ ۱ ۱  ۱ ۱  ۱ ۱      ۱ �
-;  ۱     ۱  ۱ ���� � ���� �  ��� � ۱       �� �
-;   �      �   �  ����  ۱���    ���   �        ��
-;                       ۱
-;                        �
+;  ████   █   █  ████
+;  █▒▒▒█  ██ ██▒  █▒▒█                        █
+;  █▒  █▒ █▒█ █▒  █▒ █▒ ████    ███   █ ██   ███
+;  ████ ▒ █▒█▒█▒  █▒ █▒ █▒▒▒█  █ ▒▒█  ██▒▒█   █▒▒
+;  █▒▒▒▒  █▒ ▒█▒  █▒ █▒ █▒  █▒ █▒  █▒ █▒▒  ▒  █▒
+;  █▒     █▒  █▒  █▒ █▒ █▒  █▒ █▒  █▒ █▒      █▒ █
+;  █▒     █▒  █▒ ████ ▒ ████ ▒  ███ ▒ █▒       ██ ▒
+;   ▒      ▒   ▒  ▒▒▒▒  █▒▒▒▒    ▒▒▒   ▒        ▒▒
+;                       █▒
+;                        ▒
 ;
 ;
 ;
@@ -100,7 +100,7 @@ FW_Tbl_IN       label   word
                 Port    NoIN                 ;49
                 Port    NoIN                 ;4A
                 Port    NoIN                 ;4B
-                Port    IN_4C                ;4C Joy data 8255 PA (in) 
+                Port    IN_4C                ;4C Joy data 8255 PA (in)
                 Port    NoIN                 ;4D
                 Port    NoIN                 ;4E
                 Port    NoIN                 ;4F
@@ -151,9 +151,9 @@ FW_Tbl_IN       label   word
                 Port    IN_7D                ;79 LPT1 Status 8255 PB (in)
                 Port    IN_7E                ;7A LPT1 Ctrl 8255 PC (out)
                 Port    NoIN                 ;7B
-                Port    IN_7C                ;7C LPT1 Data 8255 PA (out) 
+                Port    IN_7C                ;7C LPT1 Data 8255 PA (out)
                 Port    IN_7D                ;7D LPT1 Status 8255 PB (in)
-                Port    IN_7E                ;7E LPT1 Ctrl 8255 PC (out) 
+                Port    IN_7E                ;7E LPT1 Ctrl 8255 PC (out)
                 Port    NoIN                 ;7F
 
                 Port    IN_F4                ;80 Keybd Col 8255 PA (out)
@@ -432,13 +432,13 @@ FW_Tbl_OUT      label   word
                 Port    NoOUT                ;75
                 Port    NoOUT                ;76
                 Port    NoOUT                ;77
-                Port    OUT_7C               ;78 LPT1 Data 8255 PA (out) 
+                Port    OUT_7C               ;78 LPT1 Data 8255 PA (out)
                 Port    NoOUT                ;79 LPT1 Status 8255 PB (in)
-                Port    OUT_7E               ;7A LPT1 Ctrl 8255 PC (out) 
+                Port    OUT_7E               ;7A LPT1 Ctrl 8255 PC (out)
                 Port    NoOUT                ;7B
-                Port    OUT_7C               ;7C LPT1 Data 8255 PA (out) 
+                Port    OUT_7C               ;7C LPT1 Data 8255 PA (out)
                 Port    NoOUT                ;7D LPT1 Status 8255 PB (in)
-                Port    OUT_7E               ;7E LPT1 Ctrl 8255 PC (out) 
+                Port    OUT_7E               ;7E LPT1 Ctrl 8255 PC (out)
                 Port    NoOUT                ;7F
 
                 Port    OUT_F4               ;80 Keybd Col 8255 PA (out)
