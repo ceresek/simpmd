@@ -1,10 +1,12 @@
 .PHONY: all doc clean
 
+# Targets
+
 all: doc
 
 doc:
-	false
+	doxygen
 
 clean:
-	false
+	rm -rf html
 

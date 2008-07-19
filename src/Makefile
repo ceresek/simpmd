@@ -1,14 +1,39 @@
 .PHONY:	all clean
 
-all:		simpmd
+# Settings
+
+MAKEFLAGS += --no-builtin-rules --no-builtin-variables
+
+CC = g++
+CC_OPTS = -O
+LD = g++
+LD_OPTS =
+
+# Targets
+
+all: simpmd
 
 clean:
 	rm -f simpmd
 	rm -f *.o
 	rm -f *.dep
 
+# Modules
 
-# SimPMD Executable
+OO = sim_core.o sim_processor.o
 
-simpmd:
-	false
+%.o: %.c
+	$(CC) $(CC_OPTS) -c -o $@ $<
+
+# Executable
+
+simpmd: $(OO)
+	$(LD) $(LD_OPTS) -o $@ $^
+
+# Dependencies
+
+include $(OO:.o=.dep)
+
+%.dep: %.c
+	@set -e ; $(CC) -MM $(CC_OPTS) $< | sed 's/\($*\)\.o *:/\1.o $@:/g' > $@
+
