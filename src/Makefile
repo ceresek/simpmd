@@ -5,9 +5,9 @@
 MAKEFLAGS += --no-builtin-rules --no-builtin-variables
 
 CC = g++
-CC_OPTS = -O
+CC_OPTS = -O0 -g
 LD = g++
-LD_OPTS =
+LD_OPTS = -lSDL
 
 # Targets
 
@@ -20,7 +20,7 @@ clean:
 
 # Modules
 
-OO = sim_core.o sim_processor.o
+OO = sim_core.o sim_display.o sim_processor.o
 
 %.o: %.c
 	$(CC) $(CC_OPTS) -c -o $@ $<

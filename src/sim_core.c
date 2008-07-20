@@ -18,6 +18,8 @@ limitations under the License.
 
 */
 
+#include <SDL/SDL.h>
+
 #include "sim_common.h"
 
 
@@ -30,13 +32,45 @@ limitations under the License.
 byte MemData [65536];
 bool MemMask [65536];
 
-//--------------------------------------------------------------------------
 
 //--------------------------------------------------------------------------
 // Main
 
 int main (int iArgC, char *apArgV [])
 {
+  // Module initialization
+
+  SDL_Init (SDL_INIT_TIMER | SDL_INIT_VIDEO);
+
+  CPUInitialize ();
+  DSPInitialize ();
+
+  // Event loop
+
+  bool bQuit = false;
+  SDL_Event sEvent;
+
+  while (!bQuit)
+  {
+    SDL_WaitEvent (&sEvent);
+    switch (sEvent.type)
+    {
+      case SDL_USEREVENT:
+        DSPPaint ();
+        break;
+      case SDL_QUIT:
+        bQuit = true;
+        break;
+    }
+  }
+
+  // Module shutdown
+
+  DSPShutdown ();
+  CPUShutdown ();
+
+  SDL_Quit ();
+
   return (0);
 }
 

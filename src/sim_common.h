@@ -19,6 +19,7 @@ limitations under the License.
 */
 
 
+//--------------------------------------------------------------------------
 // Types
 
 typedef unsigned int    uint;
@@ -26,10 +27,21 @@ typedef unsigned int    uint;
 typedef unsigned char   byte;
 typedef unsigned short  word;
 
+//--------------------------------------------------------------------------
 // Globals
 
 extern byte MemData [65536];
 extern bool MemMask [65536];
+
+//--------------------------------------------------------------------------
+// Externals
+
+void CPUInitialize ();
+void CPUShutdown ();
+
+void DSPPaint ();
+void DSPInitialize ();
+void DSPShutdown ();
 
 //--------------------------------------------------------------------------
 

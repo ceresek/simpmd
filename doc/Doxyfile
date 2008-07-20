@@ -6,6 +6,7 @@ DOXYFILE_ENCODING      = UTF-8
 PROJECT_NAME           = SimPMD
 
 FULL_PATH_NAMES        = NO
+JAVADOC_AUTOBRIEF      = YES
 BUILTIN_STL_SUPPORT    = YES
 
 #---------------------------------------------------------------------------

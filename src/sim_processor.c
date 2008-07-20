@@ -18,7 +18,7 @@ limitations under the License.
 
 */
 
-#include <endian.h>
+#include <SDL/SDL_endian.h>
 
 #include "sim_common.h"
 
@@ -32,11 +32,11 @@ limitations under the License.
 // access to the two individual bytes as well
 // as to the combined word ...
 
-#if __BYTE_ORDER == __LITTLE_ENDIAN
+#if SDL_BYTEORDER == SDL_LIL_ENDIAN
 #  define RegisterPairStruct(H,L) struct { byte L; byte H; }
 #endif
 
-#if __BYTE_ORDER == __BIG_ENDIAN
+#if SDL_BYTEORDER == SDL_BIG_ENDIAN
 #  define RegisterPairStruct(H,L) struct { byte H; byte L; }
 #endif
 
@@ -696,7 +696,7 @@ void InstXCHG ()
 }
 
 //--------------------------------------------------------------------------
-// Initialization
+// Initialization and shutdown
 
 void CPUInitialize ()
 {
@@ -714,6 +714,11 @@ void CPUInitialize ()
     }
     abParity [iValue] = bParity;
   }
+}
+
+
+void CPUShutdown ()
+{
 }
 
 //--------------------------------------------------------------------------
