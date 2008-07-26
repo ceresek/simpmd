@@ -42,24 +42,24 @@ limitations under the License.
 
 #define RegisterPairUnion(H,L) union { word Pair; RegisterPairStruct (H,L) One; } RegisterPair##H##L
 
+static RegisterPairUnion (A,F);
 static RegisterPairUnion (B,C);
 static RegisterPairUnion (D,E);
 static RegisterPairUnion (H,L);
-static RegisterPairUnion (F,A);
 
+#define RegAF (RegisterPairAF.Pair)
 #define RegBC (RegisterPairBC.Pair)
 #define RegDE (RegisterPairDE.Pair)
 #define RegHL (RegisterPairHL.Pair)
-#define RegFA (RegisterPairFA.Pair)
 
+#define RegA (RegisterPairAF.One.A)
+#define RegF (RegisterPairAF.One.F)
 #define RegB (RegisterPairBC.One.B)
 #define RegC (RegisterPairBC.One.C)
 #define RegD (RegisterPairDE.One.D)
 #define RegE (RegisterPairDE.One.E)
 #define RegH (RegisterPairHL.One.H)
 #define RegL (RegisterPairHL.One.L)
-#define RegF (RegisterPairFA.One.F)
-#define RegA (RegisterPairFA.One.A)
 
 static word RegPC;
 static word RegSP;
@@ -227,7 +227,151 @@ inline void FlagsUnpack ()
   FlagC = false;
 
 //--------------------------------------------------------------------------
-// Arithmetic Operations
+// Transfer Operations
+//
+// MOV, MVI, LXI, LDA, STA, LHLD, SHLD, LDAX, STAX, XCHG
+
+// MOV between generic registers
+
+#define InstMOVDstSrc(D,S)                      \
+void InstMOV##D##S ()                           \
+{                                               \
+  Reg##D = Reg##S;                              \
+}
+
+#define InstMOVDst(S)                           \
+  InstMOVDstSrc (B,S)                           \
+  InstMOVDstSrc (C,S)                           \
+  InstMOVDstSrc (D,S)                           \
+  InstMOVDstSrc (E,S)                           \
+  InstMOVDstSrc (H,S)                           \
+  InstMOVDstSrc (L,S)                           \
+  InstMOVDstSrc (A,S)
+
+InstAllRegisters (InstMOVDst)
+
+#undef InstMOVDstSrc
+#undef InstMOVDst
+
+// MOV from register to memory
+
+#define InstMOVMemSrc(S)                        \
+void InstMOVM##S ()                             \
+{                                               \
+  MemWriteByte (RegHL, Reg##S);                 \
+}
+
+InstAllRegisters (InstMOVMemSrc)
+
+#undef InstMOVMemSrc
+
+// MOV from memory to register
+
+#define InstMOVMemDst(D)                        \
+void InstMOV##D##M ()                           \
+{                                               \
+  Reg##D = MemData [RegHL];                     \
+}
+
+InstAllRegisters (InstMOVMemDst)
+
+#undef InstMOVMemDst
+
+// MVI to register
+
+#define InstMVIDst(D)                           \
+void InstMVI##D ()                              \
+{                                               \
+  Reg##D = MemFetchByte;                        \
+}
+
+InstAllRegisters (InstMVIDst)
+
+#undef InstMVIDst
+
+// MVI to memory
+
+void InstMVIM ()
+{
+  MemWriteByte (RegHL, MemFetchByte);
+}
+
+// LXI
+
+#define InstLXIDst(D,H,L)                       \
+void InstLXI##H ()                              \
+{                                               \
+  Reg##D = MemFetchWord;                        \
+}
+
+InstAllRegisterPairs (InstLXIDst)
+
+#undef InstLXIDst
+
+// LDA
+
+void InstLDA ()
+{
+  RegA = MemData [MemFetchWord];
+}
+
+// STA
+
+void InstSTA ()
+{
+  MemWriteByte (MemFetchWord, RegA);
+}
+
+// LHLD
+
+void InstLHLD ()
+{
+  RegHL = MemData [MemFetchWord];
+}
+
+// SHLD
+
+void InstSHLD ()
+{
+  int iAddr = MemFetchWord;
+  MemWriteWord (iAddr, RegHL);
+}
+
+// LDAX
+
+#define InstLDAXSrc(S,H,L)                      \
+void InstLDAX##H ()                             \
+{                                               \
+  RegA = MemData [Reg##S];                      \
+}
+
+InstAllRegisterPairs (InstLDAXSrc)
+
+#undef InstLDAXSrc
+
+// STAX
+
+#define InstSTAXSrc(S,H,L)                      \
+void InstSTAX##H ()                             \
+{                                               \
+  MemWriteByte (MemData [Reg##S], RegA);        \
+}
+
+InstAllRegisterPairs (InstSTAXSrc)
+
+#undef InstSTAXSrc
+
+// XCHG
+
+void InstXCHG ()
+{
+  int iTemp = RegDE;
+  RegDE = RegHL;
+  RegHL = iTemp;
+}
+
+//--------------------------------------------------------------------------
+// Arithmetic Instructions
 //
 // ADD, ADI, ADC, ACI, SUB, SUI, SBB, SBI, INR, DCR, INX, DCX, DAD, DAA
 
@@ -396,9 +540,9 @@ void InstDCRM ()
 // INX
 
 #define InstINXDst(D,H,L)                       \
-void InstINX##D ()                              \
+void InstINX##H ()                              \
 {                                               \
-  Reg##D ++;                                    \
+  ++ Reg##D;                                    \
 }
 
 InstAllRegisterPairs (InstINXDst)
@@ -408,9 +552,9 @@ InstAllRegisterPairs (InstINXDst)
 // DCX
 
 #define InstDCXDst(D,H,L)                       \
-void InstDCX##D ()                              \
+void InstDCX##H ()                              \
 {                                               \
-  Reg##D --;                                    \
+  -- Reg##D;                                    \
 }
 
 InstAllRegisterPairs (InstDCXDst)
@@ -422,7 +566,7 @@ InstAllRegisterPairs (InstDCXDst)
 // This code assumes that sizeof (uint) is more than a word ...
 
 #define InstDADSrc(S,H,L)                       \
-void InstDAD##S ()                              \
+void InstDAD##H ()                              \
 {                                               \
   uint iResult = RegHL + Reg##S;                \
   FlagC = (iResult > 65535);                    \
@@ -463,7 +607,7 @@ void InstDAA ()
 }
 
 //--------------------------------------------------------------------------
-// Logical Operations
+// Logical Instructions
 //
 // ANA, ANI, XRA, XRI, ORA, ORI, CMP, CPI, RLC, RRC, RAL, RAR, CMA, CMC, STC
 
@@ -640,7 +784,7 @@ void InstSTC ()
 }
 
 //--------------------------------------------------------------------------
-// Branch Operations
+// Branch Instructions
 //
 // JMP, CALL, RET, RST, PCHL
 
@@ -737,147 +881,115 @@ void InstPCHL ()
 }
 
 //--------------------------------------------------------------------------
-// Transfer Operations
+// Stack Operations
 //
-// MOV, MVI, LXI, LDA, STA, LHLD, SHLD, LDAX, STAX, XCHG
+// PUSH, POP, XTHL, SPHL
 
-// MOV between generic registers
+// PUSH
 
-#define InstMOVDstSrc(D,S)                      \
-void InstMOV##D##S ()                           \
+#define InstPUSHSrc(D,H,L)                      \
+void InstPUSH##H ()                             \
 {                                               \
-  Reg##D = Reg##S;                              \
+  MemPushWord (Reg##D);                         \
 }
 
-#define InstMOVDst(S)                           \
-  InstMOVDstSrc (B,S)                           \
-  InstMOVDstSrc (C,S)                           \
-  InstMOVDstSrc (D,S)                           \
-  InstMOVDstSrc (E,S)                           \
-  InstMOVDstSrc (H,S)                           \
-  InstMOVDstSrc (L,S)                           \
-  InstMOVDstSrc (A,S)
+InstAllRegisterPairs (InstPUSHSrc)
 
-InstAllRegisters (InstMOVDst)
+#undef InstPUSHSrc
 
-#undef InstMOVDstSrc
-#undef InstMOVDst
+// PUSH PSW
 
-// MOV from register to memory
-
-#define InstMOVMemSrc(S)                        \
-void InstMOVM##S ()                             \
-{                                               \
-  MemWriteByte (RegHL, Reg##S);                 \
-}
-
-InstAllRegisters (InstMOVMemSrc)
-
-#undef InstMOVMemSrc
-
-// MOV from memory to register
-
-#define InstMOVMemDst(D)                        \
-void InstMOV##D##M ()                           \
-{                                               \
-  Reg##D = MemData [RegHL];                     \
-}
-
-InstAllRegisters (InstMOVMemDst)
-
-#undef InstMOVMemDst
-
-// MVI to register
-
-#define InstMVIDst(D)                           \
-void InstMVI##D ()                              \
-{                                               \
-  Reg##D = MemFetchByte;                        \
-}
-
-InstAllRegisters (InstMVIDst)
-
-#undef InstMVIDst
-
-// MVI to memory
-
-void InstMVIM ()
+void InstPUSHPSW ()
 {
-  MemWriteByte (RegHL, MemFetchByte);
+  FlagsPack ();
+  MemPushWord (RegAF);
 }
 
-// LXI
+// POP
 
-#define InstLXIDst(D,H,L)                       \
-void InstLXI##D ()                              \
+#define InstPOPDst(D,H,L)                       \
+void InstPOP##H ()                              \
 {                                               \
-  Reg##D = MemFetchWord;                        \
+  Reg##D = MemPopWord;                          \
 }
 
-InstAllRegisterPairs (InstLXIDst)
+InstAllRegisterPairs (InstPOPDst)
 
-#undef InstLXIDst
+#undef InstPOPDst
 
-// LDA
+// POP PSW
 
-void InstLDA ()
+void InstPOPPSW ()
 {
-  RegA = MemData [MemFetchWord];
+  RegAF = MemPopWord;
+  FlagsUnpack ();
 }
 
-// STA
+// XTHL
 
-void InstSTA ()
+void InstXTHL ()
 {
-  MemWriteByte (MemFetchWord, RegA);
+  word iData = RegHL;
+  RegL = MemData [RegSP];
+  RegH = MemData [RegSP + 1];
+  MemWriteWord (RegSP, iData);
 }
 
-// LHLD
+// SPHL
 
-void InstLHLD ()
+void InstSPHL ()
 {
-  RegHL = MemData [MemFetchWord];
+  RegSP = RegHL;
 }
 
-// SHLD
+//--------------------------------------------------------------------------
+// Special Operations
+//
+// IN, OUT, EI, DI, HLT, NOP
 
-void InstSHLD ()
+// IN
+
+void InstIN ()
 {
-  int iAddr = MemFetchWord;
-  MemWriteWord (iAddr, RegHL);
+  MemFetchByte;
 }
 
-// LDAX
+// OUT
 
-#define InstLDAXSrc(S,H,L)                      \
-void InstLDAX##S ()                             \
-{                                               \
-  RegA = MemData [Reg##S];                      \
-}
-
-InstAllRegisterPairs (InstLDAXSrc)
-
-#undef InstLDAXSrc
-
-// STAX
-
-#define InstSTAXSrc(S,H,L)                      \
-void InstSTAX##S ()                             \
-{                                               \
-  MemWriteByte (MemData [Reg##S], RegA);        \
-}
-
-InstAllRegisterPairs (InstSTAXSrc)
-
-#undef InstSTAXSrc
-
-// XCHG
-
-void InstXCHG ()
+void InstOUT ()
 {
-  int iTemp = RegDE;
-  RegDE = RegHL;
-  RegHL = iTemp;
+  MemFetchByte;
+}
+
+// EI
+
+void InstEI ()
+{
+  // No interrupts were used in this computer
+}
+
+// DI
+
+void InstDI ()
+{
+  // No interrupts were used in this computer
+}
+
+// HLT
+
+void InstHLT ()
+{
+  // No interrupts were used in this computer and
+  // therefore the instruction should halt forever
+
+  -- RegPC;
+}
+
+// NOP
+
+void InstNOP ()
+{
+  // Guess what :-)
 }
 
 //--------------------------------------------------------------------------
