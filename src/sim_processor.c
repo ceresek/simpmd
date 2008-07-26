@@ -81,39 +81,80 @@ static bool FlagC;
 
 static byte abParity [256];
 
-
 //--------------------------------------------------------------------------
 // Helper Macros
 
-// MemWrite - Writes a byte to simulated memory array if it is writable
-#define MemWrite(A,X)                           \
-{                                               \
-  if (MemMask [A]) MemData [A] = (X);           \
+/** Writes a byte to simulated memory array if it is writable
+ *
+ * This is an inline function rather than a macro
+ * to avoid evaluating arguments multiple times.
+ *
+ */
+inline void MemWriteByte (word iAddr, byte iData)
+{
+  if (MemMask [iAddr]) MemData [iAddr] = iData;
 }
 
-// MemFetchByte - Fetches a byte from simulated memory array at PC and shifts PC
-// MemFetchWord - Fetches a word from simulated memory array at PC and shifts PC
+/** Writes a word to simulated memory array if it is writable
+ *
+ * This is an inline function rather than a macro
+ * to avoid evaluating arguments multiple times.
+ *
+ */
+inline void MemWriteWord (word iAddr, word iData)
+{
+  MemWriteByte (iAddr, iData);
+  MemWriteByte (iAddr + 1, iData >> 8);
+}
+
+/// Pushes a word onto the stack in the simulated memory array
+inline void MemPushWord (word iData)
+{
+  RegSP -= 2;
+  MemWriteWord (RegSP, iData);
+}
+
+/// Pops a byte from the stack in the simulated memory array
+#define MemPopByte (MemData [RegSP ++])
+/// Pops a word from the stack in the simulated memory array
+#define MemPopWord (MemPopByte + 256 * MemPopByte)
+
+/// Fetches a byte from simulated memory array at PC and shifts PC
 #define MemFetchByte (MemData [RegPC ++])
-#define MemFetchWord (MemData [RegPC ++] + 256 * MemData [RegPC ++])
+/// Fetches a word from simulated memory array at PC and shifts PC
+#define MemFetchWord (MemFetchByte + 256 * MemFetchByte)
 
-// InstAllRegisters - Expands its argument with all registers
+/// Expands its argument with all registers
 #define InstAllRegisters(I)                     \
-  I(B)                                          \
-  I(C)                                          \
-  I(D)                                          \
-  I(E)                                          \
-  I(H)                                          \
-  I(L)                                          \
-  I(A)
+  I (B)                                         \
+  I (C)                                         \
+  I (D)                                         \
+  I (E)                                         \
+  I (H)                                         \
+  I (L)                                         \
+  I (A)
 
-// InstAllPairs - Expands its arguments with all register pairs
+/// Expands its arguments with all register pairs
 #define InstAllRegisterPairs(I)                 \
-  I(BC,B,C)                                     \
-  I(DE,D,E)                                     \
-  I(HL,H,L)
+  I (BC,B,C)                                    \
+  I (DE,D,E)                                    \
+  I (HL,H,L)
+
+/// Expands its arguments with all conditions
+#define InstAllConditions(I)                    \
+  I (M,FlagS)                                   \
+  I (P,!FlagS)                                  \
+  I (Z,FlagZ)                                   \
+  I (NZ,!FlagZ)                                 \
+  I (PE,FlagP)                                  \
+  I (PO,!FlagP)                                 \
+  I (C,FlagC)                                   \
+  I (NC,!FlagC)
+
 
 //--------------------------------------------------------------------------
 // Control Operations
+
 
 inline void FlagsPack ()
 // Packs the value of individual flag variables into the flag register
@@ -328,7 +369,7 @@ InstAllRegisters (InstINRDst)
 void InstINRM ()
 {
   MathGenericSZHP (MemData [RegHL],+,1,Binary)
-  MemWrite (RegHL, iResult);
+  MemWriteByte (RegHL, iResult);
 }
 
 // DCR register
@@ -349,7 +390,7 @@ InstAllRegisters (InstDCRDst)
 void InstDCRM ()
 {
   MathGenericSZHP (MemData [RegHL],-,1,Binary)
-  MemWrite (RegHL, iResult);
+  MemWriteByte (RegHL, iResult);
 }
 
 // INX
@@ -599,6 +640,103 @@ void InstSTC ()
 }
 
 //--------------------------------------------------------------------------
+// Branch Operations
+//
+// JMP, CALL, RET, RST, PCHL
+
+// JMP
+
+void InstJMP ()
+{
+  RegPC = MemFetchWord;
+}
+
+// JMP conditional
+
+#define InstJMPCon(C,E)                         \
+void InstJ##C ()                                \
+{                                               \
+  word iTarget = MemFetchWord;                  \
+  if (E) RegPC = iTarget;                       \
+}
+
+InstAllConditions (InstJMPCon)
+
+#undef InstJMPCon
+
+// CALL
+
+void InstCALL ()
+{
+  word iTarget = MemFetchWord;
+  MemPushWord (RegPC);
+  RegPC = iTarget;
+}
+
+// CALL conditional
+
+#define InstCALLCon(C,E)                        \
+void InstC##C ()                                \
+{                                               \
+  word iTarget = MemFetchWord;                  \
+  if (E)                                        \
+  {                                             \
+    MemPushWord (RegPC);                        \
+    RegPC = iTarget;                            \
+  }                                             \
+}
+
+InstAllConditions (InstCALLCon)
+
+#undef InstCALLCon
+
+// RET
+
+void InstRET ()
+{
+  RegPC = MemPopWord;
+}
+
+// RET conditional
+
+#define InstRETCon(C,E)                         \
+void InstR##C ()                                \
+{                                               \
+  if (E) RegPC = MemPopWord;                    \
+}
+
+InstAllConditions (InstRETCon)
+
+#undef InstRETCon
+
+// RST
+
+#define InstRSTVec(V)                           \
+void InstRST##V ()                              \
+{                                               \
+  MemPushWord (RegPC);                          \
+  RegPC = V * 8;                                \
+}
+
+InstRSTVec (0)
+InstRSTVec (1)
+InstRSTVec (2)
+InstRSTVec (3)
+InstRSTVec (4)
+InstRSTVec (5)
+InstRSTVec (6)
+InstRSTVec (7)
+
+#undef InstRSTVec
+
+// PCHL
+
+void InstPCHL ()
+{
+  RegPC = RegHL;
+}
+
+//--------------------------------------------------------------------------
 // Transfer Operations
 //
 // MOV, MVI, LXI, LDA, STA, LHLD, SHLD, LDAX, STAX, XCHG
@@ -612,13 +750,13 @@ void InstMOV##D##S ()                           \
 }
 
 #define InstMOVDst(S)                           \
-  InstMOVDstSrc(B,S)                            \
-  InstMOVDstSrc(C,S)                            \
-  InstMOVDstSrc(D,S)                            \
-  InstMOVDstSrc(E,S)                            \
-  InstMOVDstSrc(H,S)                            \
-  InstMOVDstSrc(L,S)                            \
-  InstMOVDstSrc(A,S)
+  InstMOVDstSrc (B,S)                           \
+  InstMOVDstSrc (C,S)                           \
+  InstMOVDstSrc (D,S)                           \
+  InstMOVDstSrc (E,S)                           \
+  InstMOVDstSrc (H,S)                           \
+  InstMOVDstSrc (L,S)                           \
+  InstMOVDstSrc (A,S)
 
 InstAllRegisters (InstMOVDst)
 
@@ -630,7 +768,7 @@ InstAllRegisters (InstMOVDst)
 #define InstMOVMemSrc(S)                        \
 void InstMOVM##S ()                             \
 {                                               \
-  MemWrite (RegHL, Reg##S);                     \
+  MemWriteByte (RegHL, Reg##S);                 \
 }
 
 InstAllRegisters (InstMOVMemSrc)
@@ -665,7 +803,7 @@ InstAllRegisters (InstMVIDst)
 
 void InstMVIM ()
 {
-  MemWrite (RegHL, MemData [RegPC ++]);
+  MemWriteByte (RegHL, MemFetchByte);
 }
 
 // LXI
@@ -691,7 +829,7 @@ void InstLDA ()
 
 void InstSTA ()
 {
-  MemWrite (MemFetchWord, RegA);
+  MemWriteByte (MemFetchWord, RegA);
 }
 
 // LHLD
@@ -706,8 +844,7 @@ void InstLHLD ()
 void InstSHLD ()
 {
   int iAddr = MemFetchWord;
-  MemWrite (iAddr, RegL);
-  MemWrite (iAddr + 1, RegH);
+  MemWriteWord (iAddr, RegHL);
 }
 
 // LDAX
@@ -727,7 +864,7 @@ InstAllRegisterPairs (InstLDAXSrc)
 #define InstSTAXSrc(S,H,L)                      \
 void InstSTAX##S ()                             \
 {                                               \
-  MemWrite (MemData [Reg##S], RegA);            \
+  MemWriteByte (MemData [Reg##S], RegA);        \
 }
 
 InstAllRegisterPairs (InstSTAXSrc)
