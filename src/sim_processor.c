@@ -424,7 +424,7 @@ void InstDAA ()
 //--------------------------------------------------------------------------
 // Logical Operations
 //
-// ANA, ANI, XRA, XRI, ORA, ORI, CMP, CPI, RLC, RRC, RAL, RAR
+// ANA, ANI, XRA, XRI, ORA, ORI, CMP, CPI, RLC, RRC, RAL, RAR, CMA, CMC, STC
 
 // ANA from register
 
@@ -547,7 +547,55 @@ void InstCPI ()
 
 void InstRLC ()
 {
+  FlagC = (RegA & 0x80);
+  RegA = (RegA << 1) | (FlagC ? 0x1 : 0);
+}
 
+// RRC
+
+void InstRRC ()
+{
+  FlagC = (RegA & 0x1);
+  RegA = (RegA >> 1) | (FlagC ? 0x80 : 0);
+}
+
+// RAL
+
+void InstRAL ()
+{
+  bool bOverflow = (RegA & 0x80);
+  RegA = (RegA << 1) | (FlagC ? 0x1 : 0);
+  FlagC = bOverflow;
+}
+
+// RAR
+
+void InstRAR ()
+{
+  bool bOverflow = (RegA & 0x1);
+  RegA = (RegA >> 1) | (FlagC ? 0x80 : 0);
+  FlagC = bOverflow;
+}
+
+// CMA
+
+void InstCMA ()
+{
+  RegA = ~RegA;
+}
+
+// CMC
+
+void InstCMC ()
+{
+  FlagC = !FlagC;
+}
+
+// STC
+
+void InstSTC ()
+{
+  FlagC = true;
 }
 
 //--------------------------------------------------------------------------
