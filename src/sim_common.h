@@ -36,6 +36,7 @@ extern bool MemMask [65536];
 //--------------------------------------------------------------------------
 // Externals
 
+int CPUThread (void *);
 void CPUInitialize ();
 void CPUShutdown ();
 

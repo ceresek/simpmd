@@ -82,49 +82,60 @@ static bool FlagC;
 static byte abParity [256];
 
 //--------------------------------------------------------------------------
-// Helper Macros
+// Helper Functions
 
-/** Writes a byte to simulated memory array if it is writable
- *
- * This is an inline function rather than a macro
- * to avoid evaluating arguments multiple times.
- *
- */
+// These are mostly inline functions rather than
+// macros to avoid evaluating arguments multiple
+// times.
+
+/// Writes a byte to simulated memory array if it is writable.
 inline void MemWriteByte (word iAddr, byte iData)
 {
   if (MemMask [iAddr]) MemData [iAddr] = iData;
 }
 
-/** Writes a word to simulated memory array if it is writable
- *
- * This is an inline function rather than a macro
- * to avoid evaluating arguments multiple times.
- *
- */
+/// Writes a word to simulated memory array if it is writable.
 inline void MemWriteWord (word iAddr, word iData)
 {
   MemWriteByte (iAddr, iData);
-  MemWriteByte (iAddr + 1, iData >> 8);
+  MemWriteByte (iAddr + (word) 1, iData >> 8);
 }
 
-/// Pushes a word onto the stack in the simulated memory array
+/// Pushes a word onto the stack in the simulated memory array.
 inline void MemPushWord (word iData)
 {
   RegSP -= 2;
   MemWriteWord (RegSP, iData);
 }
 
-/// Pops a byte from the stack in the simulated memory array
-#define MemPopByte (MemData [RegSP ++])
-/// Pops a word from the stack in the simulated memory array
-#define MemPopWord (MemPopByte + 256 * MemPopByte)
+/// Pops a byte from the stack in the simulated memory array.
+inline byte MemPopByte ()
+{
+  return (MemData [RegSP ++]);
+}
+/// Pops a word from the stack in the simulated memory array.
+inline word MemPopWord ()
+{
+  byte iLow = MemPopByte ();
+  byte iHigh = MemPopByte ();
+  return (iLow + ((word) iHigh << 8));
+}
 
-/// Fetches a byte from simulated memory array at PC and shifts PC
-#define MemFetchByte (MemData [RegPC ++])
-/// Fetches a word from simulated memory array at PC and shifts PC
-#define MemFetchWord (MemFetchByte + 256 * MemFetchByte)
+/// Fetches a byte from simulated memory array at PC and shifts PC.
+inline byte MemFetchByte ()
+{
+  return (MemData [RegPC ++]);
+}
+/// Fetches a word from simulated memory array at PC and shifts PC.
+inline word MemFetchWord ()
+{
+  byte iLow = MemFetchByte ();
+  byte iHigh = MemFetchByte ();
+  return (iLow + ((word) iHigh << 8));
+}
 
-/// Expands its argument with all registers
+
+/// Expands its argument with all registers.
 #define InstAllRegisters(I)                     \
   I (B)                                         \
   I (C)                                         \
@@ -134,13 +145,14 @@ inline void MemPushWord (word iData)
   I (L)                                         \
   I (A)
 
-/// Expands its arguments with all register pairs
+/// Expands its arguments with all register pairs.
 #define InstAllRegisterPairs(I)                 \
-  I (BC,B,C)                                    \
-  I (DE,D,E)                                    \
-  I (HL,H,L)
+  I (BC,B)                                      \
+  I (DE,D)                                      \
+  I (HL,H)                                      \
+  I (SP,SP)
 
-/// Expands its arguments with all conditions
+/// Expands its arguments with all conditions.
 #define InstAllConditions(I)                    \
   I (M,FlagS)                                   \
   I (P,!FlagS)                                  \
@@ -156,8 +168,8 @@ inline void MemPushWord (word iData)
 // Control Operations
 
 
+/// Packs the value of individual flag variables into the flag register.
 inline void FlagsPack ()
-// Packs the value of individual flag variables into the flag register
 {
   // The calculation assumes that FALSE is 0 and
   // TRUE is 1, which is what the standard says
@@ -169,8 +181,8 @@ inline void FlagsPack ()
            1 * FlagC;
 }
 
+/// Unpacks the value of individual flag variables from the flag register.
 inline void FlagsUnpack ()
-// Unpacks the value of individual flag variables from the flag register
 {
   // The calculation assumes that assignment of nonzero value
   // to boolean will be TRUE, which is what the standard says
@@ -282,7 +294,7 @@ InstAllRegisters (InstMOVMemDst)
 #define InstMVIDst(D)                           \
 void InstMVI##D ()                              \
 {                                               \
-  Reg##D = MemFetchByte;                        \
+  Reg##D = MemFetchByte ();                     \
 }
 
 InstAllRegisters (InstMVIDst)
@@ -293,15 +305,15 @@ InstAllRegisters (InstMVIDst)
 
 void InstMVIM ()
 {
-  MemWriteByte (RegHL, MemFetchByte);
+  MemWriteByte (RegHL, MemFetchByte ());
 }
 
 // LXI
 
-#define InstLXIDst(D,H,L)                       \
-void InstLXI##H ()                              \
+#define InstLXIDst(D,N)                         \
+void InstLXI##N ()                              \
 {                                               \
-  Reg##D = MemFetchWord;                        \
+  Reg##D = MemFetchWord ();                     \
 }
 
 InstAllRegisterPairs (InstLXIDst)
@@ -312,35 +324,35 @@ InstAllRegisterPairs (InstLXIDst)
 
 void InstLDA ()
 {
-  RegA = MemData [MemFetchWord];
+  RegA = MemData [MemFetchWord ()];
 }
 
 // STA
 
 void InstSTA ()
 {
-  MemWriteByte (MemFetchWord, RegA);
+  MemWriteByte (MemFetchWord (), RegA);
 }
 
 // LHLD
 
 void InstLHLD ()
 {
-  RegHL = MemData [MemFetchWord];
+  RegHL = MemData [MemFetchWord ()];
 }
 
 // SHLD
 
 void InstSHLD ()
 {
-  int iAddr = MemFetchWord;
+  int iAddr = MemFetchWord ();
   MemWriteWord (iAddr, RegHL);
 }
 
 // LDAX
 
-#define InstLDAXSrc(S,H,L)                      \
-void InstLDAX##H ()                             \
+#define InstLDAXSrc(S,N)                        \
+void InstLDAX##N ()                             \
 {                                               \
   RegA = MemData [Reg##S];                      \
 }
@@ -351,8 +363,8 @@ InstAllRegisterPairs (InstLDAXSrc)
 
 // STAX
 
-#define InstSTAXSrc(S,H,L)                      \
-void InstSTAX##H ()                             \
+#define InstSTAXSrc(S,N)                        \
+void InstSTAX##N ()                             \
 {                                               \
   MemWriteByte (MemData [Reg##S], RegA);        \
 }
@@ -400,7 +412,7 @@ void InstADDM ()
 
 void InstADI ()
 {
-  byte iOperand = MemFetchByte;
+  byte iOperand = MemFetchByte ();
   MathGenericSZHPC (RegA,+,iOperand,Binary)
   RegA = iResult;
 }
@@ -430,7 +442,7 @@ void InstADCM ()
 
 void InstACI ()
 {
-  byte iOperand = MemFetchByte;
+  byte iOperand = MemFetchByte ();
   MathGenericSZHPC (RegA,+,iOperand,Carry)
   RegA = iResult;
 }
@@ -460,7 +472,7 @@ void InstSUBM ()
 
 void InstSUI ()
 {
-  byte iOperand = MemFetchByte;
+  byte iOperand = MemFetchByte ();
   MathGenericSZHPC (RegA,-,iOperand,Binary)
   RegA = iResult;
 }
@@ -490,7 +502,7 @@ void InstSBBM ()
 
 void InstSBI ()
 {
-  byte iOperand = MemFetchByte;
+  byte iOperand = MemFetchByte ();
   MathGenericSZHPC (RegA,-,iOperand,Carry)
   RegA = iResult;
 }
@@ -539,8 +551,8 @@ void InstDCRM ()
 
 // INX
 
-#define InstINXDst(D,H,L)                       \
-void InstINX##H ()                              \
+#define InstINXDst(D,N)                         \
+void InstINX##N ()                              \
 {                                               \
   ++ Reg##D;                                    \
 }
@@ -551,8 +563,8 @@ InstAllRegisterPairs (InstINXDst)
 
 // DCX
 
-#define InstDCXDst(D,H,L)                       \
-void InstDCX##H ()                              \
+#define InstDCXDst(D,N)                         \
+void InstDCX##N ()                              \
 {                                               \
   -- Reg##D;                                    \
 }
@@ -565,8 +577,8 @@ InstAllRegisterPairs (InstDCXDst)
 
 // This code assumes that sizeof (uint) is more than a word ...
 
-#define InstDADSrc(S,H,L)                       \
-void InstDAD##H ()                              \
+#define InstDADSrc(S,N)                         \
+void InstDAD##N ()                              \
 {                                               \
   uint iResult = RegHL + Reg##S;                \
   FlagC = (iResult > 65535);                    \
@@ -636,7 +648,7 @@ void InstANAM ()
 
 void InstANI ()
 {
-  byte iOperand = MemFetchByte;
+  byte iOperand = MemFetchByte ();
   LogicalGenericSZHPC (RegA,&,iOperand)
   RegA = iResult;
 }
@@ -666,7 +678,7 @@ void InstXRAM ()
 
 void InstXRI ()
 {
-  byte iOperand = MemFetchByte;
+  byte iOperand = MemFetchByte ();
   LogicalGenericSZHPC (RegA,^,iOperand)
   RegA = iResult;
 }
@@ -696,7 +708,7 @@ void InstORAM ()
 
 void InstORI ()
 {
-  byte iOperand = MemFetchByte;
+  byte iOperand = MemFetchByte ();
   LogicalGenericSZHPC (RegA,|,iOperand)
   RegA = iResult;
 }
@@ -724,7 +736,7 @@ void InstCMPM ()
 
 void InstCPI ()
 {
-  byte iOperand = MemFetchByte;
+  byte iOperand = MemFetchByte ();
   MathGenericSZHPC (RegA,-,iOperand,Binary)
 }
 
@@ -792,7 +804,7 @@ void InstSTC ()
 
 void InstJMP ()
 {
-  RegPC = MemFetchWord;
+  RegPC = MemFetchWord ();
 }
 
 // JMP conditional
@@ -800,7 +812,7 @@ void InstJMP ()
 #define InstJMPCon(C,E)                         \
 void InstJ##C ()                                \
 {                                               \
-  word iTarget = MemFetchWord;                  \
+  word iTarget = MemFetchWord ();               \
   if (E) RegPC = iTarget;                       \
 }
 
@@ -812,7 +824,7 @@ InstAllConditions (InstJMPCon)
 
 void InstCALL ()
 {
-  word iTarget = MemFetchWord;
+  word iTarget = MemFetchWord ();
   MemPushWord (RegPC);
   RegPC = iTarget;
 }
@@ -822,7 +834,7 @@ void InstCALL ()
 #define InstCALLCon(C,E)                        \
 void InstC##C ()                                \
 {                                               \
-  word iTarget = MemFetchWord;                  \
+  word iTarget = MemFetchWord ();               \
   if (E)                                        \
   {                                             \
     MemPushWord (RegPC);                        \
@@ -838,7 +850,7 @@ InstAllConditions (InstCALLCon)
 
 void InstRET ()
 {
-  RegPC = MemPopWord;
+  RegPC = MemPopWord ();
 }
 
 // RET conditional
@@ -846,7 +858,7 @@ void InstRET ()
 #define InstRETCon(C,E)                         \
 void InstR##C ()                                \
 {                                               \
-  if (E) RegPC = MemPopWord;                    \
+  if (E) RegPC = MemPopWord ();                 \
 }
 
 InstAllConditions (InstRETCon)
@@ -887,8 +899,8 @@ void InstPCHL ()
 
 // PUSH
 
-#define InstPUSHSrc(D,H,L)                      \
-void InstPUSH##H ()                             \
+#define InstPUSHSrc(D,N)                        \
+void InstPUSH##N ()                             \
 {                                               \
   MemPushWord (Reg##D);                         \
 }
@@ -907,10 +919,10 @@ void InstPUSHPSW ()
 
 // POP
 
-#define InstPOPDst(D,H,L)                       \
-void InstPOP##H ()                              \
+#define InstPOPDst(D,N)                         \
+void InstPOP##N ()                              \
 {                                               \
-  Reg##D = MemPopWord;                          \
+  Reg##D = MemPopWord ();                       \
 }
 
 InstAllRegisterPairs (InstPOPDst)
@@ -921,7 +933,7 @@ InstAllRegisterPairs (InstPOPDst)
 
 void InstPOPPSW ()
 {
-  RegAF = MemPopWord;
+  RegAF = MemPopWord ();
   FlagsUnpack ();
 }
 
@@ -931,7 +943,7 @@ void InstXTHL ()
 {
   word iData = RegHL;
   RegL = MemData [RegSP];
-  RegH = MemData [RegSP + 1];
+  RegH = MemData [RegSP + (word) 1];
   MemWriteWord (RegSP, iData);
 }
 
@@ -951,14 +963,15 @@ void InstSPHL ()
 
 void InstIN ()
 {
-  MemFetchByte;
+  MemFetchByte ();
+  RegA = 0xFF;
 }
 
 // OUT
 
 void InstOUT ()
 {
-  MemFetchByte;
+  MemFetchByte ();
 }
 
 // EI
@@ -993,6 +1006,128 @@ void InstNOP ()
 }
 
 //--------------------------------------------------------------------------
+// Execution
+
+/// A table of functions implementing the individual instructions.
+static void (*apInstructionTable [256]) () =
+{
+        // 00h
+        InstNOP,        InstLXIB,       InstSTAXB,      InstINXB,
+        InstINRB,       InstDCRB,       InstMVIB,       InstRLC,
+        InstNOP,        InstDADB,       InstLDAXB,      InstDCXB,
+        InstINRC,       InstDCRC,       InstMVIC,       InstRRC,
+        // 10h
+        InstNOP,        InstLXID,       InstSTAXD,      InstINXD,
+        InstINRD,       InstDCRD,       InstMVID,       InstRAL,
+        InstNOP,        InstDADD,       InstLDAXD,      InstDCXD,
+        InstINRE,       InstDCRE,       InstMVIE,       InstRAR,
+        // 20h
+        InstNOP,        InstLXIH,       InstSHLD,       InstINXH,
+        InstINRH,       InstDCRH,       InstMVIH,       InstDAA,
+        InstNOP,        InstDADH,       InstLHLD,       InstDCXH,
+        InstINRL,       InstDCRL,       InstMVIL,       InstCMA,
+        // 30h
+        InstNOP,        InstLXISP,      InstSTA,        InstINXSP,
+        InstINRM,       InstDCRM,       InstMVIM,       InstSTC,
+        InstNOP,        InstDADSP,      InstLDA,        InstDCXSP,
+        InstINRA,       InstDCRA,       InstMVIA,       InstCMC,
+        // 40h
+        InstNOP,        InstMOVBC,      InstMOVBD,      InstMOVBE,
+        InstMOVBH,      InstMOVBL,      InstMOVBM,      InstMOVBA,
+        InstMOVCB,      InstNOP,        InstMOVCD,      InstMOVCE,
+        InstMOVCH,      InstMOVCL,      InstMOVCM,      InstMOVCA,
+        // 50h
+        InstMOVDB,      InstMOVDC,      InstNOP,        InstMOVDE,
+        InstMOVDH,      InstMOVDL,      InstMOVDM,      InstMOVDA,
+        InstMOVEB,      InstMOVEC,      InstMOVED,      InstNOP,
+        InstMOVEH,      InstMOVEL,      InstMOVEM,      InstMOVEA,
+        // 60h
+        InstMOVHB,      InstMOVHC,      InstMOVHD,      InstMOVHE,
+        InstNOP,        InstMOVHL,      InstMOVHM,      InstMOVHA,
+        InstMOVLB,      InstMOVLC,      InstMOVLD,      InstMOVLE,
+        InstMOVLH,      InstNOP,        InstMOVLM,      InstMOVLA,
+        // 70h
+        InstMOVMB,      InstMOVMC,      InstMOVMD,      InstMOVME,
+        InstMOVMH,      InstMOVML,      InstHLT,        InstMOVMA,
+        InstMOVAB,      InstMOVAC,      InstMOVAD,      InstMOVAE,
+        InstMOVAH,      InstMOVAL,      InstMOVAM,      InstNOP,
+        // 80h
+        InstADDB,       InstADDC,       InstADDD,       InstADDE,
+        InstADDH,       InstADDL,       InstADDM,       InstADDA,
+        InstADCB,       InstADCC,       InstADCD,       InstADCE,
+        InstADCH,       InstADCL,       InstADCM,       InstADCA,
+        // 90h
+        InstSUBB,       InstSUBC,       InstSUBD,       InstSUBE,
+        InstSUBH,       InstSUBL,       InstSUBM,       InstSUBA,
+        InstSBBB,       InstSBBC,       InstSBBD,       InstSBBE,
+        InstSBBH,       InstSBBL,       InstSBBM,       InstSBBA,
+        // 0A0h
+        InstANAB,       InstANAC,       InstANAD,       InstANAE,
+        InstANAH,       InstANAL,       InstANAM,       InstANAA,
+        InstXRAB,       InstXRAC,       InstXRAD,       InstXRAE,
+        InstXRAH,       InstXRAL,       InstXRAM,       InstXRAA,
+        // 0B0h
+        InstORAB,       InstORAC,       InstORAD,       InstORAE,
+        InstORAH,       InstORAL,       InstORAM,       InstORAA,
+        InstCMPB,       InstCMPC,       InstCMPD,       InstCMPE,
+        InstCMPH,       InstCMPL,       InstCMPM,       InstCMPA,
+        // 0C0h
+        InstRNZ,        InstPOPB,       InstJNZ,        InstJMP,
+        InstCNZ,        InstPUSHB,      InstADI,        InstRST0,
+        InstRZ,         InstRET,        InstJZ,         InstNOP,
+        InstCZ,         InstCALL,       InstACI,        InstRST1,
+        // 0D0h
+        InstRNC,        InstPOPD,       InstJNC,        InstOUT,
+        InstCNC,        InstPUSHD,      InstSUI,        InstRST2,
+        InstRC,         InstNOP,        InstJC,         InstIN,
+        InstCC,         InstNOP,        InstSBI,        InstRST3,
+        // 0E0h
+        InstRPO,        InstPOPH,       InstJPO,        InstXTHL,
+        InstCPO,        InstPUSHH,      InstANI,        InstRST4,
+        InstRPE,        InstPCHL,       InstJPE,        InstXCHG,
+        InstCPE,        InstNOP,        InstXRI,        InstRST5,
+        // 0F0h
+        InstRP,         InstPOPPSW,     InstJP,         InstNOP,
+        InstCP,         InstPUSHPSW,    InstORI,        InstRST6,
+        InstRM,         InstSPHL,       InstJM,         InstNOP,
+        InstCM,         InstNOP,        InstCPI,        InstRST7
+};
+
+
+/// Resets the processor.
+void CPUReset ()
+{
+  // The computer used an invertor on the address bus to
+  // fetch the very first instruction after reset from
+  // 8000h. Since this instruction was a jump, this
+  // was effectively the same as initializing the
+  // program counter at 8000h.
+
+  RegPC = 0x8000;
+
+  // No other initialization is done at reset.
+}
+
+
+/// Executes the processor instructions.
+void CPUExecute ()
+{
+  while (true)
+  {
+    byte bCode = MemFetchByte ();
+    apInstructionTable [bCode] ();
+  }
+}
+
+//--------------------------------------------------------------------------
+// Threads
+
+int CPUThread (void *pArgs)
+{
+  CPUExecute ();
+}
+
+//--------------------------------------------------------------------------
 // Initialization and shutdown
 
 void CPUInitialize ()
@@ -1011,6 +1146,17 @@ void CPUInitialize ()
     }
     abParity [iValue] = bParity;
   }
+
+  // Make the entire memory writable
+
+  for (int iAddr = 0 ; iAddr < 65536 ; iAddr ++)
+  {
+    MemMask [iAddr] = true;
+  }
+
+  // Reset the processor
+
+  CPUReset ();
 }
 
 

@@ -18,7 +18,11 @@ limitations under the License.
 
 */
 
+#include <fcntl.h>
+#include <unistd.h>
+
 #include <SDL/SDL.h>
+#include <SDL/SDL_thread.h>
 
 #include "sim_common.h"
 
@@ -44,6 +48,14 @@ int main (int iArgC, char *apArgV [])
 
   CPUInitialize ();
   DSPInitialize ();
+
+  // Temporary test with processor thread
+
+  int hMonitor = open ("../data/monitors/M1", O_RDONLY);
+  read (hMonitor, MemData + 0x8000, 4096);
+  close (hMonitor);
+
+  SDL_Thread *pProcessor = SDL_CreateThread (CPUThread, NULL);
 
   // Event loop
 
