@@ -23,6 +23,7 @@ limitations under the License.
 // Types
 
 typedef unsigned int    uint;
+typedef unsigned long   ulong;
 
 typedef unsigned char   byte;
 typedef unsigned short  word;
@@ -43,6 +44,15 @@ void CPUShutdown ();
 void DSPPaint ();
 void DSPInitialize ();
 void DSPShutdown ();
+
+void KBDEventHandler (const SDL_KeyboardEvent *);
+void KBDInitialize ();
+void KBDShutdown ();
+
+void TIMSynchronize (int);
+void TIMAdvance (int);
+void TIMInitialize ();
+void TIMShutdown ();
 
 //--------------------------------------------------------------------------
 

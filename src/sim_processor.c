@@ -18,6 +18,7 @@ limitations under the License.
 
 */
 
+#include <SDL/SDL.h>
 #include <SDL/SDL_endian.h>
 
 #include "sim_common.h"
@@ -75,6 +76,11 @@ static bool FlagZ;
 static bool FlagH;
 static bool FlagP;
 static bool FlagC;
+
+// Processor clock counter for timing purposes ...
+
+static int Clock;
+
 
 //--------------------------------------------------------------------------
 // Helper Variables
@@ -249,6 +255,7 @@ inline void FlagsUnpack ()
 void InstMOV##D##S ()                           \
 {                                               \
   Reg##D = Reg##S;                              \
+  Clock += 5;                                   \
 }
 
 #define InstMOVDst(S)                           \
@@ -271,6 +278,7 @@ InstAllRegisters (InstMOVDst)
 void InstMOVM##S ()                             \
 {                                               \
   MemWriteByte (RegHL, Reg##S);                 \
+  Clock += 7;                                   \
 }
 
 InstAllRegisters (InstMOVMemSrc)
@@ -283,6 +291,7 @@ InstAllRegisters (InstMOVMemSrc)
 void InstMOV##D##M ()                           \
 {                                               \
   Reg##D = MemData [RegHL];                     \
+  Clock += 7;                                   \
 }
 
 InstAllRegisters (InstMOVMemDst)
@@ -295,6 +304,7 @@ InstAllRegisters (InstMOVMemDst)
 void InstMVI##D ()                              \
 {                                               \
   Reg##D = MemFetchByte ();                     \
+  Clock += 7;                                   \
 }
 
 InstAllRegisters (InstMVIDst)
@@ -306,6 +316,7 @@ InstAllRegisters (InstMVIDst)
 void InstMVIM ()
 {
   MemWriteByte (RegHL, MemFetchByte ());
+  Clock += 10;
 }
 
 // LXI
@@ -314,6 +325,7 @@ void InstMVIM ()
 void InstLXI##N ()                              \
 {                                               \
   Reg##D = MemFetchWord ();                     \
+  Clock += 10;                                  \
 }
 
 InstAllRegisterPairs (InstLXIDst)
@@ -325,6 +337,7 @@ InstAllRegisterPairs (InstLXIDst)
 void InstLDA ()
 {
   RegA = MemData [MemFetchWord ()];
+  Clock += 13;
 }
 
 // STA
@@ -332,6 +345,7 @@ void InstLDA ()
 void InstSTA ()
 {
   MemWriteByte (MemFetchWord (), RegA);
+  Clock += 13;
 }
 
 // LHLD
@@ -339,6 +353,7 @@ void InstSTA ()
 void InstLHLD ()
 {
   RegHL = MemData [MemFetchWord ()];
+  Clock += 16;
 }
 
 // SHLD
@@ -347,6 +362,7 @@ void InstSHLD ()
 {
   int iAddr = MemFetchWord ();
   MemWriteWord (iAddr, RegHL);
+  Clock += 16;
 }
 
 // LDAX
@@ -355,6 +371,7 @@ void InstSHLD ()
 void InstLDAX##N ()                             \
 {                                               \
   RegA = MemData [Reg##S];                      \
+  Clock += 7;                                   \
 }
 
 InstAllRegisterPairs (InstLDAXSrc)
@@ -367,6 +384,7 @@ InstAllRegisterPairs (InstLDAXSrc)
 void InstSTAX##N ()                             \
 {                                               \
   MemWriteByte (MemData [Reg##S], RegA);        \
+  Clock += 7;                                   \
 }
 
 InstAllRegisterPairs (InstSTAXSrc)
@@ -380,6 +398,7 @@ void InstXCHG ()
   int iTemp = RegDE;
   RegDE = RegHL;
   RegHL = iTemp;
+  Clock += 4;
 }
 
 //--------------------------------------------------------------------------
@@ -394,6 +413,7 @@ void InstADD##S ()                              \
 {                                               \
   MathGenericSZHPC (RegA,+,Reg##S,Binary)       \
   RegA = iResult;                               \
+  Clock += 4;                                   \
 }
 
 InstAllRegisters (InstADDSrc)
@@ -406,6 +426,7 @@ void InstADDM ()
 {
   MathGenericSZHPC (RegA,+,MemData [RegHL],Binary)
   RegA = iResult;
+  Clock += 7;
 }
 
 // ADI
@@ -415,6 +436,7 @@ void InstADI ()
   byte iOperand = MemFetchByte ();
   MathGenericSZHPC (RegA,+,iOperand,Binary)
   RegA = iResult;
+  Clock += 7;
 }
 
 // ADC from register
@@ -424,6 +446,7 @@ void InstADC##S ()                              \
 {                                               \
   MathGenericSZHPC (RegA,+,Reg##S,Carry)        \
   RegA = iResult;                               \
+  Clock += 4;                                   \
 }
 
 InstAllRegisters (InstADCSrc)
@@ -436,6 +459,7 @@ void InstADCM ()
 {
   MathGenericSZHPC (RegA,+,MemData [RegHL],Carry)
   RegA = iResult;
+  Clock += 7;
 }
 
 // ACI
@@ -445,6 +469,7 @@ void InstACI ()
   byte iOperand = MemFetchByte ();
   MathGenericSZHPC (RegA,+,iOperand,Carry)
   RegA = iResult;
+  Clock += 7;
 }
 
 // SUB from register
@@ -454,6 +479,7 @@ void InstSUB##S ()                              \
 {                                               \
   MathGenericSZHPC (RegA,-,Reg##S,Binary)       \
   RegA = iResult;                               \
+  Clock += 4;                                   \
 }
 
 InstAllRegisters (InstSUBSrc)
@@ -466,6 +492,7 @@ void InstSUBM ()
 {
   MathGenericSZHPC (RegA,-,MemData [RegHL],Binary)
   RegA = iResult;
+  Clock += 7;
 }
 
 // SUI
@@ -475,6 +502,7 @@ void InstSUI ()
   byte iOperand = MemFetchByte ();
   MathGenericSZHPC (RegA,-,iOperand,Binary)
   RegA = iResult;
+  Clock += 7;
 }
 
 // SBB from register
@@ -484,6 +512,7 @@ void InstSBB##S ()                              \
 {                                               \
   MathGenericSZHPC (RegA,-,Reg##S,Carry)        \
   RegA = iResult;                               \
+  Clock += 4;                                   \
 }
 
 InstAllRegisters (InstSBBSrc)
@@ -496,6 +525,7 @@ void InstSBBM ()
 {
   MathGenericSZHPC (RegA,-,MemData [RegHL],Carry)
   RegA = iResult;
+  Clock += 7;
 }
 
 // SBI
@@ -505,6 +535,7 @@ void InstSBI ()
   byte iOperand = MemFetchByte ();
   MathGenericSZHPC (RegA,-,iOperand,Carry)
   RegA = iResult;
+  Clock += 7;
 }
 
 // INR register
@@ -514,6 +545,7 @@ void InstINR##D ()                              \
 {                                               \
   MathGenericSZHP (Reg##D,+,1,Binary)           \
   Reg##D = iResult;                             \
+  Clock += 5;                                   \
 }
 
 InstAllRegisters (InstINRDst)
@@ -526,6 +558,7 @@ void InstINRM ()
 {
   MathGenericSZHP (MemData [RegHL],+,1,Binary)
   MemWriteByte (RegHL, iResult);
+  Clock += 10;
 }
 
 // DCR register
@@ -535,6 +568,7 @@ void InstDCR##D ()                              \
 {                                               \
   MathGenericSZHP (Reg##D,-,1,Binary)           \
   Reg##D = iResult;                             \
+  Clock += 5;                                   \
 }
 
 InstAllRegisters (InstDCRDst)
@@ -547,6 +581,7 @@ void InstDCRM ()
 {
   MathGenericSZHP (MemData [RegHL],-,1,Binary)
   MemWriteByte (RegHL, iResult);
+  Clock += 10;
 }
 
 // INX
@@ -555,6 +590,7 @@ void InstDCRM ()
 void InstINX##N ()                              \
 {                                               \
   ++ Reg##D;                                    \
+  Clock += 5;                                   \
 }
 
 InstAllRegisterPairs (InstINXDst)
@@ -567,6 +603,7 @@ InstAllRegisterPairs (InstINXDst)
 void InstDCX##N ()                              \
 {                                               \
   -- Reg##D;                                    \
+  Clock += 5;                                   \
 }
 
 InstAllRegisterPairs (InstDCXDst)
@@ -583,6 +620,7 @@ void InstDAD##N ()                              \
   uint iResult = RegHL + Reg##S;                \
   FlagC = (iResult > 65535);                    \
   RegHL = iResult;                              \
+  Clock += 10;                                  \
 }
 
 InstAllRegisterPairs (InstDADSrc)
@@ -616,6 +654,8 @@ void InstDAA ()
   FlagP = abParity [(byte) iResult];
   // Store the result ...
   RegA = iResult;
+  // Update the clock ...
+  Clock += 4;
 }
 
 //--------------------------------------------------------------------------
@@ -630,6 +670,7 @@ void InstANA##S ()                              \
 {                                               \
   LogicalGenericSZHPC (RegA,&,Reg##S)           \
   RegA = iResult;                               \
+  Clock += 4;                                   \
 }
 
 InstAllRegisters (InstANASrc)
@@ -642,6 +683,7 @@ void InstANAM ()
 {
   LogicalGenericSZHPC (RegA,&,MemData [RegHL])
   RegA = iResult;
+  Clock += 7;
 }
 
 // ANI
@@ -651,6 +693,7 @@ void InstANI ()
   byte iOperand = MemFetchByte ();
   LogicalGenericSZHPC (RegA,&,iOperand)
   RegA = iResult;
+  Clock += 7;
 }
 
 // XRA from register
@@ -660,6 +703,7 @@ void InstXRA##S ()                              \
 {                                               \
   LogicalGenericSZHPC (RegA,^,Reg##S)           \
   RegA = iResult;                               \
+  Clock += 4;                                   \
 }
 
 InstAllRegisters (InstXRASrc)
@@ -672,6 +716,7 @@ void InstXRAM ()
 {
   LogicalGenericSZHPC (RegA,^,MemData [RegHL])
   RegA = iResult;
+  Clock += 7;
 }
 
 // XRI
@@ -681,6 +726,7 @@ void InstXRI ()
   byte iOperand = MemFetchByte ();
   LogicalGenericSZHPC (RegA,^,iOperand)
   RegA = iResult;
+  Clock += 7;
 }
 
 // ORA from register
@@ -690,6 +736,7 @@ void InstORA##S ()                              \
 {                                               \
   LogicalGenericSZHPC (RegA,|,Reg##S)           \
   RegA = iResult;                               \
+  Clock += 4;                                   \
 }
 
 InstAllRegisters (InstORASrc)
@@ -702,6 +749,7 @@ void InstORAM ()
 {
   LogicalGenericSZHPC (RegA,|,MemData [RegHL])
   RegA = iResult;
+  Clock += 7;
 }
 
 // ORI
@@ -711,6 +759,7 @@ void InstORI ()
   byte iOperand = MemFetchByte ();
   LogicalGenericSZHPC (RegA,|,iOperand)
   RegA = iResult;
+  Clock += 7;
 }
 
 // CMP from register
@@ -719,6 +768,7 @@ void InstORI ()
 void InstCMP##S ()                              \
 {                                               \
   MathGenericSZHPC (RegA,-,Reg##S,Binary)       \
+  Clock += 4;                                   \
 }
 
 InstAllRegisters (InstCMPSrc)
@@ -730,6 +780,7 @@ InstAllRegisters (InstCMPSrc)
 void InstCMPM ()
 {
   MathGenericSZHPC (RegA,-,MemData [RegHL],Binary)
+  Clock += 7;
 }
 
 // CPI
@@ -738,6 +789,7 @@ void InstCPI ()
 {
   byte iOperand = MemFetchByte ();
   MathGenericSZHPC (RegA,-,iOperand,Binary)
+  Clock += 7;
 }
 
 // RLC
@@ -746,6 +798,7 @@ void InstRLC ()
 {
   FlagC = (RegA & 0x80);
   RegA = (RegA << 1) | (FlagC ? 0x1 : 0);
+  Clock += 4;
 }
 
 // RRC
@@ -754,6 +807,7 @@ void InstRRC ()
 {
   FlagC = (RegA & 0x1);
   RegA = (RegA >> 1) | (FlagC ? 0x80 : 0);
+  Clock += 4;
 }
 
 // RAL
@@ -763,6 +817,7 @@ void InstRAL ()
   bool bOverflow = (RegA & 0x80);
   RegA = (RegA << 1) | (FlagC ? 0x1 : 0);
   FlagC = bOverflow;
+  Clock += 4;
 }
 
 // RAR
@@ -772,6 +827,7 @@ void InstRAR ()
   bool bOverflow = (RegA & 0x1);
   RegA = (RegA >> 1) | (FlagC ? 0x80 : 0);
   FlagC = bOverflow;
+  Clock += 4;
 }
 
 // CMA
@@ -779,6 +835,7 @@ void InstRAR ()
 void InstCMA ()
 {
   RegA = ~RegA;
+  Clock += 4;
 }
 
 // CMC
@@ -786,6 +843,7 @@ void InstCMA ()
 void InstCMC ()
 {
   FlagC = !FlagC;
+  Clock += 4;
 }
 
 // STC
@@ -793,6 +851,7 @@ void InstCMC ()
 void InstSTC ()
 {
   FlagC = true;
+  Clock += 4;
 }
 
 //--------------------------------------------------------------------------
@@ -805,6 +864,7 @@ void InstSTC ()
 void InstJMP ()
 {
   RegPC = MemFetchWord ();
+  Clock += 10;
 }
 
 // JMP conditional
@@ -814,6 +874,7 @@ void InstJ##C ()                                \
 {                                               \
   word iTarget = MemFetchWord ();               \
   if (E) RegPC = iTarget;                       \
+  Clock += 10;                                  \
 }
 
 InstAllConditions (InstJMPCon)
@@ -827,6 +888,7 @@ void InstCALL ()
   word iTarget = MemFetchWord ();
   MemPushWord (RegPC);
   RegPC = iTarget;
+  Clock += 17;
 }
 
 // CALL conditional
@@ -839,7 +901,9 @@ void InstC##C ()                                \
   {                                             \
     MemPushWord (RegPC);                        \
     RegPC = iTarget;                            \
+    Clock += 6;                                 \
   }                                             \
+  Clock += 11;                                  \
 }
 
 InstAllConditions (InstCALLCon)
@@ -851,6 +915,7 @@ InstAllConditions (InstCALLCon)
 void InstRET ()
 {
   RegPC = MemPopWord ();
+  Clock += 10;
 }
 
 // RET conditional
@@ -858,7 +923,12 @@ void InstRET ()
 #define InstRETCon(C,E)                         \
 void InstR##C ()                                \
 {                                               \
-  if (E) RegPC = MemPopWord ();                 \
+  if (E)                                        \
+  {                                             \
+    RegPC = MemPopWord ();                      \
+    Clock += 6;                                 \
+  }                                             \
+  Clock += 5;                                   \
 }
 
 InstAllConditions (InstRETCon)
@@ -872,6 +942,7 @@ void InstRST##V ()                              \
 {                                               \
   MemPushWord (RegPC);                          \
   RegPC = V * 8;                                \
+  Clock += 11;                                  \
 }
 
 InstRSTVec (0)
@@ -890,6 +961,7 @@ InstRSTVec (7)
 void InstPCHL ()
 {
   RegPC = RegHL;
+  Clock += 5;
 }
 
 //--------------------------------------------------------------------------
@@ -903,6 +975,7 @@ void InstPCHL ()
 void InstPUSH##N ()                             \
 {                                               \
   MemPushWord (Reg##D);                         \
+  Clock += 11;                                  \
 }
 
 InstAllRegisterPairs (InstPUSHSrc)
@@ -915,6 +988,7 @@ void InstPUSHPSW ()
 {
   FlagsPack ();
   MemPushWord (RegAF);
+  Clock += 11;
 }
 
 // POP
@@ -923,6 +997,7 @@ void InstPUSHPSW ()
 void InstPOP##N ()                              \
 {                                               \
   Reg##D = MemPopWord ();                       \
+  Clock += 10;                                  \
 }
 
 InstAllRegisterPairs (InstPOPDst)
@@ -935,6 +1010,7 @@ void InstPOPPSW ()
 {
   RegAF = MemPopWord ();
   FlagsUnpack ();
+  Clock += 10;
 }
 
 // XTHL
@@ -945,6 +1021,7 @@ void InstXTHL ()
   RegL = MemData [RegSP];
   RegH = MemData [RegSP + (word) 1];
   MemWriteWord (RegSP, iData);
+  Clock += 18;
 }
 
 // SPHL
@@ -952,6 +1029,7 @@ void InstXTHL ()
 void InstSPHL ()
 {
   RegSP = RegHL;
+  Clock += 5;
 }
 
 //--------------------------------------------------------------------------
@@ -965,6 +1043,7 @@ void InstIN ()
 {
   MemFetchByte ();
   RegA = 0xFF;
+  Clock += 10;
 }
 
 // OUT
@@ -972,6 +1051,7 @@ void InstIN ()
 void InstOUT ()
 {
   MemFetchByte ();
+  Clock += 10;
 }
 
 // EI
@@ -979,6 +1059,7 @@ void InstOUT ()
 void InstEI ()
 {
   // No interrupts were used in this computer
+  Clock += 4;
 }
 
 // DI
@@ -986,6 +1067,7 @@ void InstEI ()
 void InstDI ()
 {
   // No interrupts were used in this computer
+  Clock += 4;
 }
 
 // HLT
@@ -994,8 +1076,8 @@ void InstHLT ()
 {
   // No interrupts were used in this computer and
   // therefore the instruction should halt forever
-
   -- RegPC;
+  Clock += 7;
 }
 
 // NOP
@@ -1003,6 +1085,7 @@ void InstHLT ()
 void InstNOP ()
 {
   // Guess what :-)
+  Clock += 4;
 }
 
 //--------------------------------------------------------------------------
@@ -1105,6 +1188,10 @@ void CPUReset ()
 
   RegPC = 0x8000;
 
+  // Counting clock from zero is not strictly necessary ...
+
+  Clock = 0;
+
   // No other initialization is done at reset.
 }
 
@@ -1112,10 +1199,16 @@ void CPUReset ()
 /// Executes the processor instructions.
 void CPUExecute ()
 {
+  // Synchronize the simulated clock and the actual time
+  TIMSynchronize (Clock);
+
   while (true)
   {
     byte bCode = MemFetchByte ();
     apInstructionTable [bCode] ();
+
+    // Advance the simulated clock and the actual time by sleeping
+    TIMAdvance (Clock);
   }
 }
 

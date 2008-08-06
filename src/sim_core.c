@@ -20,6 +20,7 @@ limitations under the License.
 
 #include <fcntl.h>
 #include <unistd.h>
+#include <sys/types.h>
 
 #include <SDL/SDL.h>
 #include <SDL/SDL_thread.h>
@@ -48,12 +49,22 @@ int main (int iArgC, char *apArgV [])
 
   CPUInitialize ();
   DSPInitialize ();
+  TIMInitialize ();
 
   // Temporary test with processor thread
 
   int hMonitor = open ("../data/monitors/M1", O_RDONLY);
   read (hMonitor, MemData + 0x8000, 4096);
   close (hMonitor);
+
+  int hGame = open ("../data/games-pmd1/KANKAN", O_RDONLY);
+  lseek (hGame, 0x3F, SEEK_SET);
+  read (hGame, MemData, 6977-0x3F);
+  close (hGame);
+
+  MemData [0x8000] = 0xC3;
+  MemData [0x8001] = 0;
+  MemData [0x8002] = 0;
 
   SDL_Thread *pProcessor = SDL_CreateThread (CPUThread, NULL);
 
@@ -67,6 +78,10 @@ int main (int iArgC, char *apArgV [])
     SDL_WaitEvent (&sEvent);
     switch (sEvent.type)
     {
+      case SDL_KEYUP:
+      case SDL_KEYDOWN:
+        KBDEventHandler ((SDL_KeyboardEvent *) &sEvent);
+        break;
       case SDL_USEREVENT:
         DSPPaint ();
         break;
@@ -78,6 +93,7 @@ int main (int iArgC, char *apArgV [])
 
   // Module shutdown
 
+  TIMShutdown ();
   DSPShutdown ();
   CPUShutdown ();
 
