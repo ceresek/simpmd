@@ -31,11 +31,11 @@ limitations under the License.
 //--------------------------------------------------------------------------
 // System Status Variables
 
-// MemData      Simulated memory array
-// MemMask      Distinguishes readable and writable memory
-
+/// Simulated memory array.
 byte MemData [65536];
+/// Distinguishes readable and writable memory.
 bool MemMask [65536];
+
 
 
 //--------------------------------------------------------------------------
@@ -49,22 +49,23 @@ int main (int iArgC, char *apArgV [])
 
   CPUInitialize ();
   DSPInitialize ();
+  KBDInitialize ();
   TIMInitialize ();
 
   // Temporary test with processor thread
 
-  int hMonitor = open ("../data/monitors/M1", O_RDONLY);
+  int hMonitor = open ("../data/monitors/M2", O_RDONLY);
   read (hMonitor, MemData + 0x8000, 4096);
   close (hMonitor);
 
-  int hGame = open ("../data/games-pmd1/KANKAN", O_RDONLY);
-  lseek (hGame, 0x3F, SEEK_SET);
-  read (hGame, MemData, 6977-0x3F);
-  close (hGame);
+//  int hGame = open ("../data/games-pmd1/KANKAN", O_RDONLY);
+//  lseek (hGame, 0x3F, SEEK_SET);
+//  read (hGame, MemData, 6977-0x3F);
+//  close (hGame);
 
-  MemData [0x8000] = 0xC3;
-  MemData [0x8001] = 0;
-  MemData [0x8002] = 0;
+//  MemData [0x8000] = 0xC3;
+//  MemData [0x8001] = 0;
+//  MemData [0x8002] = 0;
 
   SDL_Thread *pProcessor = SDL_CreateThread (CPUThread, NULL);
 
@@ -94,6 +95,7 @@ int main (int iArgC, char *apArgV [])
   // Module shutdown
 
   TIMShutdown ();
+  KBDShutdown ();
   DSPShutdown ();
   CPUShutdown ();
 

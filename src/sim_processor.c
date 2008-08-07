@@ -18,6 +18,8 @@ limitations under the License.
 
 */
 
+#include <iostream>
+
 #include <SDL/SDL.h>
 #include <SDL/SDL_endian.h>
 
@@ -1041,8 +1043,14 @@ void InstSPHL ()
 
 void InstIN ()
 {
-  MemFetchByte ();
-  RegA = 0xFF;
+  int iPort = MemFetchByte ();
+  switch (iPort)
+  {
+    case 0xF5:  RegA = KBDReadRow ();
+                break;
+    default:    RegA = 0xFF;
+                break;
+  }
   Clock += 10;
 }
 
@@ -1050,7 +1058,12 @@ void InstIN ()
 
 void InstOUT ()
 {
-  MemFetchByte ();
+  int iPort = MemFetchByte ();
+  switch (iPort)
+  {
+    case 0xF4:  KBDWriteColumn (RegA);
+                break;
+  }
   Clock += 10;
 }
 
@@ -1204,6 +1217,9 @@ void CPUExecute ()
 
   while (true)
   {
+//!@#@!
+std::cout << std::hex << (int) RegPC << " " << (int) MemData [RegPC] << " A" << (int) RegA << " BC" << (int) RegBC << " DE" << (int) RegDE << " HL" << (int) RegHL << " SP" << (int) RegSP << std::endl;
+//#@!@#
     byte bCode = MemFetchByte ();
     apInstructionTable [bCode] ();
 

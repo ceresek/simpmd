@@ -32,12 +32,14 @@ limitations under the License.
 
 /// Number of simulated keyboard columns.
 #define PMD_KBD_COLUMNS         16
+/// Mask for keyboard column information
+#define PMD_KBD_COLUMN_MASK     0xF;
 
 /// Number of simulated keyboard rows
 #define PMD_KBD_ROWS            5
-
 /// Mask for keyboard row information.
-#define PMD_KBD_ROW_MASK        ((1 << PMD_KBD_ROWS) - 1)
+#define PMD_KBD_ROW_MASK        0x1F;
+
 /// Mask for keyboard SHIFT key
 #define PMD_KBD_SHIFT_MASK      (1 << 5)
 /// Mask for keyboard STOP key
@@ -57,8 +59,25 @@ typedef std::map <SDLKey, tKeyLocation> tKeyMap;
 static tKeyMap oKeyMap;
 
 
-/// Current keyboard state.
-static byte abKeyboard [PMD_KBD_COLUMNS];
+/// Current keyboard matrix state.
+static byte abKeyMatrix [PMD_KBD_COLUMNS];
+/// Current keyboard shifts state.
+static byte iKeyShifts;
+/// Current keyboard column
+static byte iKeyColumn;
+
+//--------------------------------------------------------------------------
+// Port operations
+
+byte KBDReadRow ()
+{
+  return (iKeyShifts & abKeyMatrix [iKeyColumn]);
+}
+
+void KBDWriteColumn (byte iData)
+{
+  iKeyColumn = iData & PMD_KBD_COLUMN_MASK;
+}
 
 //--------------------------------------------------------------------------
 // Event handlers
@@ -70,10 +89,39 @@ static byte abKeyboard [PMD_KBD_COLUMNS];
  */
 void KBDEventHandler (const SDL_KeyboardEvent *pEvent)
 {
-  tKeyMap::iterator xEvent = oKeyMap.find (pEvent->keysym.sym);
-  if (xEvent != oKeyMap.end ())
+  // Find the location of the key in the key map
+  tKeyMap::iterator xLocation = oKeyMap.find (pEvent->keysym.sym);
+  if (xLocation != oKeyMap.end ())
   {
-    std::cout << "Key " << pEvent->keysym.sym << " found" << std::endl;
+    switch (pEvent->state)
+    {
+      case SDL_PRESSED:
+        // Pressing a key resets the relevant bit of the keyboard matrix
+        abKeyMatrix [xLocation->second.iColumnIndex] &= ~xLocation->second.iRowMask;
+        break;
+      case SDL_RELEASED:
+        // Releasing a key sets the relevant bit of the keyboard matrix
+        abKeyMatrix [xLocation->second.iColumnIndex] |= xLocation->second.iRowMask;
+        break;
+    }
+  }
+  // Shift keys have special handling
+  else switch (pEvent->keysym.sym)
+  {
+    case SDLK_LSHIFT:
+    case SDLK_RSHIFT:
+      switch (pEvent->state)
+      {
+        case SDL_PRESSED:  iKeyShifts &= ~PMD_KBD_SHIFT_MASK; break;
+        case SDL_RELEASED: iKeyShifts |=  PMD_KBD_SHIFT_MASK; break;
+      }
+    case SDLK_LCTRL:
+    case SDLK_RCTRL:
+      switch (pEvent->state)
+      {
+        case SDL_PRESSED:  iKeyShifts &= ~PMD_KBD_STOP_MASK; break;
+        case SDL_RELEASED: iKeyShifts |=  PMD_KBD_STOP_MASK; break;
+      }
   }
 }
 
@@ -175,7 +223,7 @@ void KBDInitialize ()
   for (int iEvent = 0 ; iEvent < sizeof (asKeyEvents) / sizeof (tKeyEvent) ; iEvent ++)
   {
     const tKeyEvent &sEvent = asKeyEvents [iEvent];
-    oKeyMap.insert (std::make_pair (sEvent.iKey, tKeyLocation (~(1 << sEvent.iRow - 1), sEvent.iColumn - 1)));
+    oKeyMap.insert (std::make_pair (sEvent.iKey, tKeyLocation (1 << sEvent.iRow - 1, sEvent.iColumn - 1)));
   }
 
   // Initialize the field with the current simulated
@@ -183,8 +231,11 @@ void KBDInitialize ()
 
   for (int iColumn = 0 ; iColumn < PMD_KBD_COLUMNS ; iColumn ++)
   {
-    abKeyboard [iColumn] = PMD_KBD_ROW_MASK;
+    abKeyMatrix [iColumn] = 0xFF;
   }
+
+  iKeyShifts = 0xFF;
+  iKeyColumn = 0;
 }
 
 void KBDShutdown ()

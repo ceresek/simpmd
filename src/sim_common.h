@@ -45,6 +45,8 @@ void DSPPaint ();
 void DSPInitialize ();
 void DSPShutdown ();
 
+byte KBDReadRow ();
+void KBDWriteColumn (byte iData);
 void KBDEventHandler (const SDL_KeyboardEvent *);
 void KBDInitialize ();
 void KBDShutdown ();
