@@ -57,4 +57,15 @@ void TIMInitialize ();
 void TIMShutdown ();
 
 //--------------------------------------------------------------------------
+// Debugging
+
+/// Displays a message
+#define DEBUG_LOG(X) std::cout << X << std::endl
+
+/// Display instructions while executing
+#define DEBUG_CPU_TRACE_INSTRUCTIONS
+/// Display registers while executing
+#define DEBUG_CPU_TRACE_REGISTERS
+
+//--------------------------------------------------------------------------
 

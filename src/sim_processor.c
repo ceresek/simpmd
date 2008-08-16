@@ -18,6 +18,7 @@ limitations under the License.
 
 */
 
+#include <iomanip>
 #include <iostream>
 
 #include <SDL/SDL.h>
@@ -96,6 +97,18 @@ static byte abParity [256];
 // macros to avoid evaluating arguments multiple
 // times.
 
+/// Reads a byte from simulated memory array
+inline byte MemReadByte (word iAddr)
+{
+  return (MemData [iAddr]);
+}
+
+/// Reads a word from simulated memory array
+inline word MemReadWord (word iAddr)
+{
+  return (MemData [iAddr] + ((word) MemData [iAddr + (word) 1] << 8));
+}
+
 /// Writes a byte to simulated memory array if it is writable.
 inline void MemWriteByte (word iAddr, byte iData)
 {
@@ -171,6 +184,29 @@ inline word MemFetchWord ()
   I (C,FlagC)                                   \
   I (NC,!FlagC)
 
+
+/// Displays instructions when instruction tracing is enabled.
+#ifdef DEBUG_CPU_TRACE_INSTRUCTIONS
+#  define CPU_LOG_INSTRUCTION(X) DEBUG_LOG (X)
+#else
+#  define CPU_LOG_INSTRUCTION(X)
+#endif
+
+/// Displays a formatted byte value.
+#define CPU_LOG_FORMAT_BYTE(X) std::hex << std::uppercase << std::setfill ('0') << std::setw (2) << (int) X
+/// Displays a formatted word value.
+#define CPU_LOG_FORMAT_WORD(X) std::hex << std::uppercase << std::setfill ('0') << std::setw (4) << (int) X
+
+#define CPU_LOG_INST_X(X)       CPU_LOG_INSTRUCTION (#X)
+
+#define CPU_LOG_INST_B(X)       CPU_LOG_INSTRUCTION (#X " " << CPU_LOG_FORMAT_BYTE (MemReadByte (RegPC)))
+#define CPU_LOG_INST_W(X)       CPU_LOG_INSTRUCTION (#X " " << CPU_LOG_FORMAT_WORD (MemReadWord (RegPC)))
+
+#define CPU_LOG_INST_RB(X,R)    CPU_LOG_INSTRUCTION (#X " " #R "," << CPU_LOG_FORMAT_BYTE (MemReadByte (RegPC)))
+#define CPU_LOG_INST_RW(X,R)    CPU_LOG_INSTRUCTION (#X " " #R "," << CPU_LOG_FORMAT_WORD (MemReadWord (RegPC)))
+
+#define CPU_LOG_INST_R(X,R)     CPU_LOG_INSTRUCTION (#X " " #R)
+#define CPU_LOG_INST_RR(X,D,S)  CPU_LOG_INSTRUCTION (#X " " #D "," #S)
 
 //--------------------------------------------------------------------------
 // Control Operations
@@ -256,6 +292,7 @@ inline void FlagsUnpack ()
 #define InstMOVDstSrc(D,S)                      \
 void InstMOV##D##S ()                           \
 {                                               \
+  CPU_LOG_INST_RR (MOV,D,S);                    \
   Reg##D = Reg##S;                              \
   Clock += 5;                                   \
 }
@@ -279,6 +316,7 @@ InstAllRegisters (InstMOVDst)
 #define InstMOVMemSrc(S)                        \
 void InstMOVM##S ()                             \
 {                                               \
+  CPU_LOG_INST_RR (MOV,M,S);                    \
   MemWriteByte (RegHL, Reg##S);                 \
   Clock += 7;                                   \
 }
@@ -292,6 +330,7 @@ InstAllRegisters (InstMOVMemSrc)
 #define InstMOVMemDst(D)                        \
 void InstMOV##D##M ()                           \
 {                                               \
+  CPU_LOG_INST_RR (MOV,D,M);                    \
   Reg##D = MemData [RegHL];                     \
   Clock += 7;                                   \
 }
@@ -305,6 +344,7 @@ InstAllRegisters (InstMOVMemDst)
 #define InstMVIDst(D)                           \
 void InstMVI##D ()                              \
 {                                               \
+  CPU_LOG_INST_RB (MVI,D);                      \
   Reg##D = MemFetchByte ();                     \
   Clock += 7;                                   \
 }
@@ -317,6 +357,7 @@ InstAllRegisters (InstMVIDst)
 
 void InstMVIM ()
 {
+  CPU_LOG_INST_RB (MVI,M);
   MemWriteByte (RegHL, MemFetchByte ());
   Clock += 10;
 }
@@ -326,6 +367,7 @@ void InstMVIM ()
 #define InstLXIDst(D,N)                         \
 void InstLXI##N ()                              \
 {                                               \
+  CPU_LOG_INST_RW (LXI,N);                      \
   Reg##D = MemFetchWord ();                     \
   Clock += 10;                                  \
 }
@@ -338,6 +380,7 @@ InstAllRegisterPairs (InstLXIDst)
 
 void InstLDA ()
 {
+  CPU_LOG_INST_W (LDA);
   RegA = MemData [MemFetchWord ()];
   Clock += 13;
 }
@@ -346,6 +389,7 @@ void InstLDA ()
 
 void InstSTA ()
 {
+  CPU_LOG_INST_W (STA);
   MemWriteByte (MemFetchWord (), RegA);
   Clock += 13;
 }
@@ -354,6 +398,7 @@ void InstSTA ()
 
 void InstLHLD ()
 {
+  CPU_LOG_INST_X (LHLD);
   RegHL = MemData [MemFetchWord ()];
   Clock += 16;
 }
@@ -362,6 +407,7 @@ void InstLHLD ()
 
 void InstSHLD ()
 {
+  CPU_LOG_INST_X (SHLD);
   int iAddr = MemFetchWord ();
   MemWriteWord (iAddr, RegHL);
   Clock += 16;
@@ -372,6 +418,7 @@ void InstSHLD ()
 #define InstLDAXSrc(S,N)                        \
 void InstLDAX##N ()                             \
 {                                               \
+  CPU_LOG_INST_R (LDAX,N);                      \
   RegA = MemData [Reg##S];                      \
   Clock += 7;                                   \
 }
@@ -385,6 +432,7 @@ InstAllRegisterPairs (InstLDAXSrc)
 #define InstSTAXSrc(S,N)                        \
 void InstSTAX##N ()                             \
 {                                               \
+  CPU_LOG_INST_R (STAX,N);                      \
   MemWriteByte (MemData [Reg##S], RegA);        \
   Clock += 7;                                   \
 }
@@ -397,6 +445,7 @@ InstAllRegisterPairs (InstSTAXSrc)
 
 void InstXCHG ()
 {
+  CPU_LOG_INST_X (XCHG);
   int iTemp = RegDE;
   RegDE = RegHL;
   RegHL = iTemp;
@@ -413,6 +462,7 @@ void InstXCHG ()
 #define InstADDSrc(S)                           \
 void InstADD##S ()                              \
 {                                               \
+  CPU_LOG_INST_R (ADD,S);                       \
   MathGenericSZHPC (RegA,+,Reg##S,Binary)       \
   RegA = iResult;                               \
   Clock += 4;                                   \
@@ -426,6 +476,7 @@ InstAllRegisters (InstADDSrc)
 
 void InstADDM ()
 {
+  CPU_LOG_INST_R (ADD,M);
   MathGenericSZHPC (RegA,+,MemData [RegHL],Binary)
   RegA = iResult;
   Clock += 7;
@@ -435,6 +486,7 @@ void InstADDM ()
 
 void InstADI ()
 {
+  CPU_LOG_INST_B (ADI);
   byte iOperand = MemFetchByte ();
   MathGenericSZHPC (RegA,+,iOperand,Binary)
   RegA = iResult;
@@ -446,6 +498,7 @@ void InstADI ()
 #define InstADCSrc(S)                           \
 void InstADC##S ()                              \
 {                                               \
+  CPU_LOG_INST_R (ADC,S);                       \
   MathGenericSZHPC (RegA,+,Reg##S,Carry)        \
   RegA = iResult;                               \
   Clock += 4;                                   \
@@ -459,6 +512,7 @@ InstAllRegisters (InstADCSrc)
 
 void InstADCM ()
 {
+  CPU_LOG_INST_R (ADC,M);
   MathGenericSZHPC (RegA,+,MemData [RegHL],Carry)
   RegA = iResult;
   Clock += 7;
@@ -468,6 +522,7 @@ void InstADCM ()
 
 void InstACI ()
 {
+  CPU_LOG_INST_B (ACI);
   byte iOperand = MemFetchByte ();
   MathGenericSZHPC (RegA,+,iOperand,Carry)
   RegA = iResult;
@@ -479,6 +534,7 @@ void InstACI ()
 #define InstSUBSrc(S)                           \
 void InstSUB##S ()                              \
 {                                               \
+  CPU_LOG_INST_R (SUB,S);                       \
   MathGenericSZHPC (RegA,-,Reg##S,Binary)       \
   RegA = iResult;                               \
   Clock += 4;                                   \
@@ -492,6 +548,7 @@ InstAllRegisters (InstSUBSrc)
 
 void InstSUBM ()
 {
+  CPU_LOG_INST_R (SUB,M);
   MathGenericSZHPC (RegA,-,MemData [RegHL],Binary)
   RegA = iResult;
   Clock += 7;
@@ -501,6 +558,7 @@ void InstSUBM ()
 
 void InstSUI ()
 {
+  CPU_LOG_INST_B (SUI);
   byte iOperand = MemFetchByte ();
   MathGenericSZHPC (RegA,-,iOperand,Binary)
   RegA = iResult;
@@ -512,6 +570,7 @@ void InstSUI ()
 #define InstSBBSrc(S)                           \
 void InstSBB##S ()                              \
 {                                               \
+  CPU_LOG_INST_R (SBB,S);                       \
   MathGenericSZHPC (RegA,-,Reg##S,Carry)        \
   RegA = iResult;                               \
   Clock += 4;                                   \
@@ -525,6 +584,7 @@ InstAllRegisters (InstSBBSrc)
 
 void InstSBBM ()
 {
+  CPU_LOG_INST_R (SBB,M);
   MathGenericSZHPC (RegA,-,MemData [RegHL],Carry)
   RegA = iResult;
   Clock += 7;
@@ -534,6 +594,7 @@ void InstSBBM ()
 
 void InstSBI ()
 {
+  CPU_LOG_INST_B (SBI);
   byte iOperand = MemFetchByte ();
   MathGenericSZHPC (RegA,-,iOperand,Carry)
   RegA = iResult;
@@ -545,6 +606,7 @@ void InstSBI ()
 #define InstINRDst(D)                           \
 void InstINR##D ()                              \
 {                                               \
+  CPU_LOG_INST_R (INR,D);                       \
   MathGenericSZHP (Reg##D,+,1,Binary)           \
   Reg##D = iResult;                             \
   Clock += 5;                                   \
@@ -558,6 +620,7 @@ InstAllRegisters (InstINRDst)
 
 void InstINRM ()
 {
+  CPU_LOG_INST_R (INR,M);
   MathGenericSZHP (MemData [RegHL],+,1,Binary)
   MemWriteByte (RegHL, iResult);
   Clock += 10;
@@ -568,6 +631,7 @@ void InstINRM ()
 #define InstDCRDst(D)                           \
 void InstDCR##D ()                              \
 {                                               \
+  CPU_LOG_INST_R (DCR,D);                       \
   MathGenericSZHP (Reg##D,-,1,Binary)           \
   Reg##D = iResult;                             \
   Clock += 5;                                   \
@@ -581,6 +645,7 @@ InstAllRegisters (InstDCRDst)
 
 void InstDCRM ()
 {
+  CPU_LOG_INST_R (DCR,M);
   MathGenericSZHP (MemData [RegHL],-,1,Binary)
   MemWriteByte (RegHL, iResult);
   Clock += 10;
@@ -591,6 +656,7 @@ void InstDCRM ()
 #define InstINXDst(D,N)                         \
 void InstINX##N ()                              \
 {                                               \
+  CPU_LOG_INST_R (INX,N);                       \
   ++ Reg##D;                                    \
   Clock += 5;                                   \
 }
@@ -604,6 +670,7 @@ InstAllRegisterPairs (InstINXDst)
 #define InstDCXDst(D,N)                         \
 void InstDCX##N ()                              \
 {                                               \
+  CPU_LOG_INST_R (DCX,N);                       \
   -- Reg##D;                                    \
   Clock += 5;                                   \
 }
@@ -619,6 +686,7 @@ InstAllRegisterPairs (InstDCXDst)
 #define InstDADSrc(S,N)                         \
 void InstDAD##N ()                              \
 {                                               \
+  CPU_LOG_INST_R (DAD,N);                       \
   uint iResult = RegHL + Reg##S;                \
   FlagC = (iResult > 65535);                    \
   RegHL = iResult;                              \
@@ -635,6 +703,7 @@ InstAllRegisterPairs (InstDADSrc)
 
 void InstDAA ()
 {
+  CPU_LOG_INST_X (DAA);
   uint iResult = RegA;
   // Correct the lower nibble ...
   if ((iResult & 0xF) > 0x9 || FlagH)
@@ -670,6 +739,7 @@ void InstDAA ()
 #define InstANASrc(S)                           \
 void InstANA##S ()                              \
 {                                               \
+  CPU_LOG_INST_R (ANA,S);                       \
   LogicalGenericSZHPC (RegA,&,Reg##S)           \
   RegA = iResult;                               \
   Clock += 4;                                   \
@@ -683,6 +753,7 @@ InstAllRegisters (InstANASrc)
 
 void InstANAM ()
 {
+  CPU_LOG_INST_R (ANA,M);
   LogicalGenericSZHPC (RegA,&,MemData [RegHL])
   RegA = iResult;
   Clock += 7;
@@ -692,6 +763,7 @@ void InstANAM ()
 
 void InstANI ()
 {
+  CPU_LOG_INST_B (ANI);
   byte iOperand = MemFetchByte ();
   LogicalGenericSZHPC (RegA,&,iOperand)
   RegA = iResult;
@@ -703,6 +775,7 @@ void InstANI ()
 #define InstXRASrc(S)                           \
 void InstXRA##S ()                              \
 {                                               \
+  CPU_LOG_INST_R (XRA,S);                       \
   LogicalGenericSZHPC (RegA,^,Reg##S)           \
   RegA = iResult;                               \
   Clock += 4;                                   \
@@ -716,6 +789,7 @@ InstAllRegisters (InstXRASrc)
 
 void InstXRAM ()
 {
+  CPU_LOG_INST_R (XRA,M);
   LogicalGenericSZHPC (RegA,^,MemData [RegHL])
   RegA = iResult;
   Clock += 7;
@@ -725,6 +799,7 @@ void InstXRAM ()
 
 void InstXRI ()
 {
+  CPU_LOG_INST_B (XRI);
   byte iOperand = MemFetchByte ();
   LogicalGenericSZHPC (RegA,^,iOperand)
   RegA = iResult;
@@ -736,6 +811,7 @@ void InstXRI ()
 #define InstORASrc(S)                           \
 void InstORA##S ()                              \
 {                                               \
+  CPU_LOG_INST_R (ORA,S);                       \
   LogicalGenericSZHPC (RegA,|,Reg##S)           \
   RegA = iResult;                               \
   Clock += 4;                                   \
@@ -749,6 +825,7 @@ InstAllRegisters (InstORASrc)
 
 void InstORAM ()
 {
+  CPU_LOG_INST_R (ORA,M);
   LogicalGenericSZHPC (RegA,|,MemData [RegHL])
   RegA = iResult;
   Clock += 7;
@@ -758,6 +835,7 @@ void InstORAM ()
 
 void InstORI ()
 {
+  CPU_LOG_INST_B (ORI);
   byte iOperand = MemFetchByte ();
   LogicalGenericSZHPC (RegA,|,iOperand)
   RegA = iResult;
@@ -769,6 +847,7 @@ void InstORI ()
 #define InstCMPSrc(S)                           \
 void InstCMP##S ()                              \
 {                                               \
+  CPU_LOG_INST_R (CMP,S);                       \
   MathGenericSZHPC (RegA,-,Reg##S,Binary)       \
   Clock += 4;                                   \
 }
@@ -781,6 +860,7 @@ InstAllRegisters (InstCMPSrc)
 
 void InstCMPM ()
 {
+  CPU_LOG_INST_R (CMP,M);
   MathGenericSZHPC (RegA,-,MemData [RegHL],Binary)
   Clock += 7;
 }
@@ -789,6 +869,7 @@ void InstCMPM ()
 
 void InstCPI ()
 {
+  CPU_LOG_INST_B (CPI);
   byte iOperand = MemFetchByte ();
   MathGenericSZHPC (RegA,-,iOperand,Binary)
   Clock += 7;
@@ -798,6 +879,7 @@ void InstCPI ()
 
 void InstRLC ()
 {
+  CPU_LOG_INST_X (RLC);
   FlagC = (RegA & 0x80);
   RegA = (RegA << 1) | (FlagC ? 0x1 : 0);
   Clock += 4;
@@ -807,6 +889,7 @@ void InstRLC ()
 
 void InstRRC ()
 {
+  CPU_LOG_INST_X (RRC);
   FlagC = (RegA & 0x1);
   RegA = (RegA >> 1) | (FlagC ? 0x80 : 0);
   Clock += 4;
@@ -816,6 +899,7 @@ void InstRRC ()
 
 void InstRAL ()
 {
+  CPU_LOG_INST_X (RAL);
   bool bOverflow = (RegA & 0x80);
   RegA = (RegA << 1) | (FlagC ? 0x1 : 0);
   FlagC = bOverflow;
@@ -826,6 +910,7 @@ void InstRAL ()
 
 void InstRAR ()
 {
+  CPU_LOG_INST_X (RAR);
   bool bOverflow = (RegA & 0x1);
   RegA = (RegA >> 1) | (FlagC ? 0x80 : 0);
   FlagC = bOverflow;
@@ -836,6 +921,7 @@ void InstRAR ()
 
 void InstCMA ()
 {
+  CPU_LOG_INST_X (CMA);
   RegA = ~RegA;
   Clock += 4;
 }
@@ -844,6 +930,7 @@ void InstCMA ()
 
 void InstCMC ()
 {
+  CPU_LOG_INST_X (CMC);
   FlagC = !FlagC;
   Clock += 4;
 }
@@ -852,6 +939,7 @@ void InstCMC ()
 
 void InstSTC ()
 {
+  CPU_LOG_INST_X (STC);
   FlagC = true;
   Clock += 4;
 }
@@ -865,15 +953,17 @@ void InstSTC ()
 
 void InstJMP ()
 {
+  CPU_LOG_INST_W (JMP);
   RegPC = MemFetchWord ();
   Clock += 10;
 }
 
 // JMP conditional
 
-#define InstJMPCon(C,E)                         \
-void InstJ##C ()                                \
+#define InstJMPCon(N,E)                         \
+void InstJ##N ()                                \
 {                                               \
+  CPU_LOG_INST_W (J##N);                        \
   word iTarget = MemFetchWord ();               \
   if (E) RegPC = iTarget;                       \
   Clock += 10;                                  \
@@ -887,6 +977,7 @@ InstAllConditions (InstJMPCon)
 
 void InstCALL ()
 {
+  CPU_LOG_INST_W (CALL);
   word iTarget = MemFetchWord ();
   MemPushWord (RegPC);
   RegPC = iTarget;
@@ -895,9 +986,10 @@ void InstCALL ()
 
 // CALL conditional
 
-#define InstCALLCon(C,E)                        \
-void InstC##C ()                                \
+#define InstCALLCon(N,E)                        \
+void InstC##N ()                                \
 {                                               \
+  CPU_LOG_INST_X (C##N);                        \
   word iTarget = MemFetchWord ();               \
   if (E)                                        \
   {                                             \
@@ -916,15 +1008,17 @@ InstAllConditions (InstCALLCon)
 
 void InstRET ()
 {
+  CPU_LOG_INST_X (RET);
   RegPC = MemPopWord ();
   Clock += 10;
 }
 
 // RET conditional
 
-#define InstRETCon(C,E)                         \
-void InstR##C ()                                \
+#define InstRETCon(N,E)                         \
+void InstR##N ()                                \
 {                                               \
+  CPU_LOG_INST_X (R##N);                        \
   if (E)                                        \
   {                                             \
     RegPC = MemPopWord ();                      \
@@ -942,6 +1036,7 @@ InstAllConditions (InstRETCon)
 #define InstRSTVec(V)                           \
 void InstRST##V ()                              \
 {                                               \
+  CPU_LOG_INST_X (RST V);                       \
   MemPushWord (RegPC);                          \
   RegPC = V * 8;                                \
   Clock += 11;                                  \
@@ -962,6 +1057,7 @@ InstRSTVec (7)
 
 void InstPCHL ()
 {
+  CPU_LOG_INST_X (PCHL);
   RegPC = RegHL;
   Clock += 5;
 }
@@ -976,6 +1072,7 @@ void InstPCHL ()
 #define InstPUSHSrc(D,N)                        \
 void InstPUSH##N ()                             \
 {                                               \
+  CPU_LOG_INST_R (PUSH,N);                      \
   MemPushWord (Reg##D);                         \
   Clock += 11;                                  \
 }
@@ -988,6 +1085,7 @@ InstAllRegisterPairs (InstPUSHSrc)
 
 void InstPUSHPSW ()
 {
+  CPU_LOG_INST_R (PUSH,PSW);
   FlagsPack ();
   MemPushWord (RegAF);
   Clock += 11;
@@ -998,6 +1096,7 @@ void InstPUSHPSW ()
 #define InstPOPDst(D,N)                         \
 void InstPOP##N ()                              \
 {                                               \
+  CPU_LOG_INST_R (POP,N);                       \
   Reg##D = MemPopWord ();                       \
   Clock += 10;                                  \
 }
@@ -1010,6 +1109,7 @@ InstAllRegisterPairs (InstPOPDst)
 
 void InstPOPPSW ()
 {
+  CPU_LOG_INST_R (POP,PSW);
   RegAF = MemPopWord ();
   FlagsUnpack ();
   Clock += 10;
@@ -1019,6 +1119,7 @@ void InstPOPPSW ()
 
 void InstXTHL ()
 {
+  CPU_LOG_INST_X (XTHL);
   word iData = RegHL;
   RegL = MemData [RegSP];
   RegH = MemData [RegSP + (word) 1];
@@ -1030,6 +1131,7 @@ void InstXTHL ()
 
 void InstSPHL ()
 {
+  CPU_LOG_INST_X (SPHL);
   RegSP = RegHL;
   Clock += 5;
 }
@@ -1043,6 +1145,7 @@ void InstSPHL ()
 
 void InstIN ()
 {
+  CPU_LOG_INST_B (IN);
   int iPort = MemFetchByte ();
   switch (iPort)
   {
@@ -1058,6 +1161,7 @@ void InstIN ()
 
 void InstOUT ()
 {
+  CPU_LOG_INST_B (OUT);
   int iPort = MemFetchByte ();
   switch (iPort)
   {
@@ -1071,6 +1175,7 @@ void InstOUT ()
 
 void InstEI ()
 {
+  CPU_LOG_INST_X (EI);
   // No interrupts were used in this computer
   Clock += 4;
 }
@@ -1079,6 +1184,7 @@ void InstEI ()
 
 void InstDI ()
 {
+  CPU_LOG_INST_X (DI);
   // No interrupts were used in this computer
   Clock += 4;
 }
@@ -1087,6 +1193,7 @@ void InstDI ()
 
 void InstHLT ()
 {
+  CPU_LOG_INST_X (HLT);
   // No interrupts were used in this computer and
   // therefore the instruction should halt forever
   -- RegPC;
@@ -1097,6 +1204,7 @@ void InstHLT ()
 
 void InstNOP ()
 {
+  CPU_LOG_INST_X (NOP);
   // Guess what :-)
   Clock += 4;
 }
@@ -1217,9 +1325,24 @@ void CPUExecute ()
 
   while (true)
   {
-//!@#@!
-std::cout << std::hex << (int) RegPC << " " << (int) MemData [RegPC] << " A" << (int) RegA << " BC" << (int) RegBC << " DE" << (int) RegDE << " HL" << (int) RegHL << " SP" << (int) RegSP << std::endl;
-//#@!@#
+
+#ifdef DEBUG_CPU_TRACE_REGISTERS
+
+    // Display registers when register tracing is enabled
+    DEBUG_LOG ( "PC" << CPU_LOG_FORMAT_WORD (RegPC) <<
+               " BC" << CPU_LOG_FORMAT_WORD (RegBC) <<
+               " DE" << CPU_LOG_FORMAT_WORD (RegDE) <<
+               " HL" << CPU_LOG_FORMAT_WORD (RegHL) <<
+                " A" << CPU_LOG_FORMAT_BYTE (RegA) <<
+                 " " <<
+               (FlagS ? "S" : "-") <<
+               (FlagZ ? "Z" : "-") <<
+               (FlagH ? "H" : "-") <<
+               (FlagP ? "P" : "-") <<
+               (FlagC ? "C" : "-"));
+
+#endif
+
     byte bCode = MemFetchByte ();
     apInstructionTable [bCode] ();
 
