@@ -54,7 +54,7 @@ int main (int iArgC, char *apArgV [])
 
   // Temporary test with processor thread
 
-  int hMonitor = open ("../data/monitors/M2", O_RDONLY);
+  int hMonitor = open ("../data/monitors/M1", O_RDONLY);
   read (hMonitor, MemData + 0x8000, 4096);
   close (hMonitor);
 

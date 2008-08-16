@@ -59,8 +59,12 @@ void TIMShutdown ();
 //--------------------------------------------------------------------------
 // Debugging
 
-/// Displays a message
+/// Displays a message with a terminating newline.
 #define DEBUG_LOG(X) std::cout << X << std::endl
+/// Displays a message without a terminating newline.
+#define DEBUG_LOG_PARTIAL(X) std::cout << X
+/// Displays the terminating newline.
+#define DEBUG_LOG_NEWLINE std::cout << std::endl
 
 /// Display instructions while executing
 #define DEBUG_CPU_TRACE_INSTRUCTIONS

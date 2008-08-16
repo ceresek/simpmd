@@ -187,7 +187,7 @@ inline word MemFetchWord ()
 
 /// Displays instructions when instruction tracing is enabled.
 #ifdef DEBUG_CPU_TRACE_INSTRUCTIONS
-#  define CPU_LOG_INSTRUCTION(X) DEBUG_LOG (X)
+#  define CPU_LOG_INSTRUCTION(X) DEBUG_LOG_PARTIAL (X)
 #else
 #  define CPU_LOG_INSTRUCTION(X)
 #endif
@@ -398,7 +398,7 @@ void InstSTA ()
 
 void InstLHLD ()
 {
-  CPU_LOG_INST_X (LHLD);
+  CPU_LOG_INST_W (LHLD);
   RegHL = MemData [MemFetchWord ()];
   Clock += 16;
 }
@@ -407,7 +407,7 @@ void InstLHLD ()
 
 void InstSHLD ()
 {
-  CPU_LOG_INST_X (SHLD);
+  CPU_LOG_INST_W (SHLD);
   int iAddr = MemFetchWord ();
   MemWriteWord (iAddr, RegHL);
   Clock += 16;
@@ -1329,22 +1329,36 @@ void CPUExecute ()
 #ifdef DEBUG_CPU_TRACE_REGISTERS
 
     // Display registers when register tracing is enabled
-    DEBUG_LOG ( "PC" << CPU_LOG_FORMAT_WORD (RegPC) <<
-               " BC" << CPU_LOG_FORMAT_WORD (RegBC) <<
-               " DE" << CPU_LOG_FORMAT_WORD (RegDE) <<
-               " HL" << CPU_LOG_FORMAT_WORD (RegHL) <<
-                " A" << CPU_LOG_FORMAT_BYTE (RegA) <<
-                 " " <<
-               (FlagS ? "S" : "-") <<
-               (FlagZ ? "Z" : "-") <<
-               (FlagH ? "H" : "-") <<
-               (FlagP ? "P" : "-") <<
-               (FlagC ? "C" : "-"));
+    DEBUG_LOG_PARTIAL ( "PC:" << CPU_LOG_FORMAT_WORD (RegPC) <<
+                       " BC:" << CPU_LOG_FORMAT_WORD (RegBC) <<
+                       " DE:" << CPU_LOG_FORMAT_WORD (RegDE) <<
+                       " HL:" << CPU_LOG_FORMAT_WORD (RegHL) <<
+                       " SP:" << CPU_LOG_FORMAT_WORD (RegSP) <<
+                        " A:" << CPU_LOG_FORMAT_BYTE (RegA) <<
+                         " " <<
+                       (FlagS ? "S" : "-") <<
+                       (FlagZ ? "Z" : "-") <<
+                       (FlagH ? "H" : "-") <<
+                       (FlagP ? "P" : "-") <<
+                       (FlagC ? "C" : "-"));
 
+#ifdef DEBUG_CPU_TRACE_INSTRUCTIONS
+
+    // Display separator if instruction tracing is enabled
+    DEBUG_LOG_PARTIAL ("  ");
+
+#endif
 #endif
 
     byte bCode = MemFetchByte ();
     apInstructionTable [bCode] ();
+
+#if defined(DEBUG_CPU_TRACE_INSTRUCTIONS) | defined(DEBUG_CPU_TRACE_REGISTERS)
+
+    // Display newline if any tracing is enabled
+    DEBUG_LOG_NEWLINE;
+
+#endif
 
     // Advance the simulated clock and the actual time by sleeping
     TIMAdvance (Clock);
