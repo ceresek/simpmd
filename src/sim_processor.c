@@ -106,7 +106,7 @@ inline byte MemReadByte (word iAddr)
 /// Reads a word from simulated memory array
 inline word MemReadWord (word iAddr)
 {
-  return (MemData [iAddr] + ((word) MemData [iAddr + (word) 1] << 8));
+  return (MemReadByte (iAddr) + ((word) MemReadByte (iAddr + (word) 1) << 8));
 }
 
 /// Writes a byte to simulated memory array if it is writable.
@@ -132,7 +132,7 @@ inline void MemPushWord (word iData)
 /// Pops a byte from the stack in the simulated memory array.
 inline byte MemPopByte ()
 {
-  return (MemData [RegSP ++]);
+  return (MemReadByte (RegSP ++));
 }
 /// Pops a word from the stack in the simulated memory array.
 inline word MemPopWord ()
@@ -145,7 +145,7 @@ inline word MemPopWord ()
 /// Fetches a byte from simulated memory array at PC and shifts PC.
 inline byte MemFetchByte ()
 {
-  return (MemData [RegPC ++]);
+  return (MemReadByte (RegPC ++));
 }
 /// Fetches a word from simulated memory array at PC and shifts PC.
 inline word MemFetchWord ()
@@ -331,7 +331,7 @@ InstAllRegisters (InstMOVMemSrc)
 void InstMOV##D##M ()                           \
 {                                               \
   CPU_LOG_INST_RR (MOV,D,M);                    \
-  Reg##D = MemData [RegHL];                     \
+  Reg##D = MemReadByte (RegHL);                 \
   Clock += 7;                                   \
 }
 
@@ -381,7 +381,7 @@ InstAllRegisterPairs (InstLXIDst)
 void InstLDA ()
 {
   CPU_LOG_INST_W (LDA);
-  RegA = MemData [MemFetchWord ()];
+  RegA = MemReadByte (MemFetchWord ());
   Clock += 13;
 }
 
@@ -399,7 +399,7 @@ void InstSTA ()
 void InstLHLD ()
 {
   CPU_LOG_INST_W (LHLD);
-  RegHL = MemData [MemFetchWord ()];
+  RegHL = MemReadByte (MemFetchWord ());
   Clock += 16;
 }
 
@@ -419,7 +419,7 @@ void InstSHLD ()
 void InstLDAX##N ()                             \
 {                                               \
   CPU_LOG_INST_R (LDAX,N);                      \
-  RegA = MemData [Reg##S];                      \
+  RegA = MemReadByte (Reg##S);                  \
   Clock += 7;                                   \
 }
 
@@ -433,7 +433,7 @@ InstAllRegisterPairs (InstLDAXSrc)
 void InstSTAX##N ()                             \
 {                                               \
   CPU_LOG_INST_R (STAX,N);                      \
-  MemWriteByte (MemData [Reg##S], RegA);        \
+  MemWriteByte (Reg##S, RegA);                  \
   Clock += 7;                                   \
 }
 
@@ -477,7 +477,7 @@ InstAllRegisters (InstADDSrc)
 void InstADDM ()
 {
   CPU_LOG_INST_R (ADD,M);
-  MathGenericSZHPC (RegA,+,MemData [RegHL],Binary)
+  MathGenericSZHPC (RegA,+,MemReadByte (RegHL),Binary)
   RegA = iResult;
   Clock += 7;
 }
@@ -513,7 +513,7 @@ InstAllRegisters (InstADCSrc)
 void InstADCM ()
 {
   CPU_LOG_INST_R (ADC,M);
-  MathGenericSZHPC (RegA,+,MemData [RegHL],Carry)
+  MathGenericSZHPC (RegA,+,MemReadByte (RegHL),Carry)
   RegA = iResult;
   Clock += 7;
 }
@@ -549,7 +549,7 @@ InstAllRegisters (InstSUBSrc)
 void InstSUBM ()
 {
   CPU_LOG_INST_R (SUB,M);
-  MathGenericSZHPC (RegA,-,MemData [RegHL],Binary)
+  MathGenericSZHPC (RegA,-,MemReadByte (RegHL),Binary)
   RegA = iResult;
   Clock += 7;
 }
@@ -585,7 +585,7 @@ InstAllRegisters (InstSBBSrc)
 void InstSBBM ()
 {
   CPU_LOG_INST_R (SBB,M);
-  MathGenericSZHPC (RegA,-,MemData [RegHL],Carry)
+  MathGenericSZHPC (RegA,-,MemReadByte (RegHL),Carry)
   RegA = iResult;
   Clock += 7;
 }
@@ -621,7 +621,7 @@ InstAllRegisters (InstINRDst)
 void InstINRM ()
 {
   CPU_LOG_INST_R (INR,M);
-  MathGenericSZHP (MemData [RegHL],+,1,Binary)
+  MathGenericSZHP (MemReadByte (RegHL),+,1,Binary)
   MemWriteByte (RegHL, iResult);
   Clock += 10;
 }
@@ -646,7 +646,7 @@ InstAllRegisters (InstDCRDst)
 void InstDCRM ()
 {
   CPU_LOG_INST_R (DCR,M);
-  MathGenericSZHP (MemData [RegHL],-,1,Binary)
+  MathGenericSZHP (MemReadByte (RegHL),-,1,Binary)
   MemWriteByte (RegHL, iResult);
   Clock += 10;
 }
@@ -754,7 +754,7 @@ InstAllRegisters (InstANASrc)
 void InstANAM ()
 {
   CPU_LOG_INST_R (ANA,M);
-  LogicalGenericSZHPC (RegA,&,MemData [RegHL])
+  LogicalGenericSZHPC (RegA,&,MemReadByte (RegHL))
   RegA = iResult;
   Clock += 7;
 }
@@ -790,7 +790,7 @@ InstAllRegisters (InstXRASrc)
 void InstXRAM ()
 {
   CPU_LOG_INST_R (XRA,M);
-  LogicalGenericSZHPC (RegA,^,MemData [RegHL])
+  LogicalGenericSZHPC (RegA,^,MemReadByte (RegHL))
   RegA = iResult;
   Clock += 7;
 }
@@ -826,7 +826,7 @@ InstAllRegisters (InstORASrc)
 void InstORAM ()
 {
   CPU_LOG_INST_R (ORA,M);
-  LogicalGenericSZHPC (RegA,|,MemData [RegHL])
+  LogicalGenericSZHPC (RegA,|,MemReadByte (RegHL))
   RegA = iResult;
   Clock += 7;
 }
@@ -861,7 +861,7 @@ InstAllRegisters (InstCMPSrc)
 void InstCMPM ()
 {
   CPU_LOG_INST_R (CMP,M);
-  MathGenericSZHPC (RegA,-,MemData [RegHL],Binary)
+  MathGenericSZHPC (RegA,-,MemReadByte (RegHL),Binary)
   Clock += 7;
 }
 
@@ -1121,8 +1121,7 @@ void InstXTHL ()
 {
   CPU_LOG_INST_X (XTHL);
   word iData = RegHL;
-  RegL = MemData [RegSP];
-  RegH = MemData [RegSP + (word) 1];
+  RegHL = MemReadWord (RegSP);
   MemWriteWord (RegSP, iData);
   Clock += 18;
 }
@@ -1330,9 +1329,9 @@ void CPUExecute ()
 
     // Display registers when register tracing is enabled
     DEBUG_LOG_PARTIAL ( "PC:" << CPU_LOG_FORMAT_WORD (RegPC) <<
-                       " BC:" << CPU_LOG_FORMAT_WORD (RegBC) <<
-                       " DE:" << CPU_LOG_FORMAT_WORD (RegDE) <<
-                       " HL:" << CPU_LOG_FORMAT_WORD (RegHL) <<
+                       " BC:" << CPU_LOG_FORMAT_WORD (RegBC) << ":" << CPU_LOG_FORMAT_BYTE (MemReadByte (RegBC)) <<
+                       " DE:" << CPU_LOG_FORMAT_WORD (RegDE) << ":" << CPU_LOG_FORMAT_BYTE (MemReadByte (RegDE)) <<
+                       " HL:" << CPU_LOG_FORMAT_WORD (RegHL) << ":" << CPU_LOG_FORMAT_BYTE (MemReadByte (RegHL)) <<
                        " SP:" << CPU_LOG_FORMAT_WORD (RegSP) <<
                         " A:" << CPU_LOG_FORMAT_BYTE (RegA) <<
                          " " <<
