@@ -399,7 +399,7 @@ void InstSTA ()
 void InstLHLD ()
 {
   CPU_LOG_INST_W (LHLD);
-  RegHL = MemReadByte (MemFetchWord ());
+  RegHL = MemReadWord (MemFetchWord ());
   Clock += 16;
 }
 
