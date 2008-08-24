@@ -115,6 +115,7 @@ void KBDEventHandler (const SDL_KeyboardEvent *pEvent)
         case SDL_PRESSED:  iKeyShifts &= ~PMD_KBD_SHIFT_MASK; break;
         case SDL_RELEASED: iKeyShifts |=  PMD_KBD_SHIFT_MASK; break;
       }
+      break;
     case SDLK_LCTRL:
     case SDLK_RCTRL:
       switch (pEvent->state)
@@ -122,6 +123,7 @@ void KBDEventHandler (const SDL_KeyboardEvent *pEvent)
         case SDL_PRESSED:  iKeyShifts &= ~PMD_KBD_STOP_MASK; break;
         case SDL_RELEASED: iKeyShifts |=  PMD_KBD_STOP_MASK; break;
       }
+      break;
   }
 }
 

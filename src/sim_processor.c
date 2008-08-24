@@ -1148,6 +1148,8 @@ void InstIN ()
   int iPort = MemFetchByte ();
   switch (iPort)
   {
+    case 0x1E:  RegA = TAPReadData ();
+                break;
     case 0xF5:  RegA = KBDReadRow ();
                 break;
     default:    RegA = 0xFF;
@@ -1164,6 +1166,8 @@ void InstOUT ()
   int iPort = MemFetchByte ();
   switch (iPort)
   {
+    case 0x1E:  TAPWriteData (RegA);
+                break;
     case 0xF4:  KBDWriteColumn (RegA);
                 break;
   }

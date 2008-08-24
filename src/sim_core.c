@@ -50,6 +50,7 @@ int main (int iArgC, char *apArgV [])
   CPUInitialize ();
   DSPInitialize ();
   KBDInitialize ();
+  TAPInitialize ();
   TIMInitialize ();
 
   // Temporary test with processor thread
@@ -58,14 +59,15 @@ int main (int iArgC, char *apArgV [])
   read (hMonitor, MemData + 0x8000, 4096);
   close (hMonitor);
 
+//  int hGame = open ("../data/games-pmd1/KURE", O_RDONLY);
+//  lseek (hGame, 0x3F, SEEK_SET);
+//  read (hGame, MemData, 6379-0x3F);
+//  close (hGame);
+
 //  int hGame = open ("../data/games-pmd1/KANKAN", O_RDONLY);
 //  lseek (hGame, 0x3F, SEEK_SET);
 //  read (hGame, MemData, 6977-0x3F);
 //  close (hGame);
-
-//  MemData [0x8000] = 0xC3;
-//  MemData [0x8001] = 0;
-//  MemData [0x8002] = 0;
 
   SDL_Thread *pProcessor = SDL_CreateThread (CPUThread, NULL);
 
@@ -95,6 +97,7 @@ int main (int iArgC, char *apArgV [])
   // Module shutdown
 
   TIMShutdown ();
+  TAPShutdown ();
   KBDShutdown ();
   DSPShutdown ();
   CPUShutdown ();

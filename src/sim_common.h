@@ -51,6 +51,11 @@ void KBDEventHandler (const SDL_KeyboardEvent *);
 void KBDInitialize ();
 void KBDShutdown ();
 
+byte TAPReadData ();
+void TAPWriteData (byte iData);
+void TAPInitialize ();
+void TAPShutdown ();
+
 void TIMSynchronize (int);
 void TIMAdvance (int);
 void TIMInitialize ();
@@ -67,9 +72,9 @@ void TIMShutdown ();
 #define DEBUG_LOG_NEWLINE std::cout << std::endl
 
 /// Display instructions while executing
-#define DEBUG_CPU_TRACE_INSTRUCTIONS
+#undef DEBUG_CPU_TRACE_INSTRUCTIONS
 /// Display registers while executing
-#define DEBUG_CPU_TRACE_REGISTERS
+#undef DEBUG_CPU_TRACE_REGISTERS
 
 //--------------------------------------------------------------------------
 
