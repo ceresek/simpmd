@@ -29,6 +29,14 @@ typedef unsigned char   byte;
 typedef unsigned short  word;
 
 //--------------------------------------------------------------------------
+// Macros
+
+/// Returns the smaller one of two arguments.
+#define MIN(A,B) ((A) < (B) ? (A) : (B))
+/// Returns the greater one of two arguments.
+#define MAX(A,B) ((A) > (B) ? (A) : (B))
+
+//--------------------------------------------------------------------------
 // Globals
 
 extern byte MemData [65536];
@@ -41,7 +49,8 @@ int CPUThread (void *);
 void CPUInitialize ();
 void CPUShutdown ();
 
-void DSPPaint ();
+void DSPPaintHandler ();
+void DSPResizeHandler (const SDL_ResizeEvent *);
 void DSPInitialize ();
 void DSPShutdown ();
 

@@ -66,6 +66,7 @@ static byte iKeyShifts;
 /// Current keyboard column
 static byte iKeyColumn;
 
+
 //--------------------------------------------------------------------------
 // Port operations
 
@@ -79,6 +80,7 @@ void KBDWriteColumn (byte iData)
   iKeyColumn = iData & PMD_KBD_COLUMN_MASK;
 }
 
+
 //--------------------------------------------------------------------------
 // Event handlers
 
@@ -86,6 +88,8 @@ void KBDWriteColumn (byte iData)
  *
  *  Sets the information in the simulated keyboard
  *  matrix based on the keyboard events.
+ *
+ *  @arg pEvent The event to handle.
  */
 void KBDEventHandler (const SDL_KeyboardEvent *pEvent)
 {
@@ -126,6 +130,7 @@ void KBDEventHandler (const SDL_KeyboardEvent *pEvent)
       break;
   }
 }
+
 
 //--------------------------------------------------------------------------
 // Initialization and shutdown

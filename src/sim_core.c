@@ -85,8 +85,11 @@ int main (int iArgC, char *apArgV [])
       case SDL_KEYDOWN:
         KBDEventHandler ((SDL_KeyboardEvent *) &sEvent);
         break;
+      case SDL_VIDEORESIZE:
+        DSPResizeHandler ((SDL_ResizeEvent *) &sEvent);
+        break;
       case SDL_USEREVENT:
-        DSPPaint ();
+        DSPPaintHandler ();
         break;
       case SDL_QUIT:
         bQuit = true;
