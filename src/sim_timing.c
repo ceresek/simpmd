@@ -28,9 +28,6 @@ limitations under the License.
 //--------------------------------------------------------------------------
 // Data
 
-/// Simulated processor clock rate
-#define PMD_CLOCK       (18432000 / 9)
-
 /// Last synchronized value of actual time
 static struct timespec sLastTime;
 /// Last synchronized value of simulated clock
@@ -41,10 +38,10 @@ static int iLastClock;
 // Sleeping
 
 /// Synchronizes simulated clock and actual time.
-void TIMSynchronize (int iClock)
+void TIMSynchronize ()
 {
   clock_gettime (CLOCK_MONOTONIC, &sLastTime);
-  iLastClock = iClock;
+  iLastClock = Clock;
 }
 
 
@@ -67,6 +64,7 @@ void TIMAdvance (int iClock)
   iLastClock = iClock;
 }
 
+
 //--------------------------------------------------------------------------
 // Initialization and shutdown
 
@@ -80,6 +78,7 @@ void TIMShutdown ()
 {
   // Nothing really ...
 }
+
 
 //--------------------------------------------------------------------------
 

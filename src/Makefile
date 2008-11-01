@@ -20,7 +20,7 @@ clean:
 
 # Modules
 
-OO = sim_core.o sim_display.o sim_keyboard.o sim_processor.o sim_tape.o sim_timing.o
+OO = sim_core.o sim_display.o sim_keyboard.o sim_processor.o sim_speaker.o sim_tape.o sim_timing.o
 
 %.o: %.c
 	$(CC) $(CC_OPTS) -c -o $@ $<

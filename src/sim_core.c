@@ -50,6 +50,7 @@ int main (int iArgC, char *apArgV [])
   CPUInitialize ();
   DSPInitialize ();
   KBDInitialize ();
+  SNDInitialize ();
   TAPInitialize ();
   TIMInitialize ();
 
@@ -64,10 +65,10 @@ int main (int iArgC, char *apArgV [])
 //  read (hGame, MemData, 6379-0x3F);
 //  close (hGame);
 
-//  int hGame = open ("../data/games-pmd1/KANKAN", O_RDONLY);
-//  lseek (hGame, 0x3F, SEEK_SET);
-//  read (hGame, MemData, 6977-0x3F);
-//  close (hGame);
+  int hGame = open ("../data/games-pmd1/KANKAN", O_RDONLY);
+  lseek (hGame, 0x3F, SEEK_SET);
+  read (hGame, MemData, 6977-0x3F);
+  close (hGame);
 
   SDL_Thread *pProcessor = SDL_CreateThread (CPUThread, NULL);
 
@@ -101,6 +102,7 @@ int main (int iArgC, char *apArgV [])
 
   TIMShutdown ();
   TAPShutdown ();
+  SNDShutdown ();
   KBDShutdown ();
   DSPShutdown ();
   CPUShutdown ();
@@ -109,6 +111,7 @@ int main (int iArgC, char *apArgV [])
 
   return (0);
 }
+
 
 //--------------------------------------------------------------------------
 

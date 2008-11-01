@@ -70,11 +70,17 @@ static byte iKeyColumn;
 //--------------------------------------------------------------------------
 // Port operations
 
+/** Read from keyboard row register.
+ */
 byte KBDReadRow ()
 {
   return (iKeyShifts & abKeyMatrix [iKeyColumn]);
 }
 
+/** Write to keyboard column register.
+ *
+ *  @arg iData The written value.
+ */
 void KBDWriteColumn (byte iData)
 {
   iKeyColumn = iData & PMD_KBD_COLUMN_MASK;
@@ -250,6 +256,7 @@ void KBDShutdown ()
   // Free the key map
   oKeyMap.clear ();
 }
+
 
 //--------------------------------------------------------------------------
 

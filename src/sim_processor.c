@@ -82,7 +82,7 @@ static bool FlagC;
 
 // Processor clock counter for timing purposes ...
 
-static int Clock;
+atomic_int Clock;
 
 
 //--------------------------------------------------------------------------
@@ -1170,6 +1170,8 @@ void InstOUT ()
                 break;
     case 0xF4:  KBDWriteColumn (RegA);
                 break;
+    case 0xF6:  SNDWriteSpeaker (RegA);
+                break;
   }
   Clock += 10;
 }
@@ -1324,7 +1326,8 @@ void CPUReset ()
 void CPUExecute ()
 {
   // Synchronize the simulated clock and the actual time
-  TIMSynchronize (Clock);
+  SNDSynchronize ();
+  TIMSynchronize ();
 
   while (true)
   {
@@ -1412,6 +1415,7 @@ void CPUInitialize ()
 void CPUShutdown ()
 {
 }
+
 
 //--------------------------------------------------------------------------
 

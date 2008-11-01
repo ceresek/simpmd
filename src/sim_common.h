@@ -28,6 +28,7 @@ typedef unsigned long   ulong;
 typedef unsigned char   byte;
 typedef unsigned short  word;
 
+
 //--------------------------------------------------------------------------
 // Macros
 
@@ -36,11 +37,59 @@ typedef unsigned short  word;
 /// Returns the greater one of two arguments.
 #define MAX(A,B) ((A) > (B) ? (A) : (B))
 
+
+//--------------------------------------------------------------------------
+// Constants
+
+/// Simulated processor clock rate
+#define PMD_CLOCK       (18432000 / 9)
+
+
+//--------------------------------------------------------------------------
+// Atomicity
+
+#if defined (__i386__) || defined (__x86_64__)
+
+class atomic_int
+{
+  private:
+    int volatile __attribute__ ((aligned (64))) iContent;
+  public:
+    /// Atomically reads the integer value.
+    inline operator int ()
+    {
+      // Reading of aligned value is always atomic.
+      return (iContent);
+    }
+    /// Atomically writes the integer value.
+    inline void operator = (int iValue)
+    {
+      // Writing of aligned value is always atomic.
+      iContent = iValue;
+    }
+    /// Atomically increments the integer value.
+    inline void operator += (int iValue)
+    {
+      asm ("lock ; add %[src],%[dst]"
+        : [dst] "+m" (iContent)
+        : [src] "r" (iValue)
+        : "cc");
+    }
+};
+
+#else
+#error Missing atomic type implementation.
+#endif
+
+
 //--------------------------------------------------------------------------
 // Globals
 
 extern byte MemData [65536];
 extern bool MemMask [65536];
+
+extern atomic_int Clock;
+
 
 //--------------------------------------------------------------------------
 // Externals
@@ -60,15 +109,21 @@ void KBDEventHandler (const SDL_KeyboardEvent *);
 void KBDInitialize ();
 void KBDShutdown ();
 
+void SNDSynchronize ();
+void SNDWriteSpeaker (byte iData);
+void SNDInitialize ();
+void SNDShutdown ();
+
 byte TAPReadData ();
 void TAPWriteData (byte iData);
 void TAPInitialize ();
 void TAPShutdown ();
 
-void TIMSynchronize (int);
+void TIMSynchronize ();
 void TIMAdvance (int);
 void TIMInitialize ();
 void TIMShutdown ();
+
 
 //--------------------------------------------------------------------------
 // Debugging
@@ -84,6 +139,7 @@ void TIMShutdown ();
 #undef DEBUG_CPU_TRACE_INSTRUCTIONS
 /// Display registers while executing
 #undef DEBUG_CPU_TRACE_REGISTERS
+
 
 //--------------------------------------------------------------------------
 

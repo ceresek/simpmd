@@ -44,26 +44,26 @@ static SDL_Color sColorGray  = { 192, 192, 192 };
 #define DSP_COLOR_GRAY          2
 
 
-/// Base address of the video memory
+/// Base address of the video memory.
 #define PMD_VRAM_BASE           0xC000
-/// Width of the visible video memory line in bytes
+/// Width of the visible video memory line in bytes.
 #define PMD_VRAM_WIDTH          48
-/// Width of the invisible video memory line in bytes
+/// Width of the invisible video memory line in bytes.
 #define PMD_VRAM_BLANK          16
-/// Height of the video memory area in lines
+/// Height of the video memory area in lines.
 #define PMD_VRAM_HEIGHT         256
 
 /// Number of pixels in one byte.
 #define PMD_PIXEL_COUNT         6
-/// Gray attribute mask
+/// Gray attribute mask.
 #define PMD_PIXEL_GRAY          (1 << 6)
-/// Blinking attribute bask
+/// Blinking attribute bask.
 #define PMD_PIXEL_BLINK         (1 << 7)
 
-/// Blinking rate in miliseconds
+/// Blinking rate in miliseconds.
 #define PMD_BLINK_RATE          512
 
-/// Screen paint rate in miliseconds
+/// Screen paint rate in miliseconds.
 #define PMD_REFRESH             20
 
 
@@ -268,14 +268,14 @@ void DSPResizeHandler (const SDL_ResizeEvent *pEvent)
 
 
 //--------------------------------------------------------------------------
-// Timer handlers
+// Callback handlers
 
 /** Handler for painting the screen content.
  *
  *  Pushes an event corresponding to the timer on the
  *  event queue to maintain the threading rules.
  */
-Uint32 DSPPaintTimer (Uint32 iInterval, void *pArgs)
+Uint32 DSPPaintTimerCallback (Uint32 iInterval, void *pArgs)
 {
   SDL_Event sEvent;
   sEvent.type = SDL_USEREVENT;
@@ -298,7 +298,7 @@ void DSPInitialize ()
   DSPSizeScreen (0, 0);
 
   // Start the timer that paints the screen repeatedly ...
-  iPaintTimer = SDL_AddTimer (PMD_REFRESH, DSPPaintTimer, NULL);
+  iPaintTimer = SDL_AddTimer (PMD_REFRESH, DSPPaintTimerCallback, NULL);
 }
 
 
@@ -307,6 +307,7 @@ void DSPShutdown ()
   // Stop the timer that paints the screen repeatedly ...
   SDL_RemoveTimer (iPaintTimer);
 }
+
 
 //--------------------------------------------------------------------------
 

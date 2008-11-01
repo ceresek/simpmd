@@ -37,6 +37,8 @@ static int hTapeInput;
 //--------------------------------------------------------------------------
 // Port operations
 
+/** Read from tape data register.
+ */
 byte TAPReadData ()
 {
   byte iData;
@@ -44,9 +46,15 @@ byte TAPReadData ()
   return (iData);
 }
 
+
+/** Write to tape data register.
+ *
+ *  @arg iData The written value.
+ */
 void TAPWriteData (byte iData)
 {
 }
+
 
 //--------------------------------------------------------------------------
 // Initialization and shutdown
@@ -56,10 +64,12 @@ void TAPInitialize ()
   hTapeInput = open ("../data/games-pmd1/MANIC-1", O_RDONLY);
 }
 
+
 void TAPShutdown ()
 {
   close (hTapeInput);
 }
+
 
 //--------------------------------------------------------------------------
 
