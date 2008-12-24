@@ -86,8 +86,8 @@ void DSPSizeScreen (int iWidth, int iHeight)
   int iRealWidth = iWidth - iWidth % iStandardWidth;
   int iRealHeight = iHeight - iHeight % iStandardHeight;
   // Minimum width and height.
-  iRealWidth = MAX (iWidth, iStandardWidth);
-  iRealHeight = MAX (iHeight, iStandardHeight);
+  iRealWidth = MAX (iRealWidth, iStandardWidth);
+  iRealHeight = MAX (iRealHeight, iStandardHeight);
 
   // Create the surface to draw upon ...
   pScreen = SDL_SetVideoMode (iRealWidth, iRealHeight, 8, SDL_HWSURFACE | SDL_DOUBLEBUF | SDL_RESIZABLE);

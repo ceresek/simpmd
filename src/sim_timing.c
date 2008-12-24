@@ -18,11 +18,28 @@ limitations under the License.
 
 */
 
+#include <popt.h>
 #include <time.h>
 
 #include <SDL/SDL.h>
 
 #include "sim_common.h"
+
+
+//--------------------------------------------------------------------------
+// Command Line Options
+
+/// Timing precision. How many simulated clock ticks pass before synchronizing with actual time.
+static int iArgPrecision = PMD_CLOCK / 1000;
+
+/// Module command line options table.
+struct poptOption asTIMOptions [] =
+{
+  { "precision", 0, POPT_ARG_INT | POPT_ARGFLAG_SHOW_DEFAULT,
+      &iArgPrecision, 0,
+      "how many simulated clock ticks pass before synchronizing with actual time, 0 for no synchronization", "ticks" },
+  POPT_TABLEEND
+};
 
 
 //--------------------------------------------------------------------------
@@ -48,20 +65,25 @@ void TIMSynchronize ()
 /// Advances simulated clock and actual time by sleeping.
 void TIMAdvance (int iClock)
 {
-  // Convert the simulated clock delta into the actual time delta
-  ulong iSleep = iClock - iLastClock;
-  iSleep *= 1000000000;
-  iSleep /= PMD_CLOCK;
+  // Only synchronize when enough simulated clock ticks have passed.
+  int iDelta = iClock - iLastClock;
+  if ((iDelta >= iArgPrecision) && (iArgPrecision > 0))
+  {
+    // Convert the simulated clock delta into the actual time delta
+    ulong iSleep = iDelta;
+    iSleep *= 1000000000;
+    iSleep /= PMD_CLOCK;
 
-  // Convert the actual time delta into the actual time required
-  // for the sleep function and sleep until that time is reached
-  ulong iNanos = sLastTime.tv_nsec + iSleep;
-  sLastTime.tv_nsec = iNanos % 1000000000;
-  sLastTime.tv_sec += iNanos / 1000000000;
-  clock_nanosleep (CLOCK_MONOTONIC, TIMER_ABSTIME, &sLastTime, NULL);
+    // Convert the actual time delta into the actual time required
+    // for the sleep function and sleep until that time is reached
+    ulong iNanos = sLastTime.tv_nsec + iSleep;
+    sLastTime.tv_nsec = iNanos % 1000000000;
+    sLastTime.tv_sec += iNanos / 1000000000;
+    clock_nanosleep (CLOCK_MONOTONIC, TIMER_ABSTIME, &sLastTime, NULL);
 
-  // Update the last simulated clock
-  iLastClock = iClock;
+    // Update the last simulated clock
+    iLastClock = iClock;
+  }
 }
 
 

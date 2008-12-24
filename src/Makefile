@@ -7,7 +7,7 @@ MAKEFLAGS += --no-builtin-rules --no-builtin-variables
 CC = g++
 CC_OPTS = -O0 -g
 LD = g++
-LD_OPTS = -lSDL -lrt
+LD_OPTS = -lSDL -lpopt -lrt
 
 # Targets
 

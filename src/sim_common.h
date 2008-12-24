@@ -44,6 +44,11 @@ typedef unsigned short  word;
 /// Simulated processor clock rate
 #define PMD_CLOCK       (18432000 / 9)
 
+/// Model PMD 85-1
+#define PMD_MODEL_1     1
+/// Model PMD 85-2
+#define PMD_MODEL_2     2
+
 
 //--------------------------------------------------------------------------
 // Atomicity
@@ -90,6 +95,7 @@ extern bool MemMask [65536];
 
 extern atomic_int Clock;
 
+extern struct poptOption asTIMOptions [];
 
 //--------------------------------------------------------------------------
 // Externals

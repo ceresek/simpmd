@@ -62,6 +62,9 @@ void TAPWriteData (byte iData)
 void TAPInitialize ()
 {
   hTapeInput = open ("../data/games-pmd1/MANIC-1", O_RDONLY);
+//  hTapeInput = open ("../data/games-pmd2/HLIPA", O_RDONLY);
+//  hTapeInput = open ("../data/games-pmd2/PISQORKY", O_RDONLY);
+//  hTapeInput = open ("../data/editors-pmd2/KASWORD", O_RDONLY);
 }
 
 

@@ -989,7 +989,7 @@ void InstCALL ()
 #define InstCALLCon(N,E)                        \
 void InstC##N ()                                \
 {                                               \
-  CPU_LOG_INST_X (C##N);                        \
+  CPU_LOG_INST_W (C##N);                        \
   word iTarget = MemFetchWord ();               \
   if (E)                                        \
   {                                             \
@@ -1397,13 +1397,6 @@ void CPUInitialize ()
       }
     }
     abParity [iValue] = bParity;
-  }
-
-  // Make the entire memory writable
-
-  for (int iAddr = 0 ; iAddr < 65536 ; iAddr ++)
-  {
-    MemMask [iAddr] = true;
   }
 
   // Reset the processor

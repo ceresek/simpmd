@@ -18,7 +18,9 @@ limitations under the License.
 
 */
 
+#include <popt.h>
 #include <fcntl.h>
+#include <assert.h>
 #include <unistd.h>
 #include <sys/types.h>
 
@@ -26,6 +28,31 @@ limitations under the License.
 #include <SDL/SDL_thread.h>
 
 #include "sim_common.h"
+
+
+//--------------------------------------------------------------------------
+// Command Line Options
+
+/// Model to simulate.
+int iArgModel = PMD_MODEL_1;
+
+/// Core command line options table.
+struct poptOption asOptions [] =
+{
+  // Core options.
+  { "pmd1", '1', POPT_ARG_VAL,
+      &iArgModel, PMD_MODEL_1,
+      "simulate PMD 85-1", NULL },
+  { "pmd2", '2', POPT_ARG_VAL,
+    &iArgModel, PMD_MODEL_2,
+    "simulate PMD 85-2", NULL },
+  // Module options.
+  { NULL, 0, POPT_ARG_INCLUDE_TABLE,
+    &asTIMOptions, 0,
+    "Timing module options:", NULL },
+  // Closing.
+  POPT_AUTOHELP POPT_TABLEEND
+};
 
 
 //--------------------------------------------------------------------------
@@ -37,12 +64,103 @@ byte MemData [65536];
 bool MemMask [65536];
 
 
+//--------------------------------------------------------------------------
+// Model Initialization
+
+/** Mark a memory area as read write.
+ *
+ *  @arg iFrom From which address.
+ *  @arg iSize How large block.
+ */
+void SetMemoryReadWrite (int iFrom, int iSize)
+{
+  for (int iAddr = iFrom ; iAddr < iFrom + iSize ; iAddr ++)
+  {
+    MemMask [iAddr] = true;
+  }
+}
+
+/** Mark a memory area as read only.
+ *
+ *  @arg iFrom From which address.
+ *  @arg iSize How large block.
+ */
+void SetMemoryReadOnly (int iFrom, int iSize)
+{
+  for (int iAddr = iFrom ; iAddr < iFrom + iSize ; iAddr ++)
+  {
+    MemMask [iAddr] = false;
+  }
+}
+
+/** Fill a memory area with content from file.
+ *
+ *  @arg iFrom From which address.
+ *  @arg iSize How large block.
+ *  @arg pFile What file.
+ */
+void FillMemoryFromFile (int iFrom, int iSize, const char *pFile)
+{
+  int hFile = open (pFile, O_RDONLY);
+  assert (hFile >= 0);
+  int iRead = read (hFile, MemData + iFrom, iSize);
+  assert (iRead == iSize);
+  close (hFile);
+}
+
+/// Initialize a PMD 85-1 model.
+void InitializePMD1 ()
+{
+  // Read the monitor image.
+  FillMemoryFromFile (0x8000, 4096, "../data/monitors/M1");
+  // The first 32k is read write.
+  // The next 16k is read only.
+  // The last 16k is read write.
+  SetMemoryReadWrite (0x0000, 32768);
+  SetMemoryReadOnly  (0x8000, 16384);
+  SetMemoryReadWrite (0xC000, 16384);
+}
+
+
+/// Initialize a PMD 85-2 model.
+void InitializePMD2 ()
+{
+  // Read the monitor image.
+  FillMemoryFromFile (0x8000, 4096, "../data/monitors/M2");
+  // The entire 64k is read write.
+  SetMemoryReadWrite (0x0000, 65536);
+}
+
 
 //--------------------------------------------------------------------------
 // Main
 
-int main (int iArgC, char *apArgV [])
+int main (int iArgC, const char *apArgV [])
 {
+  // Command line option parsing
+
+  poptContext pArgContext;
+  char        iArgOption;
+
+  pArgContext = poptGetContext (NULL, iArgC, apArgV, asOptions, 0);
+  while ((iArgOption = poptGetNextOpt (pArgContext)) >= 0)
+  {
+    poptPrintUsage (pArgContext, stderr, 0);
+    return (1);
+  }
+  poptFreeContext (pArgContext);
+
+  // Model initialization
+
+  switch (iArgModel)
+  {
+    case PMD_MODEL_1: InitializePMD1 ();
+                      break;
+    case PMD_MODEL_2: InitializePMD2 ();
+                      break;
+    default:          assert (false);
+  }
+
   // Module initialization
 
   SDL_Init (SDL_INIT_TIMER | SDL_INIT_VIDEO);
@@ -53,22 +171,6 @@ int main (int iArgC, char *apArgV [])
   SNDInitialize ();
   TAPInitialize ();
   TIMInitialize ();
-
-  // Temporary test with processor thread
-
-  int hMonitor = open ("../data/monitors/M1", O_RDONLY);
-  read (hMonitor, MemData + 0x8000, 4096);
-  close (hMonitor);
-
-//  int hGame = open ("../data/games-pmd1/KURE", O_RDONLY);
-//  lseek (hGame, 0x3F, SEEK_SET);
-//  read (hGame, MemData, 6379-0x3F);
-//  close (hGame);
-
-  int hGame = open ("../data/games-pmd1/KANKAN", O_RDONLY);
-  lseek (hGame, 0x3F, SEEK_SET);
-  read (hGame, MemData, 6977-0x3F);
-  close (hGame);
 
   SDL_Thread *pProcessor = SDL_CreateThread (CPUThread, NULL);
 
