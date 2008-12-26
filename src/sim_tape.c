@@ -18,6 +18,7 @@ limitations under the License.
 
 */
 
+#include <popt.h>
 #include <fcntl.h>
 #include <unistd.h>
 #include <sys/types.h>
@@ -28,10 +29,33 @@ limitations under the License.
 
 
 //--------------------------------------------------------------------------
+// Command Line Options
+
+/// Tape input. What file to open as tape input.
+static char *pArgTapeInput = NULL;
+/// Tape output. What file to open as tape output.
+static char *pArgTapeOutput = NULL;
+
+/// Module command line options table.
+struct poptOption asTAPOptions [] =
+{
+  { "tape-in", 'i', POPT_ARG_STRING,
+      &pArgTapeInput, 0,
+      "what file to open as tape input", "file" },
+  { "tape-out", 'o', POPT_ARG_STRING,
+      &pArgTapeOutput, 0,
+      "what file to open as tape output", "file" },
+  POPT_TABLEEND
+};
+
+
+//--------------------------------------------------------------------------
 // Data
 
 /// Tape input file handle.
-static int hTapeInput;
+static int hTapeInput = INVALID_HANDLE;
+/// Tape output file handle.
+static int hTapeOutput = INVALID_HANDLE;
 
 
 //--------------------------------------------------------------------------
@@ -41,8 +65,11 @@ static int hTapeInput;
  */
 byte TAPReadData ()
 {
-  byte iData;
-  read (hTapeInput, &iData, 1);
+  byte iData = 0;
+  if (hTapeInput != INVALID_HANDLE)
+  {
+    read (hTapeInput, &iData, 1);
+  }
   return (iData);
 }
 
@@ -53,6 +80,10 @@ byte TAPReadData ()
  */
 void TAPWriteData (byte iData)
 {
+  if (hTapeOutput != INVALID_HANDLE)
+  {
+    write (hTapeOutput, &iData, 1);
+  }
 }
 
 
@@ -61,16 +92,17 @@ void TAPWriteData (byte iData)
 
 void TAPInitialize ()
 {
-  hTapeInput = open ("../data/games-pmd1/MANIC-1", O_RDONLY);
-//  hTapeInput = open ("../data/games-pmd2/HLIPA", O_RDONLY);
-//  hTapeInput = open ("../data/games-pmd2/PISQORKY", O_RDONLY);
-//  hTapeInput = open ("../data/editors-pmd2/KASWORD", O_RDONLY);
+  // If tape input or tape output was specified, open it.
+  if (pArgTapeInput)  hTapeInput  = open (pArgTapeInput, O_RDONLY);
+  if (pArgTapeOutput) hTapeOutput = open (pArgTapeOutput, O_WRONLY);
 }
 
 
 void TAPShutdown ()
 {
-  close (hTapeInput);
+  // Close tape input and tape output.
+  if (hTapeInput  != INVALID_HANDLE) close (hTapeInput);
+  if (hTapeOutput != INVALID_HANDLE) close (hTapeOutput);
 }
 
 

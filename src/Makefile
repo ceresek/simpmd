@@ -9,12 +9,13 @@ CC_OPTS = -O0 -g
 LD = g++
 LD_OPTS = -lSDL -lpopt -lrt
 
+BIN = ../bin
+
 # Targets
 
-all: simpmd
+all: $(BIN)/simpmd
 
 clean:
-	rm -f simpmd
 	rm -f *.o
 	rm -f *.dep
 
@@ -27,7 +28,7 @@ OO = sim_core.o sim_display.o sim_keyboard.o sim_processor.o sim_speaker.o sim_t
 
 # Executable
 
-simpmd: $(OO)
+$(BIN)/simpmd: $(OO)
 	$(LD) $(LD_OPTS) -o $@ $^
 
 # Dependencies

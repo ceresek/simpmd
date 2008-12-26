@@ -48,6 +48,9 @@ struct poptOption asOptions [] =
     "simulate PMD 85-2", NULL },
   // Module options.
   { NULL, 0, POPT_ARG_INCLUDE_TABLE,
+    &asTAPOptions, 0,
+    "Tape module options:", NULL },
+  { NULL, 0, POPT_ARG_INCLUDE_TABLE,
     &asTIMOptions, 0,
     "Timing module options:", NULL },
   // Closing.
@@ -112,7 +115,7 @@ void FillMemoryFromFile (int iFrom, int iSize, const char *pFile)
 void InitializePMD1 ()
 {
   // Read the monitor image.
-  FillMemoryFromFile (0x8000, 4096, "../data/monitors/M1");
+  FillMemoryFromFile (0x8000, 4096, "M1");
   // The first 32k is read write.
   // The next 16k is read only.
   // The last 16k is read write.
@@ -126,7 +129,7 @@ void InitializePMD1 ()
 void InitializePMD2 ()
 {
   // Read the monitor image.
-  FillMemoryFromFile (0x8000, 4096, "../data/monitors/M2");
+  FillMemoryFromFile (0x8000, 4096, "M2");
   // The entire 64k is read write.
   SetMemoryReadWrite (0x0000, 65536);
 }
@@ -140,11 +143,17 @@ int main (int iArgC, const char *apArgV [])
   // Command line option parsing
 
   poptContext pArgContext;
-  char        iArgOption;
 
   pArgContext = poptGetContext (NULL, iArgC, apArgV, asOptions, 0);
-  while ((iArgOption = poptGetNextOpt (pArgContext)) >= 0)
+  if (poptGetNextOpt (pArgContext) != POPT_NO_NEXT_OPT)
   {
+    // Any option that is returned signals an error.
+    poptPrintUsage (pArgContext, stderr, 0);
+    return (1);
+  }
+  if (poptPeekArg (pArgContext) != NULL)
+  {
+    // Any argument that is left signals an error.
     poptPrintUsage (pArgContext, stderr, 0);
     return (1);
   }

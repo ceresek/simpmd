@@ -39,7 +39,17 @@ typedef unsigned short  word;
 
 
 //--------------------------------------------------------------------------
-// Constants
+// System Related Constants
+
+/// Invalid handle value.
+#define INVALID_HANDLE          -1
+
+/// No option to parse.
+#define POPT_NO_NEXT_OPT        -1
+
+
+//--------------------------------------------------------------------------
+// Simulator Related Constants
 
 /// Simulated processor clock rate
 #define PMD_CLOCK       (18432000 / 9)
@@ -95,6 +105,7 @@ extern bool MemMask [65536];
 
 extern atomic_int Clock;
 
+extern struct poptOption asTAPOptions [];
 extern struct poptOption asTIMOptions [];
 
 //--------------------------------------------------------------------------
