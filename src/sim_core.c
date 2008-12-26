@@ -48,6 +48,9 @@ struct poptOption asOptions [] =
     "simulate PMD 85-2", NULL },
   // Module options.
   { NULL, 0, POPT_ARG_INCLUDE_TABLE,
+    &asDSPOptions, 0,
+    "Display module options:", NULL },
+  { NULL, 0, POPT_ARG_INCLUDE_TABLE,
     &asTAPOptions, 0,
     "Tape module options:", NULL },
   { NULL, 0, POPT_ARG_INCLUDE_TABLE,

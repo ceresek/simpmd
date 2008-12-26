@@ -18,11 +18,28 @@ limitations under the License.
 
 */
 
+#include <popt.h>
 #include <assert.h>
 
 #include <SDL/SDL.h>
 
 #include "sim_common.h"
+
+
+//--------------------------------------------------------------------------
+// Command Line Options
+
+/// Screen refresh. How many milliseconds per screen refresh.
+static int iArgRefresh = 20;
+
+/// Module command line options table.
+struct poptOption asDSPOptions [] =
+{
+  { "refresh", 0, POPT_ARG_INT | POPT_ARGFLAG_SHOW_DEFAULT,
+      &iArgRefresh, 0,
+      "how many milliseconds per screen refresh", "ms" },
+  POPT_TABLEEND
+};
 
 
 //--------------------------------------------------------------------------
@@ -62,9 +79,6 @@ static SDL_Color sColorGray  = { 192, 192, 192 };
 
 /// Blinking rate in miliseconds.
 #define PMD_BLINK_RATE          512
-
-/// Screen paint rate in miliseconds.
-#define PMD_REFRESH             20
 
 
 //--------------------------------------------------------------------------
@@ -284,7 +298,7 @@ Uint32 DSPPaintTimerCallback (Uint32 iInterval, void *pArgs)
   sEvent.user.data2 = NULL;
   SDL_PushEvent (&sEvent);
 
-  return (PMD_REFRESH);
+  return (iArgRefresh);
 }
 
 //--------------------------------------------------------------------------
@@ -298,7 +312,7 @@ void DSPInitialize ()
   DSPSizeScreen (0, 0);
 
   // Start the timer that paints the screen repeatedly ...
-  iPaintTimer = SDL_AddTimer (PMD_REFRESH, DSPPaintTimerCallback, NULL);
+  iPaintTimer = SDL_AddTimer (iArgRefresh, DSPPaintTimerCallback, NULL);
 }
 
 

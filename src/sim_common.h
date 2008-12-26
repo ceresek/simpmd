@@ -105,6 +105,7 @@ extern bool MemMask [65536];
 
 extern atomic_int Clock;
 
+extern struct poptOption asDSPOptions [];
 extern struct poptOption asTAPOptions [];
 extern struct poptOption asTIMOptions [];
 
