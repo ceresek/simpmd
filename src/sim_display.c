@@ -37,7 +37,7 @@ struct poptOption asDSPOptions [] =
 {
   { "refresh", 0, POPT_ARG_INT | POPT_ARGFLAG_SHOW_DEFAULT,
       &iArgRefresh, 0,
-      "how many milliseconds per screen refresh", "ms" },
+      "screen refresh period", "ms" },
   POPT_TABLEEND
 };
 

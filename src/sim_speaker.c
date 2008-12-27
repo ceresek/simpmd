@@ -18,6 +18,7 @@ limitations under the License.
 
 */
 
+#include <popt.h>
 #include <assert.h>
 
 #include <SDL/SDL.h>
@@ -26,20 +27,43 @@ limitations under the License.
 
 
 //--------------------------------------------------------------------------
+// Command Line Options
+
+/// Sampling rate. What sampling rate to use for the audio output.
+static int iArgSamplingRate = 44100;
+
+/// Software buffer size. What buffer size to use for software storing the samples, expressed in milliseconds.
+static int iArgSoftwareBuffer = 100;
+
+/// Hardware buffer size. What buffer size to use for hardware playing the samples, expressed in milliseconds.
+static int iArgHardwareBuffer = 10;
+
+/// Module command line options table.
+struct poptOption asSNDOptions [] =
+{
+  { "sampling-rate", 0, POPT_ARG_INT | POPT_ARGFLAG_SHOW_DEFAULT,
+      &iArgSamplingRate, 0,
+      "audio output sampling rate", "hz" },
+  { "software-buffer", 0, POPT_ARG_INT | POPT_ARGFLAG_SHOW_DEFAULT,
+      &iArgSoftwareBuffer, 0,
+      "software audio buffer size", "ms" },
+  { "hardware-buffer", 0, POPT_ARG_INT | POPT_ARGFLAG_SHOW_DEFAULT,
+      &iArgHardwareBuffer, 0,
+      "hardware audio buffer size", "ms" },
+  POPT_TABLEEND
+};
+
+
+//--------------------------------------------------------------------------
 // Data
 
 /// Singleton audio specification.
 static SDL_AudioSpec sAudioSpec;
 
-/** Singleton cyclic audio buffer.
- *
- *  The particular size of the audio buffer is not really
- *  all that important, proper size operator is used in
- *  code. It must not be too large though, otherwise
- *  timing imprecisions might lead to accumulated
- *  latency.
- */
-static byte aAudioBuffer [1024];
+/// Singleton cyclic audio buffer.
+static byte *pAudioBuffer;
+/// Size of the cyclic audio buffer.
+static int iAudioBufferSize;
 /// Head of the cyclic audio buffer.
 static byte *volatile pAudioBufferHead;
 /// Tail of the cyclic audio buffer.
@@ -51,9 +75,6 @@ static SDL_mutex *pAudioBufferLock;
 static int iLastClock;
 /// Last written value of simulated speaker.
 static byte iLastSpeaker;
-
-/// Desired sampling rate of the audio output.
-#define PMD_AUDIO_RATE          44100
 
 /// Speaker frequency mask.
 #define PMD_SPEAKER_FREQUENCY   (3 << 0)
@@ -68,9 +89,9 @@ static byte iLastSpeaker;
 byte *SNDIncrementInBuffer (byte *pPosition)
 {
   byte *pResult = pPosition + 1;
-  if (pResult >= aAudioBuffer + sizeof (aAudioBuffer))
+  if (pResult >= pAudioBuffer + iAudioBufferSize)
   {
-    pResult -= sizeof (aAudioBuffer);
+    pResult -= iAudioBufferSize;
   }
   return (pResult);
 }
@@ -156,13 +177,13 @@ void SNDGenerate (byte iSpeaker)
   // based on the known sampling rate and the known clock
   // frequency.
   int iDeltaInClocks = Clock - iLastClock;
-  int iDeltaInSamples = (iDeltaInClocks * PMD_AUDIO_RATE) / PMD_CLOCK;
+  int iDeltaInSamples = (iDeltaInClocks * iArgSamplingRate) / PMD_CLOCK;
 
   // Fill the buffer with the required number of samples.
   SNDWriteBuffer ((iSpeaker & PMD_SPEAKER_ENABLE) ? 255 : 0, iDeltaInSamples);
 
   // Avoid accumulative error by only advancing the clock by sample value.
-  iDeltaInClocks = (iDeltaInSamples * PMD_CLOCK) / PMD_AUDIO_RATE;
+  iDeltaInClocks = (iDeltaInSamples * PMD_CLOCK) / iArgSamplingRate;
   iLastClock += iDeltaInClocks;
 }
 
@@ -212,16 +233,18 @@ void SNDFillBufferCallback (void *pParameters, Uint8 *pBuffer, int iLength)
 void SNDInitialize ()
 {
   // Initialize the cyclic audio buffer ...
+  iAudioBufferSize = (iArgSoftwareBuffer * iArgSamplingRate) / 1000;
+  pAudioBuffer = new byte [iAudioBufferSize];
   pAudioBufferLock = SDL_CreateMutex ();
   SDL_LockMutex (pAudioBufferLock);
-  pAudioBufferHead = aAudioBuffer;
-  pAudioBufferTail = aAudioBuffer;
+  pAudioBufferHead = pAudioBuffer;
+  pAudioBufferTail = pAudioBuffer;
   SDL_UnlockMutex (pAudioBufferLock);
 
   // Prepare audio parameters ...
-  sAudioSpec.freq = PMD_AUDIO_RATE;
+  sAudioSpec.freq = iArgSamplingRate;
   sAudioSpec.format = AUDIO_U8;
-  sAudioSpec.samples = 512;
+  sAudioSpec.samples = (iArgHardwareBuffer * iArgSamplingRate) / 1000;
   sAudioSpec.channels = 1;
   sAudioSpec.userdata = NULL;
   sAudioSpec.callback = SNDFillBufferCallback;
@@ -231,7 +254,7 @@ void SNDInitialize ()
   assert (iResult == 0);
 
   // Check if audio parameters were granted ...
-  assert (sAudioSpec.freq == PMD_AUDIO_RATE);
+  assert (sAudioSpec.freq == iArgSamplingRate);
   assert (sAudioSpec.format == AUDIO_U8);
 
   // Start the callback ...
@@ -246,6 +269,7 @@ void SNDShutdown ()
 
   // Free the audio buffer mutex ...
   SDL_DestroyMutex (pAudioBufferLock);
+  delete [] (pAudioBuffer);
 }
 
 

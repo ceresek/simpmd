@@ -41,10 +41,10 @@ struct poptOption asTAPOptions [] =
 {
   { "tape-in", 'i', POPT_ARG_STRING,
       &pArgTapeInput, 0,
-      "what file to open as tape input", "file" },
+      "file to open as tape input", "file" },
   { "tape-out", 'o', POPT_ARG_STRING,
       &pArgTapeOutput, 0,
-      "what file to open as tape output", "file" },
+      "file to open as tape output", "file" },
   POPT_TABLEEND
 };
 
