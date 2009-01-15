@@ -122,6 +122,7 @@ void InitializePMD1 ()
 {
   // Read the monitor image.
   FillMemoryFromFile (0x8000, 4096, "M1");
+  FillMemoryFromFile (0xA000, 4096, "M1");
   // The first 32k is read write.
   // The next 16k is read only.
   // The last 16k is read write.

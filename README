@@ -1,0 +1,15 @@
+/*******************************************************************\
+|                        USAGE INSTRUCTIONS                         |
++-------------------------------------------------------------------+
+
+
+The simulator requires that files named M1 and M2, containing the
+binary images of the PMD 85-1 and PMD 85-2 ROM, are present in the
+current directory.
+
+The --help command line option displays command line help.
+
+
++-------------------------------------------------------------------+
+|     Copyright (C) 2008 Petr Tuma <petr.tuma@dsrg.mff.cuni.cz>     |
+\*******************************************************************/
