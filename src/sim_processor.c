@@ -179,8 +179,8 @@ inline word MemFetchWord ()
   I (P,!FlagS)                                  \
   I (Z,FlagZ)                                   \
   I (NZ,!FlagZ)                                 \
-  I (PE,FlagP)                                  \
-  I (PO,!FlagP)                                 \
+  I (PO,FlagP)                                  \
+  I (PE,!FlagP)                                 \
   I (C,FlagC)                                   \
   I (NC,!FlagC)
 
@@ -1149,6 +1149,8 @@ void InstIN ()
   switch (iPort)
   {
     case 0x1E:  RegA = TAPReadData ();
+                break;
+    case 0x1F:  RegA = TAPReadStatus ();
                 break;
     case 0xF5:  RegA = KBDReadRow ();
                 break;

@@ -135,6 +135,7 @@ void SNDShutdown ();
 
 byte TAPReadData ();
 void TAPWriteData (byte iData);
+byte TAPReadStatus ();
 void TAPInitialize ();
 void TAPShutdown ();
 

@@ -36,6 +36,14 @@ static char *pArgTapeInput = NULL;
 /// Tape output. What file to open as tape output.
 static char *pArgTapeOutput = NULL;
 
+/// Time tape input. Whether to simulate timing of the tape input.
+static int iArgTimeTapeInput = false;
+/// Time tape output. Whether to simulate timing of the tape output.
+static int iArgTimeTapeOutput = false;
+
+/// Tape rate. What tape rate to assume when simulating timing.
+static int iArgTapeRate = 2400;
+
 /// Module command line options table.
 struct poptOption asTAPOptions [] =
 {
@@ -45,6 +53,15 @@ struct poptOption asTAPOptions [] =
   { "tape-out", 'o', POPT_ARG_STRING,
       &pArgTapeOutput, 0,
       "file to open as tape output", "file" },
+  { "time-tape-input", 0, POPT_ARG_VAL,
+      &iArgTimeTapeInput, true,
+      "simulate tape input timing", NULL },
+  { "time-tape-output", 0, POPT_ARG_VAL,
+      &iArgTimeTapeOutput, true,
+      "simulate tape output timing", NULL },
+  { "tape-rate", 0, POPT_ARG_INT | POPT_ARGFLAG_SHOW_DEFAULT,
+      &iArgTapeRate, 0,
+      "tape rate", "bps" },
   POPT_TABLEEND
 };
 
@@ -52,10 +69,70 @@ struct poptOption asTAPOptions [] =
 //--------------------------------------------------------------------------
 // Data
 
+/// Number of bits in byte on tape.
+#define PMD_TAP_BITS    10
+
+/// Mask for status TxRDY bit.
+#define PMD_TAP_TXRDY_MASK        (1 << 0)
+/// Mask for status RxRDY bit.
+#define PMD_TAP_RXRDY_MASK        (1 << 1)
+
 /// Tape input file handle.
 static int hTapeInput = INVALID_HANDLE;
 /// Tape output file handle.
 static int hTapeOutput = INVALID_HANDLE;
+
+/// Last value of simulated clock at input.
+static int iLastInputClock;
+/// Last value of simulated clock at output.
+static int iLastOutputClock;
+
+
+//--------------------------------------------------------------------------
+// Serial operations
+
+/** Check if we should indicate RxRDY.
+ */
+bool TAPStatusRxRDY ()
+{
+  if (iArgTimeTapeInput)
+  {
+    // If the tape input timing is to be simulated,
+    // data reads have certain speed.
+
+    int iTimeDelta = Clock - iLastInputClock;
+    int iCharDelta = PMD_TAP_BITS * PMD_CLOCK / iArgTapeRate;
+
+    if (iTimeDelta < iCharDelta) return (false);
+  }
+
+  // The input stream must be valid.
+  if (hTapeInput == INVALID_HANDLE) return (false);
+
+  return (true);
+}
+
+
+/** Check if we should indicate TxRDY.
+ */
+bool TAPStatusTxRDY ()
+{
+  if (iArgTimeTapeOutput)
+  {
+    // If the tape output timing is to be simulated,
+    // data writes have certain speed.
+
+    int iTimeDelta = Clock - iLastOutputClock;
+    int iCharDelta = PMD_TAP_BITS * PMD_CLOCK / iArgTapeRate;
+
+    if (iTimeDelta < iCharDelta) return (false);
+  }
+
+  // The output stream must be valid.
+  if (hTapeOutput == INVALID_HANDLE) return (false);
+
+  return (true);
+}
 
 
 //--------------------------------------------------------------------------
@@ -66,10 +143,12 @@ static int hTapeOutput = INVALID_HANDLE;
 byte TAPReadData ()
 {
   byte iData = 0;
-  if (hTapeInput != INVALID_HANDLE)
+  if (TAPStatusRxRDY)
   {
     read (hTapeInput, &iData, 1);
+    iLastInputClock = Clock;
   }
+
   return (iData);
 }
 
@@ -80,10 +159,20 @@ byte TAPReadData ()
  */
 void TAPWriteData (byte iData)
 {
-  if (hTapeOutput != INVALID_HANDLE)
+  if (TAPStatusTxRDY)
   {
     write (hTapeOutput, &iData, 1);
+    iLastOutputClock = Clock;
   }
+}
+
+
+/** Read from tape status register.
+ */
+byte TAPReadStatus ()
+{
+  return (TAPStatusTxRDY () * PMD_TAP_TXRDY_MASK |
+          TAPStatusRxRDY () * PMD_TAP_RXRDY_MASK);
 }
 
 
