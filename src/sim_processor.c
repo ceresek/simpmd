@@ -263,7 +263,7 @@ inline void FlagsUnpack ()
 // MathGenericSZHP - Performs an arbitrary arithmetic operation and adjusts SZHP
 #define MathGenericSZHP(L,O,R,X)                \
   MathGeneric(L,O,R,X)                          \
-  FlagS = (iResult > 127);                      \
+  FlagS = ((byte) iResult > 127);               \
   FlagZ = ((byte) iResult == 0);                \
   FlagH = MathExpand##X##Half (L,O,R) > 0xF;    \
   FlagP = abParity [(byte) iResult];
@@ -1151,6 +1151,8 @@ void InstIN ()
     case 0x1E:  RegA = TAPReadData ();
                 break;
     case 0x1F:  RegA = TAPReadStatus ();
+                break;
+    case 0xF4:  RegA = KBDReadColumn ();
                 break;
     case 0xF5:  RegA = KBDReadRow ();
                 break;

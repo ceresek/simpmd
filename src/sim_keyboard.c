@@ -45,6 +45,9 @@ limitations under the License.
 /// Mask for keyboard STOP key
 #define PMD_KBD_STOP_MASK       (1 << 6)
 
+/// Mask for defined bits.
+#define PMD_KBD_DEF_MASK        0x7F;
+
 
 struct tKeyLocation
 {
@@ -60,11 +63,11 @@ static tKeyMap oKeyMap;
 
 
 /// Current keyboard matrix state.
-static byte abKeyMatrix [PMD_KBD_COLUMNS];
+static volatile byte abKeyMatrix [PMD_KBD_COLUMNS];
 /// Current keyboard shifts state.
-static byte iKeyShifts;
+static volatile byte iKeyShifts;
 /// Current keyboard column
-static byte iKeyColumn;
+static volatile byte iKeyColumn;
 
 
 //--------------------------------------------------------------------------
@@ -76,6 +79,15 @@ byte KBDReadRow ()
 {
   return (iKeyShifts & abKeyMatrix [iKeyColumn]);
 }
+
+
+/** Read from keyboard column register.
+ */
+byte KBDReadColumn ()
+{
+  return (iKeyColumn);
+}
+
 
 /** Write to keyboard column register.
  *
@@ -247,7 +259,7 @@ void KBDInitialize ()
     abKeyMatrix [iColumn] = 0xFF;
   }
 
-  iKeyShifts = 0xFF;
+  iKeyShifts = PMD_KBD_DEF_MASK;
   iKeyColumn = 0;
 }
 

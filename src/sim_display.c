@@ -32,9 +32,15 @@ limitations under the License.
 /// Screen refresh. How many milliseconds per screen refresh.
 static int iArgRefresh = 20;
 
+/// Initial screen zoom.
+static int iArgZoom = 3;
+
 /// Module command line options table.
 struct poptOption asDSPOptions [] =
 {
+  { "zoom", 'z', POPT_ARG_INT | POPT_ARGFLAG_SHOW_DEFAULT,
+      &iArgZoom, 0,
+      "initial screen zoom", NULL },
   { "refresh", 0, POPT_ARG_INT | POPT_ARGFLAG_SHOW_DEFAULT,
       &iArgRefresh, 0,
       "screen refresh period", "ms" },
@@ -309,7 +315,8 @@ void DSPInitialize ()
   SDL_WM_SetCaption ("SimPMD", "SimPMD");
 
   // Size the screen ...
-  DSPSizeScreen (0, 0);
+  DSPSizeScreen (iArgZoom * PMD_VRAM_WIDTH * PMD_PIXEL_COUNT,
+                 iArgZoom * PMD_VRAM_HEIGHT);
 
   // Start the timer that paints the screen repeatedly ...
   iPaintTimer = SDL_AddTimer (iArgRefresh, DSPPaintTimerCallback, NULL);

@@ -11,5 +11,65 @@ The --help command line option displays command line help.
 
 
 +-------------------------------------------------------------------+
+| TESTED APPLICATIONS                                               |
++-------------------------------------------------------------------+
+
+------------+-------+--------+---------------------------------------
+APPLICATION | MODEL | STATUS | NOTES
+------------+-------+--------+---------------------------------------
+AUTO        |   1   |   OK   | MGLD 00, JUMP 2000
+BASIC-2     |   2   |   OK   | MGLD 00, JUMP 0000
+BLUDISTE    |   2   |   OK   | MGLD 00
+BOULDER     |   1   |   OK   | MGLD 03
+CERES-1     |   2   |   OK   | MGLD 00
+COPPY       |   1   |   OK   | MGLD 00, JUMP 0000
+COPYCOPY    |   1   |   OK   | MGLD 00, JUMP 0000
+DAM         |   2   |   OK   | MGLD 00
+DAT-PMD     |   2   |   OK   | MGLD 01, JUMP 0000
+DDT         |   1   |   OK   | MGLD 00, JUMP 6000
+ELEKTRO     |   2   |   OK   | MGLD 00, JUMP 0000
+FERLAJT     |   1   |   OK   | MGLD 13
+FLAPPY      |   1   |   OK   | MGLD 03
+FRED        |   2   |   OK   | MGLD 03
+GALAXIA     |   1   |   OK   | MGLD 00
+GR          |   2   |   OK   | MGLD 00
+GRDEMO      |   2   |   OK   | MGLD 00
+GRED        |   2   |   OK   | MGLD 00
+GREDIT      |   1   |   OK   | MGLD 01, JUMP 0000
+GREP        |   2   |   OK   | MGLD 00
+HLIPA       |   1   |   OK   | MGLD 00, -o /dev/null --time-tape-output
+HORAC       |   1   | FAILED | MGLD 00, No Sound, Locks Up
+INVAZE      |   1   |   OK   | MGLD 00, JUMP 0100
+JASON       |   2   |   OK   | MGLD 00
+KANKAN      |   1   |   OK   | MGLD 00, JUMP 0000
+KAREL       |   2   |   OK   | MGLD 00
+KASWORD     |   2   |   OK   | MGLD 00, JUMP 0000
+KURE        |   1   |   OK   | MGLD 00, JUMP 0000
+MANIC-1     |   1   |   OK   | MGLD 00
+MANIC-2     |   2   |   OK   | MGLD 03
+MESTO       |   1   |   OK   | MGLD 00, Konvalinka
+MRS         |   1   |   OK   | MGLD 00, JUMP 6000
+MTRON-1     |   1   |   OK   | MGLD 00
+MTRON-2     |   1   |   OK   | MGLD 00
+MTRON-3     |   1   |   OK   | MGLD 00
+MUSICA      |   2   |   OK   | MGLD 00
+OPTIMAX     |   2   |   OK   | MGLD 00, JUMP 0000
+PAMPUCH     |   1   |   OK   | MGLD 01
+PENETR      |   2   |   OK   | MGLD 03
+PEXESO      |   2   |   OK   | MGLD 00
+PISQORKY    |   2   |   OK   | MGLD 00
+RAIDERS     |   1   | FAILED | MGLD 02, Slow Firing
+RESRC       |   2   |   OK   | MGLD 00
+SABOTER     |   2   |   OK   | MGLD 03
+TANK        |   1   |   OK   | MGLD 00, JUMP 2000
+TETRIS      |   2   |   OK   | MGLD 03
+TRANSFER    |   2   |   OK   | MGLD 00, JUMP 0000
+VEGRAP3X    |   2   |   OK   | MGLD 00, JUMP 0000
+VMON        |   2   |   OK   | MGLD 00, JUMP E000
+WILLY       |   1   |   OK   | MGLD 00
+ZED         |   1   |   OK   | MGLD 00, JUMP 1000
+------------+-------+--------+---------------------------------------
+
++-------------------------------------------------------------------+
 |     Copyright (C) 2008 Petr Tuma <petr.tuma@dsrg.mff.cuni.cz>     |
 \*******************************************************************/
