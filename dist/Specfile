@@ -28,8 +28,8 @@ mkdir -p %{buildroot}/usr/bin
 cp bin/simpmd %{buildroot}/usr/bin/simpmd
 mkdir -p %{buildroot}/usr/share/simpmd
 cp -r data/. %{buildroot}/usr/share/simpmd
-ln -s $(readlink bin/M1 | sed "s/\.\.\/data//g") %{buildroot}/usr/share/simpmd/M1
-ln -s $(readlink bin/M2 | sed "s/\.\.\/data//g") %{buildroot}/usr/share/simpmd/M2
+ln -s $(readlink bin/M1 | sed "s/\.\.\/data\///g") %{buildroot}/usr/share/simpmd/M1
+ln -s $(readlink bin/M2 | sed "s/\.\.\/data\///g") %{buildroot}/usr/share/simpmd/M2
 
 %files
 %doc FAQ
