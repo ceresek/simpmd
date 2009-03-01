@@ -5,9 +5,15 @@
 MAKEFLAGS += --no-builtin-rules --no-builtin-variables
 
 CC = g++
-CC_OPTS = -O0 -g
+CC_OPTS =
 LD = g++
 LD_OPTS = -lSDL -lpopt -lrt
+
+ifdef RELEASE
+CC_OPTS += -O2 -D RELEASE
+else
+CC_OPTS += -O0 -g
+endif
 
 BIN = ../bin
 

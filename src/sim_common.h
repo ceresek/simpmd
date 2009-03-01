@@ -61,6 +61,17 @@ typedef unsigned short  word;
 
 
 //--------------------------------------------------------------------------
+// Installation Related Constants
+
+/// Default file location
+#if defined (RELEASE)
+#  define PMD_PREFIX "/usr/share/simpmd"
+#else
+#  define PMD_PREFIX ""
+#endif
+
+
+//--------------------------------------------------------------------------
 // Atomicity
 
 #if defined (__i386__) || defined (__x86_64__)
@@ -160,7 +171,6 @@ void TIMShutdown ();
 #undef DEBUG_CPU_TRACE_INSTRUCTIONS
 /// Display registers while executing
 #undef DEBUG_CPU_TRACE_REGISTERS
-
 
 //--------------------------------------------------------------------------
 

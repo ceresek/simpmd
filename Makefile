@@ -1,4 +1,4 @@
-.PHONY: all bin doc clean
+.PHONY: all bin doc dist clean
 
 all: bin doc
 
@@ -7,6 +7,9 @@ bin:
 
 doc:
 	@$(MAKE) -C doc
+
+dist:
+	@$(MAKE) -C dist
 
 clean:
 	@$(MAKE) -C src clean

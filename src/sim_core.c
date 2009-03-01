@@ -121,8 +121,8 @@ void FillMemoryFromFile (int iFrom, int iSize, const char *pFile)
 void InitializePMD1 ()
 {
   // Read the monitor image.
-  FillMemoryFromFile (0x8000, 4096, "M1");
-  FillMemoryFromFile (0xA000, 4096, "M1");
+  FillMemoryFromFile (0x8000, 4096, PMD_PREFIX "M1");
+  FillMemoryFromFile (0xA000, 4096, PMD_PREFIX "M1");
   // The first 32k is read write.
   // The next 16k is read only.
   // The last 16k is read write.
@@ -136,7 +136,7 @@ void InitializePMD1 ()
 void InitializePMD2 ()
 {
   // Read the monitor image.
-  FillMemoryFromFile (0x8000, 4096, "M2");
+  FillMemoryFromFile (0x8000, 4096, PMD_PREFIX "M2");
   // The entire 64k is read write.
   SetMemoryReadWrite (0x0000, 65536);
 }

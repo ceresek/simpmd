@@ -11,7 +11,7 @@ BuildRequires: popt-devel
 Requires: SDL
 Requires: popt
 
-Source: simpmd-%{version}-%{release}.tar.bz2
+Source: simpmd-%{version}.tar.bz2
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}
 
 %description
@@ -24,6 +24,7 @@ __DESCRIPTION__
 make RELEASE=ESAELER bin
 
 %install
+mkdir -p %{buildroot}/usr/bin
 cp bin/simpmd %{buildroot}/usr/bin/simpmd
 mkdir -p %{buildroot}/usr/share/simpmd
 cp -r data %{buildroot}/usr/share/simpmd
