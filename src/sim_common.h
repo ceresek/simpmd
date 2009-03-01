@@ -65,7 +65,7 @@ typedef unsigned short  word;
 
 /// Default file location
 #if defined (RELEASE)
-#  define PMD_PREFIX "/usr/share/simpmd"
+#  define PMD_PREFIX "/usr/share/simpmd/"
 #else
 #  define PMD_PREFIX ""
 #endif
