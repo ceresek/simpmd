@@ -14,8 +14,7 @@ LD_OPTS = -lSDL -lpopt -lrt
 
 ifeq ($(PMD_BUILD), DEBUG)
 CC_OPTS += -O0 -g
-else
-ifeq ($(PMD_BUILD), RELEASE)
+else ifeq ($(PMD_BUILD), RELEASE)
 CC_OPTS += -O2
 else
 $(error)
