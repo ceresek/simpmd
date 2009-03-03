@@ -5,10 +5,10 @@
 MAKEFLAGS += --no-builtin-rules --no-builtin-variables
 
 PMD_BUILD ?= DEBUG
-PMD_SHARE ?= ""
+PMD_SHARE ?= .
 
 CC = g++
-CC_OPTS = -D PMD_SHARE=$(PMD_SHARE)
+CC_OPTS = -D PMD_SHARE=\"$(PMD_SHARE)\"
 LD = g++
 LD_OPTS = -lSDL -lpopt -lrt
 

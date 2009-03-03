@@ -21,7 +21,7 @@ __DESCRIPTION__
 %setup
 
 %build
-make PMD_BUILD=RELEASE PMD_SHARE=\"%{_datadir}/\" bin
+make PMD_BUILD=RELEASE PMD_SHARE=%{_datadir} bin
 
 %install
 mkdir -p %{buildroot}/%{_bindir}
