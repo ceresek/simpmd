@@ -21,15 +21,15 @@ __DESCRIPTION__
 %setup
 
 %build
-make RELEASE=ESAELER bin
+make PMD_BUILD=RELEASE PMD_SHARE="%{_datadir}/" bin
 
 %install
-mkdir -p %{buildroot}/usr/bin
-cp bin/simpmd %{buildroot}/usr/bin/simpmd
-mkdir -p %{buildroot}/usr/share/simpmd
-cp -r data/. %{buildroot}/usr/share/simpmd
-ln -s $(readlink bin/M1 | sed "s/\.\.\/data\///g") %{buildroot}/usr/share/simpmd/M1
-ln -s $(readlink bin/M2 | sed "s/\.\.\/data\///g") %{buildroot}/usr/share/simpmd/M2
+mkdir -p %{buildroot}/%{_bindir}
+cp bin/simpmd %{buildroot}/%{_bindir}/simpmd
+mkdir -p %{buildroot}/%{_datadir}/simpmd
+cp -r data/. %{buildroot}/%{_datadir}/simpmd
+ln -s $(readlink bin/M1 | sed "s/\.\.\/data\///g") %{buildroot}/%{_datadir}/simpmd/M1
+ln -s $(readlink bin/M2 | sed "s/\.\.\/data\///g") %{buildroot}/%{_datadir}/simpmd/M2
 
 %files
 %doc FAQ
@@ -38,8 +38,8 @@ ln -s $(readlink bin/M2 | sed "s/\.\.\/data\///g") %{buildroot}/usr/share/simpmd
 %doc COPYING
 %doc CREDITS
 %doc INSTALL
-/usr/bin/simpmd
-/usr/share/simpmd
+%{_bindir}/simpmd
+%{_datadir}/simpmd
 
 %clean
 rm -rf %{buildroot}

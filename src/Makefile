@@ -4,15 +4,21 @@
 
 MAKEFLAGS += --no-builtin-rules --no-builtin-variables
 
+PMD_BUILD ?= DEBUG
+PMD_SHARE ?= ""
+
 CC = g++
-CC_OPTS =
+CC_OPTS = -D PMD_SHARE=$(PMD_SHARE)
 LD = g++
 LD_OPTS = -lSDL -lpopt -lrt
 
-ifdef RELEASE
-CC_OPTS += -O2 -D RELEASE
-else
+ifeq ($(PMD_BUILD), DEBUG)
 CC_OPTS += -O0 -g
+else
+ifeq ($(PMD_BUILD), RELEASE)
+CC_OPTS += -O2
+else
+$(error)
 endif
 
 BIN = ../bin
