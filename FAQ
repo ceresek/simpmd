@@ -2,7 +2,74 @@
 |                    FREQUENTLY ASKED QUESTIONS                     |
 +-------------------------------------------------------------------+
 
-None yet :-) ...
+
+1. Basic Questions
+1.1. How do I use this thing ?
+2. Implementation Questions
+2.1. How precise is the simulation ?
+
+
++-------------------------------------------------------------------+
+| 1. BASIC QUESTIONS                                                |
++-------------------------------------------------------------------+
+
+
+1.1. How do I use this thing ?
+
+Type "simpmd -i /usr/share/simpmd/games-pmd1/MANIC-1".
+When the simulator starts, type "MGLD 00".
+The Manic Miner game should start.
+
+Check out the files in /usr/share/simpmd for more applications.
+The README file lists the commands to use to run the applications.
+
+
++-------------------------------------------------------------------+
+| 2. IMPLEMENTATION QUESTIONS                                       |
++-------------------------------------------------------------------+
+
+
+2.1. How precise is the simulation ?
+
+In general, the simulation should be precise enough to run the
+applications developed for the original computer. In particular:
+
+Processor
+
+  Bugs excepting, the processor is simulated faithfully,
+  including the timing of the individual instructions.
+
+Keyboard
+
+  The keyboard is simulated faithfully, but due to
+  pecularities of the current keyboards, multiple
+  keypresses can fail.
+
+  The simulator does not implement the programmable
+  features of the 8255A keyboard port, but expects
+  the applications to use the standard settings.
+
+Display
+
+  The display is simulated faithfully, including the
+  intensity and blinking attributes. The display
+  is refreshed at a configurable rate.
+
+Sound
+
+  Only the software generated sound is supported for now.
+
+Tape
+
+  Only the hardware managed tape input and output is
+  supported for now. The PMD 85-2 ROM image is
+  patched to use the PMD 85-1 method of
+  reading from tape.
+
+  The simulator does not implement the programmable
+  features of the 8251A tape port, but expects the
+  applications to use the standard settings.
+
 
 +-------------------------------------------------------------------+
 |     Copyright (C) 2008 Petr Tuma <petr.tuma@dsrg.mff.cuni.cz>     |
