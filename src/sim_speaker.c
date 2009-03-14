@@ -43,13 +43,13 @@ struct poptOption asSNDOptions [] =
 {
   { "sampling-rate", 0, POPT_ARG_INT | POPT_ARGFLAG_SHOW_DEFAULT,
       &iArgSamplingRate, 0,
-      "audio output sampling rate", "hz" },
+      "Audio output sampling rate", "hz" },
   { "software-buffer", 0, POPT_ARG_INT | POPT_ARGFLAG_SHOW_DEFAULT,
       &iArgSoftwareBuffer, 0,
-      "software audio buffer size", "ms" },
+      "Software audio buffer size", "ms" },
   { "hardware-buffer", 0, POPT_ARG_INT | POPT_ARGFLAG_SHOW_DEFAULT,
       &iArgHardwareBuffer, 0,
-      "hardware audio buffer size", "ms" },
+      "Hardware audio buffer size", "ms" },
   POPT_TABLEEND
 };
 

@@ -40,10 +40,10 @@ struct poptOption asDSPOptions [] =
 {
   { "zoom", 'z', POPT_ARG_INT | POPT_ARGFLAG_SHOW_DEFAULT,
       &iArgZoom, 0,
-      "initial screen zoom", NULL },
+      "Initial screen zoom", NULL },
   { "refresh", 0, POPT_ARG_INT | POPT_ARGFLAG_SHOW_DEFAULT,
       &iArgRefresh, 0,
-      "screen refresh period", "ms" },
+      "Screen refresh period", "ms" },
   POPT_TABLEEND
 };
 

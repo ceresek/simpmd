@@ -37,7 +37,7 @@ struct poptOption asTIMOptions [] =
 {
   { "precision", 0, POPT_ARG_INT | POPT_ARGFLAG_SHOW_DEFAULT,
       &iArgPrecision, 0,
-      "clock synchronization period, 0 for no synchronization", "ticks" },
+      "Clock synchronization period, 0 for no synchronization", "ticks" },
   POPT_TABLEEND
 };
 

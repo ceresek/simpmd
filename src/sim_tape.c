@@ -49,19 +49,19 @@ struct poptOption asTAPOptions [] =
 {
   { "tape-in", 'i', POPT_ARG_STRING,
       &pArgTapeInput, 0,
-      "file to open as tape input", "file" },
+      "File to open as tape input", "file" },
   { "tape-out", 'o', POPT_ARG_STRING,
       &pArgTapeOutput, 0,
-      "file to open as tape output", "file" },
+      "File to open as tape output", "file" },
   { "time-tape-input", 0, POPT_ARG_VAL,
       &iArgTimeTapeInput, true,
-      "simulate tape input timing", NULL },
+      "Simulate tape input timing", NULL },
   { "time-tape-output", 0, POPT_ARG_VAL,
       &iArgTimeTapeOutput, true,
-      "simulate tape output timing", NULL },
+      "Simulate tape output timing", NULL },
   { "tape-rate", 0, POPT_ARG_INT | POPT_ARGFLAG_SHOW_DEFAULT,
       &iArgTapeRate, 0,
-      "tape rate", "bps" },
+      "Tape rate", "bps" },
   POPT_TABLEEND
 };
 

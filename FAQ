@@ -5,8 +5,11 @@
 
 1. Basic Questions
 1.1. How do I use this thing ?
-2. Implementation Questions
-2.1. How precise is the simulation ?
+2. Usage Questions
+2.1. Can I use applications in PTP file format ?
+2.2. Can I use applications in RMM file format ?
+3. Implementation Questions
+3.1. How precise is the simulation ?
 
 
 +-------------------------------------------------------------------+
@@ -25,11 +28,27 @@ The README file lists the commands to use to run the applications.
 
 
 +-------------------------------------------------------------------+
-| 2. IMPLEMENTATION QUESTIONS                                       |
+| 2. USAGE QUESTIONS                                                |
 +-------------------------------------------------------------------+
 
 
-2.1. How precise is the simulation ?
+2.1. Can I use applications in PTP file format ?
+
+Use the ptp2raw utility to convert applications from
+the PTP file format to the raw file format, which is
+supported by the simulator.
+
+2.2. Can I use applications in RMM file format ?
+
+Applications in external modules are not yet supported.
+
+
++-------------------------------------------------------------------+
+| 3. IMPLEMENTATION QUESTIONS                                       |
++-------------------------------------------------------------------+
+
+
+3.1. How precise is the simulation ?
 
 In general, the simulation should be precise enough to run the
 applications developed for the original computer. In particular:

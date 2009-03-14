@@ -26,6 +26,7 @@ make PMD_BUILD=RELEASE PMD_SHARE=%{_datadir}/simpmd/ bin
 %install
 mkdir -p %{buildroot}/%{_bindir}
 cp bin/simpmd %{buildroot}/%{_bindir}/simpmd
+cp bin/ptp2raw %{buildroot}/%{_bindir}/ptp2raw
 mkdir -p %{buildroot}/%{_datadir}/simpmd
 cp -r data/. %{buildroot}/%{_datadir}/simpmd
 ln -s $(readlink bin/M1 | sed "s/\.\.\/data\///g") %{buildroot}/%{_datadir}/simpmd/M1
@@ -39,6 +40,7 @@ ln -s $(readlink bin/M2 | sed "s/\.\.\/data\///g") %{buildroot}/%{_datadir}/simp
 %doc CREDITS
 %doc INSTALL
 %{_bindir}/simpmd
+%{_bindir}/ptp2raw
 %{_datadir}/simpmd
 
 %clean
