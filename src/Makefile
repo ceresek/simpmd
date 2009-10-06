@@ -32,7 +32,8 @@ clean:
 
 # Modules
 
-OO = sim_core.o sim_display.o sim_keyboard.o sim_processor.o sim_speaker.o sim_tape.o sim_timing.o
+MM = sim_core sim_timing sim_display sim_keyboard sim_processor sim_speaker sim_tape
+OO = $(addsuffix .o, $(MM))
 
 %.o: %.c
 	$(CC) $(CC_OPTS) -c -o $@ $<
@@ -47,5 +48,5 @@ $(BIN)/simpmd: $(OO)
 include $(OO:.o=.dep)
 
 %.dep: %.c
-	@set -e ; $(CC) -MM $(CC_OPTS) $< | sed 's/\($*\)\.o *:/\1.o $@:/g' > $@
+	$(CC) -MM $(CC_OPTS) -MT "$@ $<" -o $@ $<
 
