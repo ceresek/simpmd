@@ -34,6 +34,7 @@ clean:
 
 MM = sim_core sim_timing sim_display sim_keyboard sim_processor sim_speaker sim_tape
 OO = $(addsuffix .o, $(MM))
+DD = $(addsuffix .dep, $(MM))
 
 %.o: %.c
 	$(CC) $(CC_OPTS) -c -o $@ $<
@@ -45,8 +46,8 @@ $(BIN)/simpmd: $(OO)
 
 # Dependencies
 
-include $(OO:.o=.dep)
+include $(DD)
 
 %.dep: %.c
-	$(CC) -MM $(CC_OPTS) -MT "$@ $<" -o $@ $<
+	$(CC) -MM $(CC_OPTS) -MT "$@ $(basename $@).o" -o $@ $<
 

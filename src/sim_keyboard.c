@@ -32,17 +32,17 @@ limitations under the License.
 
 /// Number of simulated keyboard columns.
 #define PMD_KBD_COLUMNS         16
-/// Mask for keyboard column information
+/// Mask for keyboard column information.
 #define PMD_KBD_COLUMN_MASK     0xF;
 
-/// Number of simulated keyboard rows
+/// Number of simulated keyboard rows.
 #define PMD_KBD_ROWS            5
 /// Mask for keyboard row information.
 #define PMD_KBD_ROW_MASK        0x1F;
 
-/// Mask for keyboard SHIFT key
+/// Mask for keyboard SHIFT key.
 #define PMD_KBD_SHIFT_MASK      (1 << 5)
-/// Mask for keyboard STOP key
+/// Mask for keyboard STOP key.
 #define PMD_KBD_STOP_MASK       (1 << 6)
 
 /// Mask for defined bits.
