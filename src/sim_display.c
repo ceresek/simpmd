@@ -20,6 +20,7 @@ limitations under the License.
 
 #include <popt.h>
 #include <assert.h>
+#include <iostream>
 
 #include <SDL/SDL.h>
 
@@ -110,8 +111,7 @@ void DSPSizeScreen (int iWidth, int iHeight)
   iRealHeight = MAX (iRealHeight, iStandardHeight);
 
   // Create the surface to draw upon ...
-  pScreen = SDL_SetVideoMode (iRealWidth, iRealHeight, 8, SDL_HWSURFACE | SDL_DOUBLEBUF | SDL_RESIZABLE);
-  assert (pScreen != NULL);
+  SDL_CheckNotNull (pScreen = SDL_SetVideoMode (iRealWidth, iRealHeight, 8, SDL_HWSURFACE | SDL_DOUBLEBUF | SDL_RESIZABLE));
 
   // Create a palette with the required colors ...
   SDL_SetColors (pScreen, &sColorBlack, DSP_COLOR_BLACK, 1);

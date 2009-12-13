@@ -20,6 +20,7 @@ limitations under the License.
 
 #include <popt.h>
 #include <assert.h>
+#include <iostream>
 
 #include <SDL/SDL.h>
 
@@ -250,8 +251,7 @@ void SNDInitialize ()
   sAudioSpec.callback = SNDFillBufferCallback;
 
   // Open the audio device ...
-  int iResult = SDL_OpenAudio (&sAudioSpec, NULL);
-  assert (iResult == 0);
+  SDL_CheckZero (SDL_OpenAudio (&sAudioSpec, NULL));
 
   // Check if audio parameters were granted ...
   assert (sAudioSpec.freq == iArgSamplingRate);

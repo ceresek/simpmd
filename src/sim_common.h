@@ -156,10 +156,15 @@ void TIMShutdown ();
 /// Displays the terminating newline.
 #define DEBUG_LOG_NEWLINE std::cout << std::endl
 
-/// Display instructions while executing
+/// Display instructions while executing.
 #undef DEBUG_CPU_TRACE_INSTRUCTIONS
-/// Display registers while executing
+/// Display registers while executing.
 #undef DEBUG_CPU_TRACE_REGISTERS
+
+/// Executes an SDL function and makes sure it returned 0.
+#define SDL_CheckZero(X) if (X) { DEBUG_LOG (SDL_GetError ()); assert (false); }
+/// Executes an SDL function and makes sure it did not return NULL.
+#define SDL_CheckNotNull(X) if ((X) == NULL) { DEBUG_LOG (SDL_GetError ()); assert (false); }
 
 //--------------------------------------------------------------------------
 

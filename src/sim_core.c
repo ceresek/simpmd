@@ -22,6 +22,7 @@ limitations under the License.
 #include <fcntl.h>
 #include <assert.h>
 #include <unistd.h>
+#include <iostream>
 #include <sys/types.h>
 
 #include <SDL/SDL.h>
@@ -179,7 +180,7 @@ int main (int iArgC, const char *apArgV [])
 
   // Module initialization
 
-  SDL_Init (SDL_INIT_AUDIO | SDL_INIT_TIMER | SDL_INIT_VIDEO);
+  SDL_CheckZero (SDL_Init (SDL_INIT_AUDIO | SDL_INIT_TIMER | SDL_INIT_VIDEO));
 
   CPUInitialize ();
   DSPInitialize ();
