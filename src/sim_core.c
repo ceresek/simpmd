@@ -179,7 +179,7 @@ int main (int iArgC, const char *apArgV [])
 
   // Module initialization
 
-  SDL_Init (SDL_INIT_TIMER | SDL_INIT_VIDEO);
+  SDL_Init (SDL_INIT_AUDIO | SDL_INIT_TIMER | SDL_INIT_VIDEO);
 
   CPUInitialize ();
   DSPInitialize ();
