@@ -245,7 +245,7 @@ void SNDInitialize ()
   // Prepare audio parameters ...
   sAudioSpec.freq = iArgSamplingRate;
   sAudioSpec.format = AUDIO_U8;
-  sAudioSpec.samples = (iArgHardwareBuffer * iArgSamplingRate) / 1000;
+  sAudioSpec.samples = POT ((iArgHardwareBuffer * iArgSamplingRate) / 1000);
   sAudioSpec.channels = 1;
   sAudioSpec.userdata = NULL;
   sAudioSpec.callback = SNDFillBufferCallback;

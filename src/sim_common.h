@@ -37,6 +37,8 @@ typedef unsigned short  word;
 /// Returns the greater one of two arguments.
 #define MAX(A,B) ((A) > (B) ? (A) : (B))
 
+/// Returns the nearest higher power of two.
+#define POT(X) ({ uint O = 1; uint H = (X); while (H > 1) { H >>= 1; O <<= 1; }; O; })
 
 //--------------------------------------------------------------------------
 // System Related Constants
