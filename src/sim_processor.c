@@ -18,6 +18,8 @@ limitations under the License.
 
 */
 
+#include <stdint.h>
+
 #include <iomanip>
 #include <iostream>
 

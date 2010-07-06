@@ -23,10 +23,12 @@ limitations under the License.
 // Types
 
 typedef unsigned int    uint;
-typedef unsigned long   ulong;
 
-typedef unsigned char   byte;
-typedef unsigned short  word;
+typedef uint8_t         byte;
+typedef uint16_t        word;
+
+typedef uint32_t        uint32;
+typedef uint64_t        uint64;
 
 
 //--------------------------------------------------------------------------

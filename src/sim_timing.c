@@ -20,6 +20,7 @@ limitations under the License.
 
 #include <popt.h>
 #include <time.h>
+#include <stdint.h>
 
 #include <SDL/SDL.h>
 
@@ -70,13 +71,13 @@ void TIMAdvance (int iClock)
   if ((iDelta >= iArgPrecision) && (iArgPrecision > 0))
   {
     // Convert the simulated clock delta into the actual time delta
-    ulong iSleep = iDelta;
+    uint64 iSleep = iDelta;
     iSleep *= 1000000000;
     iSleep /= PMD_CLOCK;
 
     // Convert the actual time delta into the actual time required
     // for the sleep function and sleep until that time is reached
-    ulong iNanos = sLastTime.tv_nsec + iSleep;
+    uint64 iNanos = sLastTime.tv_nsec + iSleep;
     sLastTime.tv_nsec = iNanos % 1000000000;
     sLastTime.tv_sec += iNanos / 1000000000;
     clock_nanosleep (CLOCK_MONOTONIC, TIMER_ABSTIME, &sLastTime, NULL);

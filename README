@@ -34,6 +34,7 @@ DOMCEKY     |   1   |   OK   | MGLD 00, JUMP 0000
 ELEKTRO     |   2   |   OK   | MGLD 00, JUMP 0000
 FERLAJT     |   1   |   OK   | MGLD 13
 FLAPPY      |   1   |   OK   | MGLD 03
+FLARE+      |   2   |   OK   | MGLD 00, JUMP 5000
 FRED        |   2   |   OK   | MGLD 03
 GALAXIA     |   1   |   OK   | MGLD 00
 GLUTTON     |   1   |   OK   | MGLD 00

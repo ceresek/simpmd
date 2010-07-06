@@ -20,6 +20,7 @@ limitations under the License.
 
 #include <popt.h>
 #include <fcntl.h>
+#include <stdint.h>
 #include <unistd.h>
 #include <sys/types.h>
 

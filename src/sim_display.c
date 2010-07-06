@@ -20,6 +20,8 @@ limitations under the License.
 
 #include <popt.h>
 #include <assert.h>
+#include <stdint.h>
+
 #include <iostream>
 
 #include <SDL/SDL.h>

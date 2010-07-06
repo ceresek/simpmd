@@ -21,9 +21,11 @@ limitations under the License.
 #include <popt.h>
 #include <fcntl.h>
 #include <assert.h>
+#include <stdint.h>
 #include <unistd.h>
-#include <iostream>
 #include <sys/types.h>
+
+#include <iostream>
 
 #include <SDL/SDL.h>
 #include <SDL/SDL_thread.h>
