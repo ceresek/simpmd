@@ -21,12 +21,14 @@ APPLICATION | MODEL | STATUS | NOTES
 AUTO        |   1   |   OK   | MGLD 00, JUMP 2000
 BASIC-G     |   2   |   OK   | MGLD 00, JUMP 0000
 BLUDISTE    |   2   |   OK   | MGLD 00
+BOULD+3     |   2   |   OK   | MGLD 03
 BOULDER     |   1   |   OK   | MGLD 03
 CERES-1     |   2   |   OK   | MGLD 00
 COPPY       |   1   |   OK   | MGLD 00, JUMP 0000
 COPY        |   1   |   OK   | MGLD 00, JUMP 0000
 COPYCOPY    |   1   |   OK   | MGLD 00, JUMP 0000
 COPYPLUS    |   1   |   OK   | MGLD 00, JUMP 0100
+CROSSI      |   1   | FAILED | MGLD 00, JUMP 0000, Locks Up
 DAM+2       |   2   |   OK   | MGLD 00
 DAT-PMD     |   2   |   OK   | MGLD 01, JUMP 0000
 DDT         |   1   |   OK   | MGLD 00, JUMP 6000
@@ -39,16 +41,20 @@ FRED        |   2   |   OK   | MGLD 03
 GALAXIA     |   1   |   OK   | MGLD 00
 GLUTTON     |   1   |   OK   | MGLD 00
 GR          |   2   |   OK   | MGLD 00
-GRDEMO      |   2   |   OK   | MGLD 00
+GRAFIKA     |   2   |   OK   | MGLD 00
 GRED        |   2   |   OK   | MGLD 00
 GREDIT      |   1   |   OK   | MGLD 01, JUMP 0000
 GREP        |   2   |   OK   | MGLD 00
 HLIPA       |   1   |   OK   | MGLD 00, -o /dev/null --time-tape-output
 HORAC       |   1   | FAILED | MGLD 00, No Sound, Locks Up
-INVAZE      |   1   |   OK   | MGLD 00, JUMP 0100
+INVADERS    |   1   |   OK   | MGLD 00, JUMP 0100
+IPOWORD     |   1   |   OK   | MGLD 00
 JASON       |   2   |   OK   | MGLD 00
 KANKAN      |   1   |   OK   | MGLD 00, JUMP 0000
+KAREL       |   1   |   OK   | MGLD 00, JUMP 0000
 KAREL       |   2   |   OK   | MGLD 00
+KAREL3D     |   1   |   OK   | MGLD 00, JUMP 0000
+KARTOTEK    |   2   |   OK   | MGLD 00, JUMP 0030
 KASWORD     |   2   |   OK   | MGLD 00, JUMP 0000
 KURA        |   1   |   OK   | MGLD 00, JUMP 0000
 MANIC-1     |   1   |   OK   | MGLD 00
@@ -70,11 +76,15 @@ PUZZLE      |   1   |   OK   | MGLD 00, JUMP 0000
 RESRC2      |   2   |   OK   | MGLD 00
 ROBOTIK     |   1   |   OK   | MGLD 00, JUMP 0000
 SABOTER     |   2   |   OK   | MGLD 03
+SACH        |   1   |   OK   | MGLD 00, JUMP 0000
 SASKO       |   2   |   OK   | MGLD 00
+SP-DEMIS    |   1   |   OK   | MGLD 00
 SPACE-RA    |   1   | FAILED | MGLD 00, Slow Firing
+SYSTEL      |   1   |   OK   | MGLD 00
 TANK        |   1   |   OK   | MGLD 00, JUMP 2000
 TENISS      |   2   |   OK   | MGLD 00, JUMP 7000
 TETRIS      |   2   |   OK   | MGLD 03
+TEXTEDIT    |   1   |   OK   | MGLD 00, JUMP 0000
 TRANSFER    |   2   |   OK   | MGLD 00, JUMP 0000
 VEGRAP3X    |   2   |   OK   | MGLD 00, JUMP 0000
 VMON        |   2   |   OK   | MGLD 00, JUMP E000
