@@ -90,7 +90,7 @@ atomic_int Clock;
 //--------------------------------------------------------------------------
 // Helper Variables
 
-static byte abParity [256];
+static bool abParity [256];
 
 //--------------------------------------------------------------------------
 // Helper Functions
@@ -1399,7 +1399,7 @@ void CPUInitialize ()
     {
       if (iValue & iMask)
       {
-        bParity = ~bParity;
+        bParity = !bParity;
       }
     }
     abParity [iValue] = bParity;
