@@ -28,7 +28,7 @@ COPPY       |   1   |   OK   | MGLD 00, JUMP 0000
 COPY        |   1   |   OK   | MGLD 00, JUMP 0000
 COPYCOPY    |   1   |   OK   | MGLD 00, JUMP 0000
 COPYPLUS    |   1   |   OK   | MGLD 00, JUMP 0100
-CROSSI      |   1   | FAILED | MGLD 00, JUMP 0000, Locks Up
+CROSSI      |   1   |   OK   | MGLD 00, JUMP 0000
 DAM+2       |   2   |   OK   | MGLD 00
 DAT-PMD     |   2   |   OK   | MGLD 01, JUMP 0000
 DDT         |   1   |   OK   | MGLD 00, JUMP 6000
@@ -79,7 +79,7 @@ SABOTER     |   2   |   OK   | MGLD 03
 SACH        |   1   |   OK   | MGLD 00, JUMP 0000
 SASKO       |   2   |   OK   | MGLD 00
 SP-DEMIS    |   1   |   OK   | MGLD 00
-SPACE-RA    |   1   | FAILED | MGLD 00, Slow Firing
+SPACE-RA    |   1   |   OK   | MGLD 00
 SYSTEL      |   1   |   OK   | MGLD 00
 TANK        |   1   |   OK   | MGLD 00, JUMP 2000
 TENISS      |   2   |   OK   | MGLD 00, JUMP 7000
