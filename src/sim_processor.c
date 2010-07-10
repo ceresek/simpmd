@@ -177,14 +177,14 @@ inline word MemFetchWord ()
 
 /// Expands its arguments with all conditions.
 #define InstAllConditions(I)                    \
-  I (M,FlagS)                                   \
-  I (P,!FlagS)                                  \
-  I (Z,FlagZ)                                   \
   I (NZ,!FlagZ)                                 \
-  I (PO,FlagP)                                  \
-  I (PE,!FlagP)                                 \
+  I (Z,FlagZ)                                   \
+  I (NC,!FlagC)                                 \
   I (C,FlagC)                                   \
-  I (NC,!FlagC)
+  I (PO,!FlagP)                                 \
+  I (PE,FlagP)                                  \
+  I (P,!FlagS)                                  \
+  I (M,FlagS)
 
 
 /// Displays instructions when instruction tracing is enabled.
@@ -1394,7 +1394,7 @@ void CPUInitialize ()
 
   for (int iValue = 0 ; iValue < 256 ; iValue ++)
   {
-    bool bParity = false;
+    bool bParity = true;
     for (int iMask = 1 ; iMask < 256 ; iMask <<= 1)
     {
       if (iValue & iMask)
