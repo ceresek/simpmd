@@ -1,0 +1,2 @@
+parallel convert {} -colorspace RGB -resize 1024 -density 123 -unsharp 0x1 -colorspace sRGB {.}.pdf -- *.jpg
+pdftk Front.pdf Page-*.pdf Back.pdf cat output Vypis-Jednicka.pdf

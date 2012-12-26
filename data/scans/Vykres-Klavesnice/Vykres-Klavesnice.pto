@@ -1,0 +1,53 @@
+# hugin project file
+#hugin_ptoversion 2
+p f0 w20575 h8333 v22  E0 R0 S144,15479,466,7997 n"TIFF_m c:LZW r:CROP"
+m g1 i0 f0 m2 p0.00784314
+
+# image lines
+#-hugin  cropFactor=1
+i w10192 h7008 f0 v11 Ra0 Rb0 Rc0 Rd0 Re0 Eev0 Er1 Eb1 r-0.54659244427662 p0 y0 TrX0 TrY0 TrZ0 j0 a0 b0 c0 d0 e0 g0 t0 Va1 Vb0 Vc0 Vd0 Vx0 Vy0  Vm5 n"Klavesnice-1.jpg"
+#-hugin  cropFactor=1
+i w10192 h7008 f0 v11 Ra0 Rb0 Rc0 Rd0 Re0 Eev0 Er1 Eb1 r-0.573329795348161 p0 y0 TrX-0.0936811547769413 TrY0.00260538666497767 TrZ0.00117559979770281 j0 a0 b0 c0 d0 e0 g0 t0 Va1 Vb0 Vc0 Vd0 Vx0 Vy0  Vm5 n"Klavesnice-2.jpg"
+
+
+# specify variables that should be optimized
+v r0
+v r1
+v TrX1
+v TrY1
+v TrZ1
+v
+
+
+# control points
+c n0 N0 x10 y1002 X7189 Y1073 t2
+c n0 N0 x6617 y1215 X6591 Y2957 t1
+c n0 N0 x452 y6092 X493 Y2913 t1
+c n0 N1 x671 y5927 X5628.10998904384 Y5838.69976196812 t0
+c n0 N1 x361 y3529 X5324.723008003 Y3438.1943473353 t0
+c n0 N1 x2792 y6128 X7744.58989291272 Y6036.03776520271 t0
+c n0 N1 x3397 y3542 X8351 Y3451 t0
+c n0 N1 x3872 y2147 X8828.70645383634 Y2057.86101240106 t0
+c n0 N1 x4023 y5603 X8974.05731506046 Y5511.18460113061 t0
+
+#hugin_optimizeReferenceImage 0
+#hugin_blender enblend
+#hugin_remapper nona
+#hugin_enblendOptions 
+#hugin_enfuseOptions 
+#hugin_hdrmergeOptions -m avg -c
+#hugin_outputLDRBlended true
+#hugin_outputLDRLayers false
+#hugin_outputLDRExposureRemapped false
+#hugin_outputLDRExposureLayers false
+#hugin_outputLDRExposureBlended false
+#hugin_outputLDRExposureLayersFused false
+#hugin_outputHDRBlended false
+#hugin_outputHDRLayers false
+#hugin_outputHDRStacks false
+#hugin_outputLayersCompression LZW
+#hugin_outputImageType png
+#hugin_outputImageTypeCompression LZW
+#hugin_outputJPEGQuality 90
+#hugin_outputImageTypeHDR exr
+#hugin_outputImageTypeHDRCompression LZW
