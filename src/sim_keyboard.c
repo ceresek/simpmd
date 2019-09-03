@@ -18,15 +18,10 @@ limitations under the License.
 
 */
 
-#include <stdint.h>
+#include "sim_common.h"
 
 #include <map>
 #include <utility>
-#include <iostream>
-
-#include <SDL/SDL.h>
-
-#include "sim_common.h"
 
 
 //--------------------------------------------------------------------------
@@ -60,7 +55,7 @@ struct tKeyLocation
 };
 
 /// Map for translation of keyboard events.
-typedef std::map <SDLKey, tKeyLocation> tKeyMap;
+typedef std::map <SDL_Keycode, tKeyLocation> tKeyMap;
 static tKeyMap oKeyMap;
 
 
@@ -161,10 +156,12 @@ void KBDInitialize ()
 
   struct tKeyEvent
   {
-    SDLKey iKey;
-    int    iRow;
-    int    iColumn;
+    SDL_Keycode iKey;
+    int         iRow;
+    int         iColumn;
   };
+
+  // TODO Separate keypad codes ?
 
   const tKeyEvent asKeyEvents [] = {
     // Row 1
@@ -214,7 +211,7 @@ void KBDInitialize ()
     { SDLK_RIGHTBRACKET,        3, 12 },                // BACKSLASH
     { SDLK_BACKSPACE,           3, 13 },                // LEFT
     { SDLK_LEFT,                3, 13 },                // LEFT
-    { SDLK_KP5,                 3, 14 },                // HOME
+    { SDLK_KP_5,                3, 14 },                // HOME
     { SDLK_RIGHT,               3, 15 },                // RIGHT
     // Row 4
     { SDLK_a,                   4, 1 },                 // A
@@ -273,4 +270,3 @@ void KBDShutdown ()
 
 
 //--------------------------------------------------------------------------
-

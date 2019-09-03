@@ -18,13 +18,9 @@ limitations under the License.
 
 */
 
-#include <popt.h>
-#include <time.h>
-#include <stdint.h>
-
-#include <SDL/SDL.h>
-
 #include "sim_common.h"
+
+#include <time.h>
 
 
 //--------------------------------------------------------------------------
@@ -32,15 +28,6 @@ limitations under the License.
 
 /// Timing precision. How many simulated clock ticks pass before synchronizing with actual time.
 static int iArgPrecision = PMD_CLOCK / 1000;
-
-/// Module command line options table.
-struct poptOption asTIMOptions [] =
-{
-  { "precision", 0, POPT_ARG_INT | POPT_ARGFLAG_SHOW_DEFAULT,
-      &iArgPrecision, 0,
-      "Clock synchronization period, 0 for no synchronization", "ticks" },
-  POPT_TABLEEND
-};
 
 
 //--------------------------------------------------------------------------
@@ -53,43 +40,88 @@ static int iLastClock;
 
 
 //--------------------------------------------------------------------------
-// Sleeping
+// Timing
 
-/// Synchronizes simulated clock and actual time.
+/// Synchronizes simulated clock with real time.
 void TIMSynchronize ()
 {
   clock_gettime (CLOCK_MONOTONIC, &sLastTime);
-  iLastClock = Clock;
+  iLastClock = iProcessorClock;
 }
 
 
-/// Advances simulated clock and actual time by sleeping.
-void TIMAdvance (int iClock)
+/** Advances real time to match simulated time by sleeping.
+ *
+ */
+void TIMAdvance ()
 {
   // Only synchronize when enough simulated clock ticks have passed.
-  int iDelta = iClock - iLastClock;
-  if ((iDelta >= iArgPrecision) && (iArgPrecision > 0))
+  int iDelta = iProcessorClock - iLastClock;
+  if (__builtin_expect ((iDelta >= iArgPrecision) && (iArgPrecision > 0), false))
   {
-    // Convert the simulated clock delta into the actual time delta
+    // Convert the simulated clock delta into the real time delta.
     uint64 iSleep = iDelta;
     iSleep *= 1000000000;
     iSleep /= PMD_CLOCK;
 
-    // Convert the actual time delta into the actual time required
-    // for the sleep function and sleep until that time is reached
+    // Convert the real time delta into the time value required
+    // for the sleep function and sleep until that time is reached.
     uint64 iNanos = sLastTime.tv_nsec + iSleep;
     sLastTime.tv_nsec = iNanos % 1000000000;
     sLastTime.tv_sec += iNanos / 1000000000;
     clock_nanosleep (CLOCK_MONOTONIC, TIMER_ABSTIME, &sLastTime, NULL);
 
-    // Update the last simulated clock
-    iLastClock = iClock;
+    // Update the last simulated clock.
+    iLastClock = iProcessorClock;
+  }
+}
+
+
+//--------------------------------------------------------------------------
+// Sleeping
+
+/** Waits given number of ticks of simulated clock.
+ *
+ * We do not want to add overhead by having simulator signal us.
+ * We therefore estimate the real time and then wait normally.
+ */
+void TIMSleep (int iTicks)
+{
+  // Calculate the simulated time when the wait should finish.
+  int iExpectedClock = iProcessorClock + iTicks;
+
+  while (true)
+  {
+    // See how long a wait remains in simulated clock.
+    // Leave the cycle if we have waited long enough.
+    int iDelta = iExpectedClock - iProcessorClock;
+    if (iDelta <= 0) break;
+
+    // Convert the simulated clock delta into the real time delta.
+    uint64 iSleep = iDelta;
+    iSleep *= 1000000000;
+    iSleep /= PMD_CLOCK;
+
+    // Wait that real time delta and then see again how much time expired.
+    struct timespec sSleep;
+    sSleep.tv_nsec = iSleep % 1000000000;
+    sSleep.tv_sec += iSleep / 1000000000;
+    clock_nanosleep (CLOCK_MONOTONIC, 0, &sSleep, NULL);
   }
 }
 
 
 //--------------------------------------------------------------------------
 // Initialization and shutdown
+
+opt::options_description &TIMOptions ()
+{
+  static opt::options_description options ("Timing module options");
+  options.add_options ()
+    ("precision", opt::value<int> (&iArgPrecision), "Clock synchronization period, 0 for no synchronization [ticks]");
+  return (options);
+}
+
 
 void TIMInitialize ()
 {

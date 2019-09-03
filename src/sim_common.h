@@ -18,6 +18,19 @@ limitations under the License.
 
 */
 
+#include <assert.h>
+#include <stdint.h>
+#include <pthread.h>
+
+#include <atomic>
+#include <iomanip>
+#include <iostream>
+
+#include <boost/program_options.hpp>
+namespace opt = boost::program_options;
+
+#include <SDL2/SDL.h>
+
 
 //--------------------------------------------------------------------------
 // Types
@@ -42,14 +55,12 @@ typedef uint64_t        uint64;
 /// Returns the nearest higher power of two.
 #define POT(X) ({ uint O = 1; uint H = (X); while (H > 1) { H >>= 1; O <<= 1; }; O; })
 
+
 //--------------------------------------------------------------------------
 // System Related Constants
 
-/// Invalid handle value.
-#define INVALID_HANDLE          -1
-
-/// No option to parse.
-#define POPT_NO_NEXT_OPT        -1
+/// Reasonable alignment to prevent cache line ping pong.
+#define SAFE_ALIGNMENT          64
 
 
 //--------------------------------------------------------------------------
@@ -65,64 +76,67 @@ typedef uint64_t        uint64;
 
 
 //--------------------------------------------------------------------------
-// Atomicity
+// Atomics
 
-#if defined (__i386__) || defined (__x86_64__)
-
-class atomic_int
+/// Atomic boolean wrapper with short syntax for relaxed ordering.
+class relaxed_bool
 {
   private:
-    int volatile __attribute__ ((aligned (64))) iContent;
+    std::atomic<bool> bValue __attribute__ ((aligned (SAFE_ALIGNMENT)));
+    bool bPadding __attribute__ ((aligned (SAFE_ALIGNMENT)));
   public:
-    /// Atomically reads the integer value.
-    inline operator int ()
-    {
-      // Reading of aligned value is always atomic.
-      return (iContent);
-    }
-    /// Atomically writes the integer value.
-    inline void operator = (int iValue)
-    {
-      // Writing of aligned value is always atomic.
-      iContent = iValue;
-    }
-    /// Atomically increments the integer value.
-    inline void operator += (int iValue)
-    {
-      asm ("lock ; add %[src],%[dst]"
-        : [dst] "+m" (iContent)
-        : [src] "r" (iValue)
-        : "cc");
-    }
+    relaxed_bool (bool bInitial) : bValue (bInitial) { }
+    inline operator bool () { return (bValue.load (std::memory_order_relaxed)); }
+    inline void operator = (bool bAssignment) { bValue.store (bAssignment, std::memory_order_relaxed); }
 };
 
-#else
-#error Missing atomic type implementation.
-#endif
+/// Atomic integer wrapper with short syntax for relaxed ordering.
+class relaxed_int
+{
+  private:
+    std::atomic<int> iValue __attribute__ ((aligned (SAFE_ALIGNMENT)));
+    int iPadding __attribute__ ((aligned (SAFE_ALIGNMENT)));
+  public:
+    relaxed_int (int iInitial) : iValue (iInitial) { }
+    inline operator int () { return (iValue.load (std::memory_order_relaxed)); }
+    inline void operator = (int iAssignment) { iValue.store (iAssignment, std::memory_order_relaxed); }
+    inline void operator += (int iIncrement) { iValue.fetch_add (iIncrement, std::memory_order_relaxed); }
+    inline void operator -= (int iDecrement) { iValue.fetch_sub (iDecrement, std::memory_order_relaxed); }
+};
 
 
 //--------------------------------------------------------------------------
 // Globals
 
-extern byte MemData [65536];
-extern bool MemMask [65536];
+// To be entirely correct, we should use atomic bytes for memory arrays.
+// This would likely be much syntactic work with little semantic impact.
 
-extern atomic_int Clock;
+extern byte abMemoryData [65536];
+extern bool abMemoryMask [65536];
 
-extern struct poptOption asDSPOptions [];
-extern struct poptOption asSNDOptions [];
-extern struct poptOption asTAPOptions [];
-extern struct poptOption asTIMOptions [];
+extern relaxed_int iProcessorClock;
+
 
 //--------------------------------------------------------------------------
 // Externals
 
-int CPUThread (void *);
+void SIMRequestShutdown ();
+bool SIMQueryShutdown ();
+
+void CONStartThread ();
+void CONTerminateThread ();
+void CONInitialize ();
+void CONShutdown ();
+
+void CPUReset ();
+void CPUStartThread ();
+void CPUTerminateThread ();
 void CPUInitialize ();
 void CPUShutdown ();
 
 void DSPPaintHandler ();
-void DSPResizeHandler (const SDL_ResizeEvent *);
+void DSPResizeHandler ();
+opt::options_description &DSPOptions ();
 void DSPInitialize ();
 void DSPShutdown ();
 
@@ -135,17 +149,20 @@ void KBDShutdown ();
 
 void SNDSynchronize ();
 void SNDWriteSpeaker (byte iData);
+opt::options_description &SNDOptions ();
 void SNDInitialize ();
 void SNDShutdown ();
 
 byte TAPReadData ();
 void TAPWriteData (byte iData);
 byte TAPReadStatus ();
+opt::options_description &TAPOptions ();
 void TAPInitialize ();
 void TAPShutdown ();
 
 void TIMSynchronize ();
-void TIMAdvance (int);
+void TIMAdvance ();
+opt::options_description &TIMOptions ();
 void TIMInitialize ();
 void TIMShutdown ();
 
@@ -165,10 +182,13 @@ void TIMShutdown ();
 /// Display registers while executing.
 #undef DEBUG_CPU_TRACE_REGISTERS
 
+/// Executes a function and makes sure it returned 0.
+#define CheckZero(X) if (X) { assert (false); }
 /// Executes an SDL function and makes sure it returned 0.
 #define SDL_CheckZero(X) if (X) { DEBUG_LOG (SDL_GetError ()); assert (false); }
+/// Executes an SDL function and makes sure it returned TRUE.
+#define SDL_CheckTrue(X) if (!X) { DEBUG_LOG (SDL_GetError ()); assert (false); }
 /// Executes an SDL function and makes sure it did not return NULL.
 #define SDL_CheckNotNull(X) if ((X) == NULL) { DEBUG_LOG (SDL_GetError ()); assert (false); }
 
 //--------------------------------------------------------------------------
-

@@ -18,15 +18,40 @@ limitations under the License.
 
 */
 
-#include <stdint.h>
-
-#include <iomanip>
-#include <iostream>
-
-#include <SDL/SDL.h>
-#include <SDL/SDL_endian.h>
-
 #include "sim_common.h"
+
+#include <semaphore.h>
+
+
+//--------------------------------------------------------------------------
+// Synchronization Notes
+
+// The processor simulation executes in an independent thread. The simulator
+// needs to initialize the module before starting the module thread and
+// terminate the module thread before shutting down the module.
+//
+// CPUInitialize - CPUStartThread - CPUTerminateThread - CPUShutdown
+//
+// Access to processor simulation is limited:
+//
+//  - External functions can be called but their execution will
+//    wait until time synchronization occurs during simulation.
+//
+//  - Processor clock can be accessed atomically.
+
+
+//--------------------------------------------------------------------------
+// Asynchronous Execution Variables
+
+static pthread_t sThread;
+
+// Synchronization variables ...
+
+static relaxed_bool bSuspend (false);
+static sem_t sSignalSuspend;
+static sem_t sSignalResume;
+
+static relaxed_bool bTerminate (false);
 
 
 //--------------------------------------------------------------------------
@@ -82,15 +107,12 @@ static bool FlagH;
 static bool FlagP;
 static bool FlagC;
 
-// Processor clock counter for timing purposes ...
-
-atomic_int Clock;
-
 
 //--------------------------------------------------------------------------
 // Helper Variables
 
 static bool abParity [256];
+
 
 //--------------------------------------------------------------------------
 // Helper Functions
@@ -102,7 +124,7 @@ static bool abParity [256];
 /// Reads a byte from simulated memory array
 inline byte MemReadByte (word iAddr)
 {
-  return (MemData [iAddr]);
+  return (abMemoryData [iAddr]);
 }
 
 /// Reads a word from simulated memory array
@@ -114,7 +136,7 @@ inline word MemReadWord (word iAddr)
 /// Writes a byte to simulated memory array if it is writable.
 inline void MemWriteByte (word iAddr, byte iData)
 {
-  if (MemMask [iAddr]) MemData [iAddr] = iData;
+  if (abMemoryMask [iAddr]) abMemoryData [iAddr] = iData;
 }
 
 /// Writes a word to simulated memory array if it is writable.
@@ -210,6 +232,7 @@ inline word MemFetchWord ()
 #define CPU_LOG_INST_R(X,R)     CPU_LOG_INSTRUCTION (#X " " #R)
 #define CPU_LOG_INST_RR(X,D,S)  CPU_LOG_INSTRUCTION (#X " " #D "," #S)
 
+
 //--------------------------------------------------------------------------
 // Control Operations
 
@@ -218,7 +241,7 @@ inline word MemFetchWord ()
 inline void FlagsPack ()
 {
   // The calculation assumes that FALSE is 0 and
-  // TRUE is 1, which is what the standard says
+  // TRUE is 1, which is what the standard says.
   RegF = 128 * FlagS +
           64 * FlagZ +
           16 * FlagH +
@@ -231,7 +254,7 @@ inline void FlagsPack ()
 inline void FlagsUnpack ()
 {
   // The calculation assumes that assignment of nonzero value
-  // to boolean will be TRUE, which is what the standard says
+  // to boolean will be TRUE, which is what the standard says.
   FlagS = RegF & 128;
   FlagZ = RegF & 64;
   FlagH = RegF & 16;
@@ -284,6 +307,7 @@ inline void FlagsUnpack ()
   FlagP = abParity [iResult];                   \
   FlagC = false;
 
+
 //--------------------------------------------------------------------------
 // Transfer Operations
 //
@@ -296,7 +320,7 @@ void InstMOV##D##S ()                           \
 {                                               \
   CPU_LOG_INST_RR (MOV,D,S);                    \
   Reg##D = Reg##S;                              \
-  Clock += 5;                                   \
+  iProcessorClock += 5;                         \
 }
 
 #define InstMOVDst(S)                           \
@@ -320,7 +344,7 @@ void InstMOVM##S ()                             \
 {                                               \
   CPU_LOG_INST_RR (MOV,M,S);                    \
   MemWriteByte (RegHL, Reg##S);                 \
-  Clock += 7;                                   \
+  iProcessorClock += 7;                         \
 }
 
 InstAllRegisters (InstMOVMemSrc)
@@ -334,7 +358,7 @@ void InstMOV##D##M ()                           \
 {                                               \
   CPU_LOG_INST_RR (MOV,D,M);                    \
   Reg##D = MemReadByte (RegHL);                 \
-  Clock += 7;                                   \
+  iProcessorClock += 7;                         \
 }
 
 InstAllRegisters (InstMOVMemDst)
@@ -348,7 +372,7 @@ void InstMVI##D ()                              \
 {                                               \
   CPU_LOG_INST_RB (MVI,D);                      \
   Reg##D = MemFetchByte ();                     \
-  Clock += 7;                                   \
+  iProcessorClock += 7;                         \
 }
 
 InstAllRegisters (InstMVIDst)
@@ -361,7 +385,7 @@ void InstMVIM ()
 {
   CPU_LOG_INST_RB (MVI,M);
   MemWriteByte (RegHL, MemFetchByte ());
-  Clock += 10;
+  iProcessorClock += 10;
 }
 
 // LXI
@@ -371,7 +395,7 @@ void InstLXI##N ()                              \
 {                                               \
   CPU_LOG_INST_RW (LXI,N);                      \
   Reg##D = MemFetchWord ();                     \
-  Clock += 10;                                  \
+  iProcessorClock += 10;                        \
 }
 
 InstAllRegisterPairs (InstLXIDst)
@@ -384,7 +408,7 @@ void InstLDA ()
 {
   CPU_LOG_INST_W (LDA);
   RegA = MemReadByte (MemFetchWord ());
-  Clock += 13;
+  iProcessorClock += 13;
 }
 
 // STA
@@ -393,7 +417,7 @@ void InstSTA ()
 {
   CPU_LOG_INST_W (STA);
   MemWriteByte (MemFetchWord (), RegA);
-  Clock += 13;
+  iProcessorClock += 13;
 }
 
 // LHLD
@@ -402,7 +426,7 @@ void InstLHLD ()
 {
   CPU_LOG_INST_W (LHLD);
   RegHL = MemReadWord (MemFetchWord ());
-  Clock += 16;
+  iProcessorClock += 16;
 }
 
 // SHLD
@@ -412,7 +436,7 @@ void InstSHLD ()
   CPU_LOG_INST_W (SHLD);
   int iAddr = MemFetchWord ();
   MemWriteWord (iAddr, RegHL);
-  Clock += 16;
+  iProcessorClock += 16;
 }
 
 // LDAX
@@ -422,7 +446,7 @@ void InstLDAX##N ()                             \
 {                                               \
   CPU_LOG_INST_R (LDAX,N);                      \
   RegA = MemReadByte (Reg##S);                  \
-  Clock += 7;                                   \
+  iProcessorClock += 7;                         \
 }
 
 InstAllRegisterPairs (InstLDAXSrc)
@@ -436,7 +460,7 @@ void InstSTAX##N ()                             \
 {                                               \
   CPU_LOG_INST_R (STAX,N);                      \
   MemWriteByte (Reg##S, RegA);                  \
-  Clock += 7;                                   \
+  iProcessorClock += 7;                         \
 }
 
 InstAllRegisterPairs (InstSTAXSrc)
@@ -451,8 +475,9 @@ void InstXCHG ()
   int iTemp = RegDE;
   RegDE = RegHL;
   RegHL = iTemp;
-  Clock += 4;
+  iProcessorClock += 4;
 }
+
 
 //--------------------------------------------------------------------------
 // Arithmetic Instructions
@@ -467,7 +492,7 @@ void InstADD##S ()                              \
   CPU_LOG_INST_R (ADD,S);                       \
   MathGenericSZHPC (RegA,+,Reg##S,Binary)       \
   RegA = iResult;                               \
-  Clock += 4;                                   \
+  iProcessorClock += 4;                         \
 }
 
 InstAllRegisters (InstADDSrc)
@@ -481,7 +506,7 @@ void InstADDM ()
   CPU_LOG_INST_R (ADD,M);
   MathGenericSZHPC (RegA,+,MemReadByte (RegHL),Binary)
   RegA = iResult;
-  Clock += 7;
+  iProcessorClock += 7;
 }
 
 // ADI
@@ -492,7 +517,7 @@ void InstADI ()
   byte iOperand = MemFetchByte ();
   MathGenericSZHPC (RegA,+,iOperand,Binary)
   RegA = iResult;
-  Clock += 7;
+  iProcessorClock += 7;
 }
 
 // ADC from register
@@ -503,7 +528,7 @@ void InstADC##S ()                              \
   CPU_LOG_INST_R (ADC,S);                       \
   MathGenericSZHPC (RegA,+,Reg##S,Carry)        \
   RegA = iResult;                               \
-  Clock += 4;                                   \
+  iProcessorClock += 4;                         \
 }
 
 InstAllRegisters (InstADCSrc)
@@ -517,7 +542,7 @@ void InstADCM ()
   CPU_LOG_INST_R (ADC,M);
   MathGenericSZHPC (RegA,+,MemReadByte (RegHL),Carry)
   RegA = iResult;
-  Clock += 7;
+  iProcessorClock += 7;
 }
 
 // ACI
@@ -528,7 +553,7 @@ void InstACI ()
   byte iOperand = MemFetchByte ();
   MathGenericSZHPC (RegA,+,iOperand,Carry)
   RegA = iResult;
-  Clock += 7;
+  iProcessorClock += 7;
 }
 
 // SUB from register
@@ -539,7 +564,7 @@ void InstSUB##S ()                              \
   CPU_LOG_INST_R (SUB,S);                       \
   MathGenericSZHPC (RegA,-,Reg##S,Binary)       \
   RegA = iResult;                               \
-  Clock += 4;                                   \
+  iProcessorClock += 4;                         \
 }
 
 InstAllRegisters (InstSUBSrc)
@@ -553,7 +578,7 @@ void InstSUBM ()
   CPU_LOG_INST_R (SUB,M);
   MathGenericSZHPC (RegA,-,MemReadByte (RegHL),Binary)
   RegA = iResult;
-  Clock += 7;
+  iProcessorClock += 7;
 }
 
 // SUI
@@ -564,7 +589,7 @@ void InstSUI ()
   byte iOperand = MemFetchByte ();
   MathGenericSZHPC (RegA,-,iOperand,Binary)
   RegA = iResult;
-  Clock += 7;
+  iProcessorClock += 7;
 }
 
 // SBB from register
@@ -575,7 +600,7 @@ void InstSBB##S ()                              \
   CPU_LOG_INST_R (SBB,S);                       \
   MathGenericSZHPC (RegA,-,Reg##S,Carry)        \
   RegA = iResult;                               \
-  Clock += 4;                                   \
+  iProcessorClock += 4;                         \
 }
 
 InstAllRegisters (InstSBBSrc)
@@ -589,7 +614,7 @@ void InstSBBM ()
   CPU_LOG_INST_R (SBB,M);
   MathGenericSZHPC (RegA,-,MemReadByte (RegHL),Carry)
   RegA = iResult;
-  Clock += 7;
+  iProcessorClock += 7;
 }
 
 // SBI
@@ -600,7 +625,7 @@ void InstSBI ()
   byte iOperand = MemFetchByte ();
   MathGenericSZHPC (RegA,-,iOperand,Carry)
   RegA = iResult;
-  Clock += 7;
+  iProcessorClock += 7;
 }
 
 // INR register
@@ -611,7 +636,7 @@ void InstINR##D ()                              \
   CPU_LOG_INST_R (INR,D);                       \
   MathGenericSZHP (Reg##D,+,1,Binary)           \
   Reg##D = iResult;                             \
-  Clock += 5;                                   \
+  iProcessorClock += 5;                         \
 }
 
 InstAllRegisters (InstINRDst)
@@ -625,7 +650,7 @@ void InstINRM ()
   CPU_LOG_INST_R (INR,M);
   MathGenericSZHP (MemReadByte (RegHL),+,1,Binary)
   MemWriteByte (RegHL, iResult);
-  Clock += 10;
+  iProcessorClock += 10;
 }
 
 // DCR register
@@ -636,7 +661,7 @@ void InstDCR##D ()                              \
   CPU_LOG_INST_R (DCR,D);                       \
   MathGenericSZHP (Reg##D,-,1,Binary)           \
   Reg##D = iResult;                             \
-  Clock += 5;                                   \
+  iProcessorClock += 5;                         \
 }
 
 InstAllRegisters (InstDCRDst)
@@ -650,7 +675,7 @@ void InstDCRM ()
   CPU_LOG_INST_R (DCR,M);
   MathGenericSZHP (MemReadByte (RegHL),-,1,Binary)
   MemWriteByte (RegHL, iResult);
-  Clock += 10;
+  iProcessorClock += 10;
 }
 
 // INX
@@ -660,7 +685,7 @@ void InstINX##N ()                              \
 {                                               \
   CPU_LOG_INST_R (INX,N);                       \
   ++ Reg##D;                                    \
-  Clock += 5;                                   \
+  iProcessorClock += 5;                         \
 }
 
 InstAllRegisterPairs (InstINXDst)
@@ -674,7 +699,7 @@ void InstDCX##N ()                              \
 {                                               \
   CPU_LOG_INST_R (DCX,N);                       \
   -- Reg##D;                                    \
-  Clock += 5;                                   \
+  iProcessorClock += 5;                         \
 }
 
 InstAllRegisterPairs (InstDCXDst)
@@ -692,7 +717,7 @@ void InstDAD##N ()                              \
   uint iResult = RegHL + Reg##S;                \
   FlagC = (iResult > 65535);                    \
   RegHL = iResult;                              \
-  Clock += 10;                                  \
+  iProcessorClock += 10;                        \
 }
 
 InstAllRegisterPairs (InstDADSrc)
@@ -714,7 +739,7 @@ void InstDAA ()
     FlagH = (iResult & 0xF) < 0x6;
   }
   else FlagH = false;
-  // Correct the upper nibble
+  // Correct the upper nibble ...
   if ((iResult & 0xF0) > 0x90 || FlagC)
   {
     iResult += 0x60;
@@ -728,8 +753,9 @@ void InstDAA ()
   // Store the result ...
   RegA = iResult;
   // Update the clock ...
-  Clock += 4;
+  iProcessorClock += 4;
 }
+
 
 //--------------------------------------------------------------------------
 // Logical Instructions
@@ -744,7 +770,7 @@ void InstANA##S ()                              \
   CPU_LOG_INST_R (ANA,S);                       \
   LogicalGenericSZHPC (RegA,&,Reg##S)           \
   RegA = iResult;                               \
-  Clock += 4;                                   \
+  iProcessorClock += 4;                         \
 }
 
 InstAllRegisters (InstANASrc)
@@ -758,7 +784,7 @@ void InstANAM ()
   CPU_LOG_INST_R (ANA,M);
   LogicalGenericSZHPC (RegA,&,MemReadByte (RegHL))
   RegA = iResult;
-  Clock += 7;
+  iProcessorClock += 7;
 }
 
 // ANI
@@ -769,7 +795,7 @@ void InstANI ()
   byte iOperand = MemFetchByte ();
   LogicalGenericSZHPC (RegA,&,iOperand)
   RegA = iResult;
-  Clock += 7;
+  iProcessorClock += 7;
 }
 
 // XRA from register
@@ -780,7 +806,7 @@ void InstXRA##S ()                              \
   CPU_LOG_INST_R (XRA,S);                       \
   LogicalGenericSZHPC (RegA,^,Reg##S)           \
   RegA = iResult;                               \
-  Clock += 4;                                   \
+  iProcessorClock += 4;                         \
 }
 
 InstAllRegisters (InstXRASrc)
@@ -794,7 +820,7 @@ void InstXRAM ()
   CPU_LOG_INST_R (XRA,M);
   LogicalGenericSZHPC (RegA,^,MemReadByte (RegHL))
   RegA = iResult;
-  Clock += 7;
+  iProcessorClock += 7;
 }
 
 // XRI
@@ -805,7 +831,7 @@ void InstXRI ()
   byte iOperand = MemFetchByte ();
   LogicalGenericSZHPC (RegA,^,iOperand)
   RegA = iResult;
-  Clock += 7;
+  iProcessorClock += 7;
 }
 
 // ORA from register
@@ -816,7 +842,7 @@ void InstORA##S ()                              \
   CPU_LOG_INST_R (ORA,S);                       \
   LogicalGenericSZHPC (RegA,|,Reg##S)           \
   RegA = iResult;                               \
-  Clock += 4;                                   \
+  iProcessorClock += 4;                         \
 }
 
 InstAllRegisters (InstORASrc)
@@ -830,7 +856,7 @@ void InstORAM ()
   CPU_LOG_INST_R (ORA,M);
   LogicalGenericSZHPC (RegA,|,MemReadByte (RegHL))
   RegA = iResult;
-  Clock += 7;
+  iProcessorClock += 7;
 }
 
 // ORI
@@ -841,7 +867,7 @@ void InstORI ()
   byte iOperand = MemFetchByte ();
   LogicalGenericSZHPC (RegA,|,iOperand)
   RegA = iResult;
-  Clock += 7;
+  iProcessorClock += 7;
 }
 
 // CMP from register
@@ -851,7 +877,7 @@ void InstCMP##S ()                              \
 {                                               \
   CPU_LOG_INST_R (CMP,S);                       \
   MathGenericSZHPC (RegA,-,Reg##S,Binary)       \
-  Clock += 4;                                   \
+  iProcessorClock += 4;                         \
 }
 
 InstAllRegisters (InstCMPSrc)
@@ -864,7 +890,7 @@ void InstCMPM ()
 {
   CPU_LOG_INST_R (CMP,M);
   MathGenericSZHPC (RegA,-,MemReadByte (RegHL),Binary)
-  Clock += 7;
+  iProcessorClock += 7;
 }
 
 // CPI
@@ -874,7 +900,7 @@ void InstCPI ()
   CPU_LOG_INST_B (CPI);
   byte iOperand = MemFetchByte ();
   MathGenericSZHPC (RegA,-,iOperand,Binary)
-  Clock += 7;
+  iProcessorClock += 7;
 }
 
 // RLC
@@ -884,7 +910,7 @@ void InstRLC ()
   CPU_LOG_INST_X (RLC);
   FlagC = (RegA & 0x80);
   RegA = (RegA << 1) | (FlagC ? 0x1 : 0);
-  Clock += 4;
+  iProcessorClock += 4;
 }
 
 // RRC
@@ -894,7 +920,7 @@ void InstRRC ()
   CPU_LOG_INST_X (RRC);
   FlagC = (RegA & 0x1);
   RegA = (RegA >> 1) | (FlagC ? 0x80 : 0);
-  Clock += 4;
+  iProcessorClock += 4;
 }
 
 // RAL
@@ -905,7 +931,7 @@ void InstRAL ()
   bool bOverflow = (RegA & 0x80);
   RegA = (RegA << 1) | (FlagC ? 0x1 : 0);
   FlagC = bOverflow;
-  Clock += 4;
+  iProcessorClock += 4;
 }
 
 // RAR
@@ -916,7 +942,7 @@ void InstRAR ()
   bool bOverflow = (RegA & 0x1);
   RegA = (RegA >> 1) | (FlagC ? 0x80 : 0);
   FlagC = bOverflow;
-  Clock += 4;
+  iProcessorClock += 4;
 }
 
 // CMA
@@ -925,7 +951,7 @@ void InstCMA ()
 {
   CPU_LOG_INST_X (CMA);
   RegA = ~RegA;
-  Clock += 4;
+  iProcessorClock += 4;
 }
 
 // CMC
@@ -934,7 +960,7 @@ void InstCMC ()
 {
   CPU_LOG_INST_X (CMC);
   FlagC = !FlagC;
-  Clock += 4;
+  iProcessorClock += 4;
 }
 
 // STC
@@ -943,8 +969,9 @@ void InstSTC ()
 {
   CPU_LOG_INST_X (STC);
   FlagC = true;
-  Clock += 4;
+  iProcessorClock += 4;
 }
+
 
 //--------------------------------------------------------------------------
 // Branch Instructions
@@ -957,7 +984,7 @@ void InstJMP ()
 {
   CPU_LOG_INST_W (JMP);
   RegPC = MemFetchWord ();
-  Clock += 10;
+  iProcessorClock += 10;
 }
 
 // JMP conditional
@@ -968,7 +995,7 @@ void InstJ##N ()                                \
   CPU_LOG_INST_W (J##N);                        \
   word iTarget = MemFetchWord ();               \
   if (E) RegPC = iTarget;                       \
-  Clock += 10;                                  \
+  iProcessorClock += 10;                        \
 }
 
 InstAllConditions (InstJMPCon)
@@ -983,7 +1010,7 @@ void InstCALL ()
   word iTarget = MemFetchWord ();
   MemPushWord (RegPC);
   RegPC = iTarget;
-  Clock += 17;
+  iProcessorClock += 17;
 }
 
 // CALL conditional
@@ -997,9 +1024,9 @@ void InstC##N ()                                \
   {                                             \
     MemPushWord (RegPC);                        \
     RegPC = iTarget;                            \
-    Clock += 6;                                 \
+    iProcessorClock += 6;                       \
   }                                             \
-  Clock += 11;                                  \
+  iProcessorClock += 11;                        \
 }
 
 InstAllConditions (InstCALLCon)
@@ -1012,7 +1039,7 @@ void InstRET ()
 {
   CPU_LOG_INST_X (RET);
   RegPC = MemPopWord ();
-  Clock += 10;
+  iProcessorClock += 10;
 }
 
 // RET conditional
@@ -1024,9 +1051,9 @@ void InstR##N ()                                \
   if (E)                                        \
   {                                             \
     RegPC = MemPopWord ();                      \
-    Clock += 6;                                 \
+    iProcessorClock += 6;                       \
   }                                             \
-  Clock += 5;                                   \
+  iProcessorClock += 5;                         \
 }
 
 InstAllConditions (InstRETCon)
@@ -1041,7 +1068,7 @@ void InstRST##V ()                              \
   CPU_LOG_INST_X (RST V);                       \
   MemPushWord (RegPC);                          \
   RegPC = V * 8;                                \
-  Clock += 11;                                  \
+  iProcessorClock += 11;                        \
 }
 
 InstRSTVec (0)
@@ -1061,8 +1088,9 @@ void InstPCHL ()
 {
   CPU_LOG_INST_X (PCHL);
   RegPC = RegHL;
-  Clock += 5;
+  iProcessorClock += 5;
 }
+
 
 //--------------------------------------------------------------------------
 // Stack Operations
@@ -1076,7 +1104,7 @@ void InstPUSH##N ()                             \
 {                                               \
   CPU_LOG_INST_R (PUSH,N);                      \
   MemPushWord (Reg##D);                         \
-  Clock += 11;                                  \
+  iProcessorClock += 11;                        \
 }
 
 InstAllRegisterPairs (InstPUSHSrc)
@@ -1090,7 +1118,7 @@ void InstPUSHPSW ()
   CPU_LOG_INST_R (PUSH,PSW);
   FlagsPack ();
   MemPushWord (RegAF);
-  Clock += 11;
+  iProcessorClock += 11;
 }
 
 // POP
@@ -1100,7 +1128,7 @@ void InstPOP##N ()                              \
 {                                               \
   CPU_LOG_INST_R (POP,N);                       \
   Reg##D = MemPopWord ();                       \
-  Clock += 10;                                  \
+  iProcessorClock += 10;                        \
 }
 
 InstAllRegisterPairs (InstPOPDst)
@@ -1114,7 +1142,7 @@ void InstPOPPSW ()
   CPU_LOG_INST_R (POP,PSW);
   RegAF = MemPopWord ();
   FlagsUnpack ();
-  Clock += 10;
+  iProcessorClock += 10;
 }
 
 // XTHL
@@ -1125,7 +1153,7 @@ void InstXTHL ()
   word iData = RegHL;
   RegHL = MemReadWord (RegSP);
   MemWriteWord (RegSP, iData);
-  Clock += 18;
+  iProcessorClock += 18;
 }
 
 // SPHL
@@ -1134,8 +1162,9 @@ void InstSPHL ()
 {
   CPU_LOG_INST_X (SPHL);
   RegSP = RegHL;
-  Clock += 5;
+  iProcessorClock += 5;
 }
+
 
 //--------------------------------------------------------------------------
 // Special Operations
@@ -1161,7 +1190,7 @@ void InstIN ()
     default:    RegA = 0xFF;
                 break;
   }
-  Clock += 10;
+  iProcessorClock += 10;
 }
 
 // OUT
@@ -1179,7 +1208,7 @@ void InstOUT ()
     case 0xF6:  SNDWriteSpeaker (RegA);
                 break;
   }
-  Clock += 10;
+  iProcessorClock += 10;
 }
 
 // EI
@@ -1187,8 +1216,8 @@ void InstOUT ()
 void InstEI ()
 {
   CPU_LOG_INST_X (EI);
-  // No interrupts were used in this computer
-  Clock += 4;
+  // No interrupts were used in this computer.
+  iProcessorClock += 4;
 }
 
 // DI
@@ -1196,8 +1225,8 @@ void InstEI ()
 void InstDI ()
 {
   CPU_LOG_INST_X (DI);
-  // No interrupts were used in this computer
-  Clock += 4;
+  // No interrupts were used in this computer.
+  iProcessorClock += 4;
 }
 
 // HLT
@@ -1206,9 +1235,9 @@ void InstHLT ()
 {
   CPU_LOG_INST_X (HLT);
   // No interrupts were used in this computer and
-  // therefore the instruction should halt forever
+  // therefore the instruction should halt forever.
   -- RegPC;
-  Clock += 7;
+  iProcessorClock += 7;
 }
 
 // NOP
@@ -1217,14 +1246,15 @@ void InstNOP ()
 {
   CPU_LOG_INST_X (NOP);
   // Guess what :-)
-  Clock += 4;
+  iProcessorClock += 4;
 }
+
 
 //--------------------------------------------------------------------------
 // Execution
 
 /// A table of functions implementing the individual instructions.
-static void (*apInstructionTable [256]) () =
+static void (*apInstructionTable [256]) () __attribute__ ((aligned (SAFE_ALIGNMENT))) =
 {
         // 00h
         InstNOP,        InstLXIB,       InstSTAXB,      InstINXB,
@@ -1320,76 +1350,130 @@ void CPUReset ()
 
   RegPC = 0x8000;
 
-  // Counting clock from zero is not strictly necessary ...
-
-  Clock = 0;
-
   // No other initialization is done at reset.
 }
 
 
 /// Executes the processor instructions.
-void CPUExecute ()
+void *CPUThread (void *pArgs)
 {
-  // Synchronize the simulated clock and the actual time
+  // Synchronize the simulated clock and the actual time.
   SNDSynchronize ();
   TIMSynchronize ();
 
-  while (true)
+  while (__builtin_expect (!bTerminate, true))
   {
+    while (__builtin_expect (!bSuspend, true))
+    {
 
 #ifdef DEBUG_CPU_TRACE_REGISTERS
 
-    // Display registers when register tracing is enabled
-    DEBUG_LOG_PARTIAL ( "PC:" << CPU_LOG_FORMAT_WORD (RegPC) <<
-                       " BC:" << CPU_LOG_FORMAT_WORD (RegBC) << ":" << CPU_LOG_FORMAT_BYTE (MemReadByte (RegBC)) <<
-                       " DE:" << CPU_LOG_FORMAT_WORD (RegDE) << ":" << CPU_LOG_FORMAT_BYTE (MemReadByte (RegDE)) <<
-                       " HL:" << CPU_LOG_FORMAT_WORD (RegHL) << ":" << CPU_LOG_FORMAT_BYTE (MemReadByte (RegHL)) <<
-                       " SP:" << CPU_LOG_FORMAT_WORD (RegSP) <<
-                        " A:" << CPU_LOG_FORMAT_BYTE (RegA) <<
-                         " " <<
-                       (FlagS ? "S" : "-") <<
-                       (FlagZ ? "Z" : "-") <<
-                       (FlagH ? "H" : "-") <<
-                       (FlagP ? "P" : "-") <<
-                       (FlagC ? "C" : "-"));
+      // Display registers when register tracing is enabled.
+      DEBUG_LOG_PARTIAL ( "PC:" << CPU_LOG_FORMAT_WORD (RegPC) <<
+                         " BC:" << CPU_LOG_FORMAT_WORD (RegBC) << ":" << CPU_LOG_FORMAT_BYTE (MemReadByte (RegBC)) <<
+                         " DE:" << CPU_LOG_FORMAT_WORD (RegDE) << ":" << CPU_LOG_FORMAT_BYTE (MemReadByte (RegDE)) <<
+                         " HL:" << CPU_LOG_FORMAT_WORD (RegHL) << ":" << CPU_LOG_FORMAT_BYTE (MemReadByte (RegHL)) <<
+                         " SP:" << CPU_LOG_FORMAT_WORD (RegSP) <<
+                          " A:" << CPU_LOG_FORMAT_BYTE (RegA) <<
+                           " " <<
+                         (FlagS ? "S" : "-") <<
+                         (FlagZ ? "Z" : "-") <<
+                         (FlagH ? "H" : "-") <<
+                         (FlagP ? "P" : "-") <<
+                         (FlagC ? "C" : "-"));
 
 #ifdef DEBUG_CPU_TRACE_INSTRUCTIONS
 
-    // Display separator if instruction tracing is enabled
-    DEBUG_LOG_PARTIAL ("  ");
+      // Display separator if instruction tracing is enabled.
+      DEBUG_LOG_PARTIAL ("  ");
 
 #endif
 #endif
 
-    byte bCode = MemFetchByte ();
-    apInstructionTable [bCode] ();
+      // How to get your branch predictor to hate you ...
+      byte bCode = MemFetchByte ();
+      apInstructionTable [bCode] ();
 
 #if defined(DEBUG_CPU_TRACE_INSTRUCTIONS) | defined(DEBUG_CPU_TRACE_REGISTERS)
 
-    // Display newline if any tracing is enabled
-    DEBUG_LOG_NEWLINE;
+      // Display newline if any tracing is enabled.
+      DEBUG_LOG_NEWLINE;
 
 #endif
 
-    // Advance the simulated clock and the actual time by sleeping
-    TIMAdvance (Clock);
+      // Advance real time to match simulated time.
+      TIMAdvance ();
+    }
+
+    // We were asked to suspend the simulation temporarily.
+    // This is done to access complex shared data quickly.
+
+    CheckZero (sem_post (&sSignalSuspend));
+    CheckZero (sem_wait (&sSignalResume));
   }
+
+  return (NULL);
 }
+
 
 //--------------------------------------------------------------------------
-// Threads
+// Thread management
 
-int CPUThread (void *pArgs)
+/// Suspend the simulation.
+void CPUSuspend ()
 {
-  CPUExecute ();
+  // Indicate that the instruction cycle should stop.
+  bSuspend = true;
+  // Wait on the suspension semaphore.
+  // Note that the semaphore also enforces memory ordering.
+  CheckZero (sem_wait (&sSignalSuspend));
 }
+
+
+/// Resume the simulation.
+void CPUResume ()
+{
+  // Indicate that the instruction cycle should start.
+  bSuspend = false;
+  // Post on the resumption semaphore.
+  // Note that the semaphore also enforces memory ordering.
+  CheckZero (sem_post (&sSignalResume));
+}
+
+
+/// Starts the processor thread.
+void CPUStartThread ()
+{
+  // SDL threads are not used since it is not
+  // possible to send signals through SDL.
+  CheckZero (pthread_create (&sThread, NULL, CPUThread, NULL));
+}
+
+
+/// Terminates the processor thread.
+void CPUTerminateThread ()
+{
+  bTerminate = true;
+
+  // The termination flag is only checked on transition from suspend to resume.
+  // Synchronization inside suspend and resume should enforce sufficient ordering.
+  CPUSuspend ();
+  CPUResume ();
+
+  // Just wait for the thread to terminate.
+  CheckZero (pthread_join (sThread, NULL));
+}
+
 
 //--------------------------------------------------------------------------
 // Initialization and shutdown
 
 void CPUInitialize ()
 {
+  // Initialize the semaphores for suspend and resume handling.
+  CheckZero (sem_init (&sSignalSuspend, false, 0));
+  CheckZero (sem_init (&sSignalResume, false, 0));
+
   // Calculate the contents of the parity lookup array
 
   for (int iValue = 0 ; iValue < 256 ; iValue ++)
@@ -1413,6 +1497,9 @@ void CPUInitialize ()
 
 void CPUShutdown ()
 {
+  // Destroy the semaphores for suspend and resume handling.
+  CheckZero (sem_destroy (&sSignalSuspend));
+  CheckZero (sem_destroy (&sSignalResume));
 }
 
 

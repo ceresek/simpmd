@@ -18,14 +18,6 @@ limitations under the License.
 
 */
 
-#include <popt.h>
-#include <assert.h>
-#include <stdint.h>
-
-#include <iostream>
-
-#include <SDL/SDL.h>
-
 #include "sim_common.h"
 
 
@@ -33,28 +25,13 @@ limitations under the License.
 // Command Line Options
 
 /// Sampling rate. What sampling rate to use for the audio output.
-static int iArgSamplingRate = 44100;
+static int iArgSamplingRate = 48000;
 
 /// Software buffer size. What buffer size to use for software storing the samples, expressed in milliseconds.
 static int iArgSoftwareBuffer = 100;
 
 /// Hardware buffer size. What buffer size to use for hardware playing the samples, expressed in milliseconds.
 static int iArgHardwareBuffer = 10;
-
-/// Module command line options table.
-struct poptOption asSNDOptions [] =
-{
-  { "sampling-rate", 0, POPT_ARG_INT | POPT_ARGFLAG_SHOW_DEFAULT,
-      &iArgSamplingRate, 0,
-      "Audio output sampling rate", "hz" },
-  { "software-buffer", 0, POPT_ARG_INT | POPT_ARGFLAG_SHOW_DEFAULT,
-      &iArgSoftwareBuffer, 0,
-      "Software audio buffer size", "ms" },
-  { "hardware-buffer", 0, POPT_ARG_INT | POPT_ARGFLAG_SHOW_DEFAULT,
-      &iArgHardwareBuffer, 0,
-      "Hardware audio buffer size", "ms" },
-  POPT_TABLEEND
-};
 
 
 //--------------------------------------------------------------------------
@@ -72,7 +49,7 @@ static byte *volatile pAudioBufferHead;
 /// Tail of the cyclic audio buffer.
 static byte *volatile pAudioBufferTail;
 /// Mutex protecting the cyclic audio buffer.
-static SDL_mutex *pAudioBufferLock;
+static pthread_mutex_t sAudioBufferLock;
 
 /// Last generated value of simulated clock
 static int iLastClock;
@@ -104,9 +81,9 @@ byte *SNDIncrementInBuffer (byte *pPosition)
  */
 void SNDFlushBuffer ()
 {
-  SDL_LockMutex (pAudioBufferLock);
+  CheckZero (pthread_mutex_lock (&sAudioBufferLock));
   pAudioBufferHead = pAudioBufferTail;
-  SDL_UnlockMutex (pAudioBufferLock);
+  CheckZero (pthread_mutex_unlock (&sAudioBufferLock));
 }
 
 
@@ -118,7 +95,7 @@ void SNDFlushBuffer ()
 void SNDReadBuffer (byte *pBuffer, int iCount)
 {
   byte bData = 0;
-  SDL_LockMutex (pAudioBufferLock);
+  CheckZero (pthread_mutex_lock (&sAudioBufferLock));
   for (int i = 0 ; i < iCount ; i ++)
   {
     if (pAudioBufferHead != pAudioBufferTail)
@@ -129,7 +106,7 @@ void SNDReadBuffer (byte *pBuffer, int iCount)
     *pBuffer = bData;
     pBuffer ++;
   }
-  SDL_UnlockMutex (pAudioBufferLock);
+  CheckZero (pthread_mutex_unlock (&sAudioBufferLock));
 }
 
 
@@ -140,7 +117,7 @@ void SNDReadBuffer (byte *pBuffer, int iCount)
  */
 void SNDWriteBuffer (byte bSample, int iCount)
 {
-  SDL_LockMutex (pAudioBufferLock);
+  CheckZero (pthread_mutex_lock (&sAudioBufferLock));
   for (int i = 0 ; i < iCount ; i ++)
   {
     (*pAudioBufferTail) = bSample;
@@ -150,19 +127,19 @@ void SNDWriteBuffer (byte bSample, int iCount)
       pAudioBufferHead = SNDIncrementInBuffer (pAudioBufferHead);
     }
   }
-  SDL_UnlockMutex (pAudioBufferLock);
+  CheckZero (pthread_mutex_unlock (&sAudioBufferLock));
 }
 
 
 //--------------------------------------------------------------------------
 // Sound generation
 
-/** Synchronizes simulated clock and actual time.
+/** Synchronizes simulated clock with real time.
  */
 void SNDSynchronize ()
 {
   // Synchronize the time.
-  iLastClock = Clock;
+  iLastClock = iProcessorClock;
   // Synchronize the buffer.
   SNDFlushBuffer ();
 }
@@ -179,7 +156,7 @@ void SNDGenerate (byte iSpeaker)
   // Calculate current position in the cyclic audio buffer
   // based on the known sampling rate and the known clock
   // frequency.
-  int iDeltaInClocks = Clock - iLastClock;
+  int iDeltaInClocks = iProcessorClock - iLastClock;
   int iDeltaInSamples = (iDeltaInClocks * iArgSamplingRate) / PMD_CLOCK;
 
   // Fill the buffer with the required number of samples.
@@ -200,7 +177,6 @@ void SNDGenerate (byte iSpeaker)
  *  to the simulated speaker. Only the binary speaker
  *  output is simulated for now.
  *
- *  @arg iClock Current value of simulated clock.
  *  @arg iData The written value.
  */
 void SNDWriteSpeaker (byte iData)
@@ -221,7 +197,7 @@ void SNDWriteSpeaker (byte iData)
  *  @arg pBuffer Sound buffer address.
  *  @arg iLength Sound buffer length.
  */
-void SNDFillBufferCallback (void *pParameters, Uint8 *pBuffer, int iLength)
+void SNDFillBufferCallback (void *pParameters, byte *pBuffer, int iLength)
 {
   // Generate whatever sound was heard until now.
   SNDGenerate (iLastSpeaker);
@@ -233,16 +209,27 @@ void SNDFillBufferCallback (void *pParameters, Uint8 *pBuffer, int iLength)
 //--------------------------------------------------------------------------
 // Initialization and shutdown
 
+opt::options_description &SNDOptions ()
+{
+  static opt::options_description options ("Sound module options");
+  options.add_options ()
+    ("sampling-rate", opt::value<int> (&iArgSamplingRate), "Audio output sampling rate [hz]")
+    ("software-buffer", opt::value<int> (&iArgSoftwareBuffer), "Software audio buffer size [ms]")
+    ("hardware-buffer", opt::value<int> (&iArgHardwareBuffer), "Hardware audio buffer size [ms]");
+  return (options);
+}
+
+
 void SNDInitialize ()
 {
   // Initialize the cyclic audio buffer ...
   iAudioBufferSize = (iArgSoftwareBuffer * iArgSamplingRate) / 1000;
   pAudioBuffer = new byte [iAudioBufferSize];
-  pAudioBufferLock = SDL_CreateMutex ();
-  SDL_LockMutex (pAudioBufferLock);
+  CheckZero (pthread_mutex_init (&sAudioBufferLock, NULL));
+  CheckZero (pthread_mutex_lock (&sAudioBufferLock));
   pAudioBufferHead = pAudioBuffer;
   pAudioBufferTail = pAudioBuffer;
-  SDL_UnlockMutex (pAudioBufferLock);
+  CheckZero (pthread_mutex_unlock (&sAudioBufferLock));
 
   // Prepare audio parameters ...
   sAudioSpec.freq = iArgSamplingRate;
@@ -270,7 +257,7 @@ void SNDShutdown ()
   SDL_CloseAudio ();
 
   // Free the audio buffer mutex ...
-  SDL_DestroyMutex (pAudioBufferLock);
+  CheckZero (pthread_mutex_destroy (&sAudioBufferLock));
   delete [] (pAudioBuffer);
 }
 

@@ -18,62 +18,59 @@ limitations under the License.
 
 */
 
-#include <popt.h>
-#include <fcntl.h>
-#include <assert.h>
-#include <stdint.h>
-#include <unistd.h>
-#include <sys/types.h>
-
-#include <iostream>
-
-#include <SDL/SDL.h>
-#include <SDL/SDL_thread.h>
-
 #include "sim_common.h"
+
+#include <fstream>
 
 
 //--------------------------------------------------------------------------
 // Command Line Options
 
 /// Model to simulate.
-int iArgModel = PMD_MODEL_1;
-
-/// Core command line options table.
-struct poptOption asOptions [] =
-{
-  // Core options.
-  { "pmd1", '1', POPT_ARG_VAL,
-      &iArgModel, PMD_MODEL_1,
-      "Simulate PMD 85-1", NULL },
-  { "pmd2", '2', POPT_ARG_VAL,
-      &iArgModel, PMD_MODEL_2,
-      "Simulate PMD 85-2", NULL },
-  // Module options.
-  { NULL, 0, POPT_ARG_INCLUDE_TABLE,
-      &asDSPOptions, 0,
-      "Display module options:", NULL },
-  { NULL, 0, POPT_ARG_INCLUDE_TABLE,
-      &asSNDOptions, 0,
-      "Sound module options:", NULL },
-  { NULL, 0, POPT_ARG_INCLUDE_TABLE,
-      &asTAPOptions, 0,
-      "Tape module options:", NULL },
-  { NULL, 0, POPT_ARG_INCLUDE_TABLE,
-      &asTIMOptions, 0,
-      "Timing module options:", NULL },
-  // Closing.
-  POPT_AUTOHELP POPT_TABLEEND
-};
+static bool bArgModelOne = false;
+static bool bArgModelTwo = false;
 
 
 //--------------------------------------------------------------------------
 // System Status Variables
 
+// If we were to be entirely correct, the memory arrays
+// should be declared volatile. However, this just
+// leads to more complex display code and is
+// otherwise unlikely to change anything.
+
 /// Simulated memory array.
-byte MemData [65536];
+byte abMemoryData [65536] __attribute__ ((aligned (SAFE_ALIGNMENT)));
+/// Simulator memory mask.
 /// Distinguishes readable and writable memory.
-bool MemMask [65536];
+bool abMemoryMask [65536] __attribute__ ((aligned (SAFE_ALIGNMENT)));
+
+/// Processor clock counter.
+/// Note that access to clock is not ordered !!!
+relaxed_int iProcessorClock (0);
+
+/// Simulator shutdown flag.
+static relaxed_bool bShutdown (false);
+
+
+//--------------------------------------------------------------------------
+// Simulator Control
+
+/// Request simulator shutdown.
+void SIMRequestShutdown ()
+{
+  // No active notification is needed since the main
+  // event loop delivers messages periodically and
+  // is therefore bound to observe the variable.
+
+  bShutdown = true;
+}
+
+
+bool SIMQueryShutdown ()
+{
+  return (bShutdown);
+}
 
 
 //--------------------------------------------------------------------------
@@ -84,11 +81,11 @@ bool MemMask [65536];
  *  @arg iFrom From which address.
  *  @arg iSize How large block.
  */
-void SetMemoryReadWrite (int iFrom, int iSize)
+static void SetMemoryReadWrite (int iFrom, int iSize)
 {
   for (int iAddr = iFrom ; iAddr < iFrom + iSize ; iAddr ++)
   {
-    MemMask [iAddr] = true;
+    abMemoryMask [iAddr] = true;
   }
 }
 
@@ -97,13 +94,14 @@ void SetMemoryReadWrite (int iFrom, int iSize)
  *  @arg iFrom From which address.
  *  @arg iSize How large block.
  */
-void SetMemoryReadOnly (int iFrom, int iSize)
+static void SetMemoryReadOnly (int iFrom, int iSize)
 {
   for (int iAddr = iFrom ; iAddr < iFrom + iSize ; iAddr ++)
   {
-    MemMask [iAddr] = false;
+    abMemoryMask [iAddr] = false;
   }
 }
+
 
 /** Fill a memory area with content from file.
  *
@@ -111,17 +109,18 @@ void SetMemoryReadOnly (int iFrom, int iSize)
  *  @arg iSize How large block.
  *  @arg pFile What file.
  */
-void FillMemoryFromFile (int iFrom, int iSize, const char *pFile)
+static void FillMemoryFromFile (int iFrom, int iSize, const char *pFile)
 {
-  int hFile = open (pFile, O_RDONLY);
-  assert (hFile >= 0);
-  int iRead = read (hFile, MemData + iFrom, iSize);
-  assert (iRead == iSize);
-  close (hFile);
+  std::ifstream oFile;
+  oFile.open (pFile);
+  oFile.read (reinterpret_cast <char *> (abMemoryData + iFrom), iSize);
+  oFile.close ();
+  assert (oFile.good ());
 }
 
+
 /// Initialize a PMD 85-1 model.
-void InitializePMD1 ()
+static void InitializePMD1 ()
 {
   // Read the monitor image.
   FillMemoryFromFile (0x8000, 4096, PMD_SHARE "M1");
@@ -136,7 +135,7 @@ void InitializePMD1 ()
 
 
 /// Initialize a PMD 85-2 model.
-void InitializePMD2 ()
+static void InitializePMD2 ()
 {
   // Read the monitor image.
   FillMemoryFromFile (0x8000, 4096, PMD_SHARE "M2");
@@ -152,38 +151,60 @@ int main (int iArgC, const char *apArgV [])
 {
   // Command line option parsing
 
-  poptContext pArgContext;
+  opt::options_description oFlagNames ("Core options");
+  oFlagNames.add_options ()
+    ("pmd1,1", opt::bool_switch (&bArgModelOne), "Simulate PMD 85-1")
+    ("pmd2,2", opt::bool_switch (&bArgModelTwo), "Simulate PMD 85-2");
+  oFlagNames.add (DSPOptions ());
+  oFlagNames.add (SNDOptions ());
+  oFlagNames.add (TAPOptions ());
+  oFlagNames.add (TIMOptions ());
 
-  pArgContext = poptGetContext (NULL, iArgC, apArgV, asOptions, 0);
-  if (poptGetNextOpt (pArgContext) != POPT_NO_NEXT_OPT)
-  {
-    // Any option that is returned signals an error.
-    poptPrintUsage (pArgContext, stderr, 0);
-    return (1);
-  }
-  if (poptPeekArg (pArgContext) != NULL)
-  {
-    // Any argument that is left signals an error.
-    poptPrintUsage (pArgContext, stderr, 0);
-    return (1);
-  }
-  poptFreeContext (pArgContext);
+  opt::positional_options_description oFlagPositions;
+  oFlagPositions.add ("script", 1);
+
+  opt::variables_map oFlagVariables;
+  opt::store (
+    opt::command_line_parser (iArgC, apArgV).
+    positional (oFlagPositions).
+    options (oFlagNames).
+    run (),
+    oFlagVariables);
+  opt::notify (oFlagVariables);
+
+//!@#@!
+if (bArgModelOne) InitializePMD1 ();
+if (bArgModelTwo) InitializePMD2 ();
+//#@!@#
+
+//  {
+//    // Any option that is returned signals an error.
+//    poptPrintUsage (pArgContext, stderr, 0);
+//    return (1);
+//  }
+//  if (poptPeekArg (pArgContext) != NULL)
+//  {
+//    // Any argument that is left signals an error.
+//    poptPrintUsage (pArgContext, stderr, 0);
+//    return (1);
+//  }
 
   // Model initialization
 
-  switch (iArgModel)
-  {
-    case PMD_MODEL_1: InitializePMD1 ();
-                      break;
-    case PMD_MODEL_2: InitializePMD2 ();
-                      break;
-    default:          assert (false);
-  }
+//  switch (iArgModel)
+//  {
+//    case PMD_MODEL_1: InitializePMD1 ();
+//                      break;
+//    case PMD_MODEL_2: InitializePMD2 ();
+//                      break;
+//    default:          assert (false);
+//  }
 
   // Module initialization
 
   SDL_CheckZero (SDL_Init (SDL_INIT_AUDIO | SDL_INIT_TIMER | SDL_INIT_VIDEO));
 
+  CONInitialize ();
   CPUInitialize ();
   DSPInitialize ();
   KBDInitialize ();
@@ -191,14 +212,16 @@ int main (int iArgC, const char *apArgV [])
   TAPInitialize ();
   TIMInitialize ();
 
-  SDL_Thread *pProcessor = SDL_CreateThread (CPUThread, NULL);
+  // Console thread is the last to run because user commands require functional simulator.
+
+  CPUStartThread ();
+  CONStartThread ();
 
   // Event loop
 
-  bool bQuit = false;
   SDL_Event sEvent;
 
-  while (!bQuit)
+  while (!SIMQueryShutdown ())
   {
     SDL_WaitEvent (&sEvent);
     switch (sEvent.type)
@@ -207,17 +230,22 @@ int main (int iArgC, const char *apArgV [])
       case SDL_KEYDOWN:
         KBDEventHandler ((SDL_KeyboardEvent *) &sEvent);
         break;
-      case SDL_VIDEORESIZE:
-        DSPResizeHandler ((SDL_ResizeEvent *) &sEvent);
-        break;
+//      case SDL_WINDOWEVENT_RESIZED:
+//        DSPResizeHandler ();
+//        break;
       case SDL_USEREVENT:
         DSPPaintHandler ();
         break;
       case SDL_QUIT:
-        bQuit = true;
+        SIMRequestShutdown ();
         break;
     }
   }
+
+  // Console thread is the first to terminate because user commands require functional simulator.
+
+  CONTerminateThread ();
+  CPUTerminateThread ();
 
   // Module shutdown
 
@@ -227,6 +255,7 @@ int main (int iArgC, const char *apArgV [])
   KBDShutdown ();
   DSPShutdown ();
   CPUShutdown ();
+  CONShutdown ();
 
   SDL_Quit ();
 

@@ -18,14 +18,6 @@ limitations under the License.
 
 */
 
-#include <popt.h>
-#include <assert.h>
-#include <stdint.h>
-
-#include <iostream>
-
-#include <SDL/SDL.h>
-
 #include "sim_common.h"
 
 
@@ -38,37 +30,24 @@ static int iArgRefresh = 20;
 /// Initial screen zoom.
 static int iArgZoom = 3;
 
-/// Module command line options table.
-struct poptOption asDSPOptions [] =
-{
-  { "zoom", 'z', POPT_ARG_INT | POPT_ARGFLAG_SHOW_DEFAULT,
-      &iArgZoom, 0,
-      "Initial screen zoom", NULL },
-  { "refresh", 0, POPT_ARG_INT | POPT_ARGFLAG_SHOW_DEFAULT,
-      &iArgRefresh, 0,
-      "Screen refresh period", "ms" },
-  POPT_TABLEEND
-};
-
 
 //--------------------------------------------------------------------------
 // Data
 
-/// Singleton screen surface.
-static SDL_Surface *pScreen;
+/// Singleton screen window.
+static SDL_Window *pWindow;
+/// Singleton screen renderer;
+static SDL_Renderer *pRenderer;
+/// Singleton screen texture;
+static SDL_Texture *pTexture;
 
-/// Paint timer
+/// Paint timer.
 static SDL_TimerID iPaintTimer;
 
-
-static SDL_Color sColorBlack = {   0,   0,   0 };
-static SDL_Color sColorWhite = { 255, 255, 255 };
-static SDL_Color sColorGray  = { 192, 192, 192 };
-
-#define DSP_COLOR_BLACK         0
-#define DSP_COLOR_WHITE         1
-#define DSP_COLOR_GRAY          2
-
+// Display colors.
+#define DSP_COLOR_BLACK 0b00000000
+#define DSP_COLOR_WHITE 0b11111111
+#define DSP_COLOR_GRAY  0b10010010
 
 /// Base address of the video memory.
 #define PMD_VRAM_BASE           0xC000
@@ -90,36 +69,8 @@ static SDL_Color sColorGray  = { 192, 192, 192 };
 #define PMD_BLINK_RATE          512
 
 
-//--------------------------------------------------------------------------
-// Screen size
-
-/** Size the screen.
- *
- *  Performs the necessary video mode initialization.
- *
- *  @arg iWidth Proposed screen width.
- *  @arg iHeight Proposed screen height.
- */
-void DSPSizeScreen (int iWidth, int iHeight)
-{
-  // Any width and height is multiple of standard width and height.
-  int iStandardWidth = PMD_VRAM_WIDTH * PMD_PIXEL_COUNT;
-  int iStandardHeight = PMD_VRAM_HEIGHT;
-  // Calculate the rounded width and height.
-  int iRealWidth = iWidth - iWidth % iStandardWidth;
-  int iRealHeight = iHeight - iHeight % iStandardHeight;
-  // Minimum width and height.
-  iRealWidth = MAX (iRealWidth, iStandardWidth);
-  iRealHeight = MAX (iRealHeight, iStandardHeight);
-
-  // Create the surface to draw upon ...
-  SDL_CheckNotNull (pScreen = SDL_SetVideoMode (iRealWidth, iRealHeight, 8, SDL_HWSURFACE | SDL_DOUBLEBUF | SDL_RESIZABLE));
-
-  // Create a palette with the required colors ...
-  SDL_SetColors (pScreen, &sColorBlack, DSP_COLOR_BLACK, 1);
-  SDL_SetColors (pScreen, &sColorWhite, DSP_COLOR_WHITE, 1);
-  SDL_SetColors (pScreen, &sColorGray,  DSP_COLOR_GRAY,  1);
-}
+/// Rendered screen data.
+static byte abScreenData [PMD_VRAM_WIDTH * PMD_PIXEL_COUNT * PMD_VRAM_HEIGHT];
 
 
 //--------------------------------------------------------------------------
@@ -140,7 +91,7 @@ bool DSPBlinkVisible ()
 /** Decode the screen content in 1:1 zoom.
  *
  *  Decodes the memory content of the simulated machine using
- *  direct writing to screen buffer. Optimized for 1:1 zoom.
+ *  direct writing to screen texture. Optimized for 1:1 zoom.
  */
 void DSPDecodeScreen ()
 {
@@ -148,20 +99,20 @@ void DSPDecodeScreen ()
 
   // Traverse the memory content line by line and byte by byte
   // and paint the screen content as we go.
-  byte *pSource = & MemData [PMD_VRAM_BASE];
-  byte *pTarget = (byte *) pScreen->pixels;
+  byte *pSource = abMemoryData + PMD_VRAM_BASE;
+  byte *pTarget = abScreenData;
   for (int iLine = 0 ; iLine < PMD_VRAM_HEIGHT ; iLine ++)
   {
     for (int iByte = 0 ; iByte < PMD_VRAM_WIDTH ; iByte ++)
     {
       byte iData = *pSource;
 
-      // Determine the drawing color. All pixels in one byte share color
+      // Determine the drawing color. All pixels in one byte share color.
       byte iColor = (iData & PMD_PIXEL_GRAY) ? iColor = DSP_COLOR_GRAY
                                              : iColor = DSP_COLOR_WHITE;
       if ((iData & PMD_PIXEL_BLINK) && !bBlinkVisible) iColor = DSP_COLOR_BLACK;
 
-      // The inner cycle is unrolled for speed
+      // The inner cycle is unrolled for speed.
 
 #define DSPPaintPixel                                           \
   *pTarget = (iData & 1) ? iColor : DSP_COLOR_BLACK;            \
@@ -180,62 +131,7 @@ void DSPDecodeScreen ()
       pSource ++;
     }
 
-    pTarget += pScreen->pitch - PMD_VRAM_WIDTH * PMD_PIXEL_COUNT;
     pSource += PMD_VRAM_BLANK;
-  }
-}
-
-
-/** Decode the screen content in 1:X and 1:Y zoom.
- *
- *  Decodes the memory content of the simulated machine using
- *  direct writing to screen buffer. Generalized for any zoom.
- *
- *  @arg iZoomWidth Multiple of standard width.
- *  @arg iZoomHeight Multiple of standard height.
- */
-void DSPDecodeScreenWithZoom (int iZoomWidth, int iZoomHeight)
-{
-  bool bBlinkVisible = DSPBlinkVisible ();
-
-  // Traverse the memory content line by line and byte by byte
-  // and paint the screen content as we go. Repeat each step
-  // as many times as directed by the zoom level.
-  byte *pSourceBase = & MemData [PMD_VRAM_BASE];
-  byte *pTargetBase = (byte *) pScreen->pixels;
-  for (int iLine = 0 ; iLine < PMD_VRAM_HEIGHT ; iLine ++)
-  {
-    for (int iLineZoom = 0 ; iLineZoom < iZoomHeight ; iLineZoom ++)
-    {
-      byte *pSourceData = pSourceBase;
-      byte *pTargetData = pTargetBase;
-
-      for (int iByte = 0 ; iByte < PMD_VRAM_WIDTH ; iByte ++)
-      {
-        byte iData = *pSourceData;
-
-        // Determine the drawing color. All pixels in one byte share color
-        byte iColor = (iData & PMD_PIXEL_GRAY) ? iColor = DSP_COLOR_GRAY
-                                               : iColor = DSP_COLOR_WHITE;
-        if ((iData & PMD_PIXEL_BLINK) && !bBlinkVisible) iColor = DSP_COLOR_BLACK;
-
-        for (int iPixel = 0 ; iPixel < PMD_PIXEL_COUNT ; iPixel ++)
-        {
-          for (int iPixelZoom = 0 ; iPixelZoom < iZoomWidth ; iPixelZoom ++)
-          {
-            *pTargetData = (iData & 1) ? iColor : DSP_COLOR_BLACK;
-            pTargetData ++;
-          }
-          iData >>= 1;
-        }
-
-        pSourceData ++;
-      }
-
-      pTargetBase += pScreen->pitch;
-    }
-
-    pSourceBase += PMD_VRAM_WIDTH + PMD_VRAM_BLANK;
   }
 }
 
@@ -251,41 +147,17 @@ void DSPDecodeScreenWithZoom (int iZoomWidth, int iZoomHeight)
  */
 void DSPPaintHandler ()
 {
-  SDL_LockSurface (pScreen);
+  // TODO Consider using HQX ?
 
-  // Decide which decoder to use based on the screen size.
-  // We have a decoder for the standard screen size and
-  // a decoder for an arbitrary screen size.
+  DSPDecodeScreen ();
 
-  int iZoomWidth = pScreen->w / (PMD_VRAM_WIDTH * PMD_PIXEL_COUNT);
-  int iZoomHeight = pScreen->h / (PMD_VRAM_HEIGHT);
+  // TODO Check if render clear is really needed ?
 
-  if ((iZoomWidth == 1) && (iZoomHeight == 1))
-  {
-    DSPDecodeScreen ();
-  }
-  else
-  {
-    DSPDecodeScreenWithZoom (iZoomWidth, iZoomHeight);
-  }
-
-  SDL_UnlockSurface (pScreen);
-
-  // Make the content visible
-  SDL_Flip (pScreen);
-}
-
-
-/** Handler for resizing the screen content.
- *
- *  Reacts to the screen resize event. Constraints the
- *  available sizes to multiples of standard screen.
- *
- *  @arg pEvent The event to handle.
- */
-void DSPResizeHandler (const SDL_ResizeEvent *pEvent)
-{
-  DSPSizeScreen (pEvent->w, pEvent->h);
+  SDL_CheckZero (SDL_SetRenderDrawColor (pRenderer, 0, 0, 0, SDL_ALPHA_OPAQUE));
+  SDL_CheckZero (SDL_RenderClear (pRenderer));
+  SDL_CheckZero (SDL_UpdateTexture (pTexture, NULL, &abScreenData, PMD_VRAM_WIDTH * PMD_PIXEL_COUNT));
+  SDL_CheckZero (SDL_RenderCopy (pRenderer, pTexture, NULL, NULL));
+  SDL_RenderPresent (pRenderer);
 }
 
 
@@ -309,16 +181,44 @@ Uint32 DSPPaintTimerCallback (Uint32 iInterval, void *pArgs)
   return (iArgRefresh);
 }
 
+
 //--------------------------------------------------------------------------
 // Initialization and shutdown
 
+opt::options_description &DSPOptions ()
+{
+  static opt::options_description options ("Display module options");
+  options.add_options ()
+    ("zoom,z", opt::value<int> (&iArgZoom), "Initial screen zoom")
+    ("refresh", opt::value<int> (&iArgRefresh), "Screen refresh period [ms]");
+  return (options);
+}
+
+
 void DSPInitialize ()
 {
-  SDL_WM_SetCaption ("SimPMD", "SimPMD");
+  // Initialize the video resources.
+  // Drawing is done by updating texture.
+  SDL_CheckNotNull (pWindow = SDL_CreateWindow (
+    "SimPMD",
+    SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
+    PMD_VRAM_WIDTH * PMD_PIXEL_COUNT, PMD_VRAM_HEIGHT,
+    SDL_WINDOW_RESIZABLE));
+  SDL_CheckNotNull (pRenderer = SDL_CreateRenderer (
+    pWindow,
+    -1, 0));
+  SDL_CheckNotNull (pTexture = SDL_CreateTexture (
+    pRenderer,
+    SDL_PIXELFORMAT_RGB332,
+    SDL_TEXTUREACCESS_STREAMING,
+    PMD_VRAM_WIDTH * PMD_PIXEL_COUNT, PMD_VRAM_HEIGHT));
+  SDL_CheckTrue (SDL_SetHint (
+    SDL_HINT_RENDER_SCALE_QUALITY, "best"));
 
-  // Size the screen ...
-  DSPSizeScreen (iArgZoom * PMD_VRAM_WIDTH * PMD_PIXEL_COUNT,
-                 iArgZoom * PMD_VRAM_HEIGHT);
+  // Clear screen.
+  SDL_CheckZero (SDL_SetRenderDrawColor (pRenderer, 0, 0, 0, SDL_ALPHA_OPAQUE));
+  SDL_CheckZero (SDL_RenderClear (pRenderer));
+  SDL_RenderPresent (pRenderer);
 
   // Start the timer that paints the screen repeatedly ...
   iPaintTimer = SDL_AddTimer (iArgRefresh, DSPPaintTimerCallback, NULL);
@@ -329,6 +229,10 @@ void DSPShutdown ()
 {
   // Stop the timer that paints the screen repeatedly ...
   SDL_RemoveTimer (iPaintTimer);
+
+  SDL_DestroyTexture (pTexture);
+  SDL_DestroyRenderer (pRenderer);
+  SDL_DestroyWindow (pWindow);
 }
 
 
